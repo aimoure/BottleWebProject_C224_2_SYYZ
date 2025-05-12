@@ -1,42 +1,130 @@
+/* Тело */
 body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
 
-/* Set padding to keep content from hitting the edges */
+/* Отступы, чтобы контент не прижимался к краям */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
+/* Ширина для элементов формы */
 input,
 select,
 textarea {
     max-width: 280px;
 }
 
-/* styles for validation helpers */
+/* Стили для сообщений об ошибках валидации */
 .field-validation-error {
     color: #b94a48;
 }
 
+/* Скрываем сообщения, если ошибок нет */
 .field-validation-valid {
     display: none;
 }
 
+/* Красная рамка для полей ввода с ошибкой */
 input.input-validation-error {
     border: 1px solid #b94a48;
 }
 
+/* Убираем рамку у чекбоксов с ошибкой */
 input[type="checkbox"].input-validation-error {
     border: 0 none;
 }
 
+/* Стили для списка ошибок валидации */
 .validation-summary-errors {
     color: #b94a48;
 }
 
+/* Скрываем сообщение, если ошибок нет */
 .validation-summary-valid {
     display: none;
 }
+
+/* Цвет navbar */
+.navbar-inverse {
+    background-color: rgba(255, 186, 139, 0.8);
+    border-color: rgba(255, 186, 139, 0.8);
+}
+    /* Цвет текста логотипа */
+    .navbar-inverse .navbar-brand {
+        color: white;
+    }
+
+        /* Цвет текста логотипа при наведении */
+        .navbar-inverse .navbar-brand:hover {
+            color: white;
+            text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
+            0 0 10px #ffbA8b, /* Средний слой */
+            0 0 20px #ffbA8b, /* Более яркое свечение */
+            0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+        }
+
+    /* Цвет текста в navbar  */
+    .navbar-inverse .navbar-nav > li > a {
+        color: white;
+    }
+
+        /* Цвет текста в navbar при наведении */
+        .navbar-inverse .navbar-nav > li > a:hover {
+            color: white;
+            text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
+            0 0 10px #ffbA8b, /* Средний слой */
+            0 0 20px #ffbA8b, /* Более яркое свечение */
+            0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+        }
+
+/* Цвет фона для контейнера на главной странице */
+.jumbotron {
+    background-color: rgba(255, 186, 139, 0.8);
+}
+
+/* Выделение */
+.highlight {
+    color: white;
+    text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
+    0 0 10px #ffbA8b, /* Средний слой */
+    0 0 20px #ffbA8b, /* Более яркое свечение */
+    0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+}
+
+/* Оформление контейнера с создательницами/-ем */
+/* Равномерное распределение */
+.row-about {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Расположение по горизонтали*/
+.col-proud {
+    flex: 1;
+    max-width: 360px;
+}
+
+/* Карточка с создетельницей/-ем */
+.creator {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    border-color: #faad79;
+    background-color: rgba(255, 186, 139, 0.6);
+    width: 260px;
+    flex-grow: 1;
+}
+
+    /* Оформление аватаров создательниц */
+    .creator img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
