@@ -2,6 +2,7 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    color: #ff6633;
 }
 
 /* Отступы, чтобы контент не прижимался к краям */
@@ -49,8 +50,8 @@ input[type="checkbox"].input-validation-error {
 
 /* Цвет navbar */
 .navbar-inverse {
-    background-color: rgba(255, 186, 139, 0.8);
-    border-color: rgba(255, 186, 139, 0.8);
+    background-color: #ff855c;
+    border-color: #ff855c;
 }
     /* Цвет текста логотипа */
     .navbar-inverse .navbar-brand {
@@ -60,10 +61,10 @@ input[type="checkbox"].input-validation-error {
         /* Цвет текста логотипа при наведении */
         .navbar-inverse .navbar-brand:hover {
             color: white;
-            text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
-            0 0 10px #ffbA8b, /* Средний слой */
-            0 0 20px #ffbA8b, /* Более яркое свечение */
-            0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+            text-shadow: 0 0 5px #ffffff, /* Мягкое внутреннее свечение */
+            0 0 10px #ffffff, /* Средний слой */
+            0 0 20px #ffffff, /* Более яркое свечение */
+            0 0 40px #ffffff; /* Дальний эффект для глубины */
         }
 
     /* Цвет текста в navbar  */
@@ -74,24 +75,25 @@ input[type="checkbox"].input-validation-error {
         /* Цвет текста в navbar при наведении */
         .navbar-inverse .navbar-nav > li > a:hover {
             color: white;
-            text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
-            0 0 10px #ffbA8b, /* Средний слой */
-            0 0 20px #ffbA8b, /* Более яркое свечение */
-            0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+            text-shadow: 0 0 5px #ffffff, /* Мягкое внутреннее свечение */
+            0 0 10px #ffffff, /* Средний слой */
+            0 0 20px #ffffff, /* Более яркое свечение */
+            0 0 40px #ffffff; /* Дальний эффект для глубины */
         }
 
 /* Цвет фона для контейнера на главной странице */
 .jumbotron {
-    background-color: rgba(255, 186, 139, 0.8);
+    background-color: rgba(255, 102, 51, 0.8);
+    color: white;
 }
 
 /* Выделение */
 .highlight {
     color: white;
-    text-shadow: 0 0 5px #ffbA8b, /* Мягкое внутреннее свечение */
-    0 0 10px #ffbA8b, /* Средний слой */
-    0 0 20px #ffbA8b, /* Более яркое свечение */
-    0 0 40px #ffbA8b; /* Дальний эффект для глубины */
+    text-shadow: 0 0 5px #ffffff, /* Мягкое внутреннее свечение */
+    0 0 10px #ffffff, /* Средний слой */
+    0 0 20px #ffffff, /* Более яркое свечение */
+    0 0 40px #ffffff; /* Дальний эффект для глубины */
 }
 
 /* Оформление контейнера с создательницами/-ем */
@@ -111,12 +113,13 @@ input[type="checkbox"].input-validation-error {
 
 /* Карточка с создетельницей/-ем */
 .creator {
+    color: white;
     text-align: center;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
     border-color: #faad79;
-    background-color: rgba(255, 186, 139, 0.6);
+    background-color: rgba(255, 102, 51, 0.6);
     width: 260px;
     flex-grow: 1;
 }
