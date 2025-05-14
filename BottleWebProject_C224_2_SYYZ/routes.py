@@ -13,7 +13,7 @@ def home():
     return dict(
         year=datetime.now().year
     )
-
+#fgwesf
 @route('/about')
 @view('about')
 def about():
