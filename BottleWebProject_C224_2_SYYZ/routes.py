@@ -14,6 +14,7 @@ def home():
         year=datetime.now().year
     )
 
+
 @route('/direct_lpp_theory')
 @view('direct_lpp_theory')
 def direct_lpp_theory():
@@ -32,11 +33,21 @@ def direct_lpp_practice():
         year=datetime.now().year
     )
 
+
 @route('/about')
 @view('about')
 def about():
     """Renders the about page."""
     return dict(
         title='About',
+        year=datetime.now().year
+    )
+
+@route('/purpose_theory')
+@view('purpose_theory')
+def direct_lpp_practice():
+    """Renders the purpose_theory page."""
+    return dict(
+        title='The assignment problem',
         year=datetime.now().year
     )

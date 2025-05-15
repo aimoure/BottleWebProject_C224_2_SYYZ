@@ -69,17 +69,21 @@
     <Content Include="views\direct_lpp_practice.tpl">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\dual_theory.tpl" />
     <Content Include="views\direct_lpp_theory.tpl">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\index.tpl" />
     <Content Include="views\layout.tpl" />
+    <Content Include="views\purpose_theory.tpl">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
       <Id>env</Id>
-      <Version>3.13</Version>
-      <Description>env (Python 3.13 (64-bit))</Description>
+      <Version>0.0</Version>
+      <Description>env (Python 3.12 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
