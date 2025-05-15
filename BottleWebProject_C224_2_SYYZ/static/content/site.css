@@ -96,6 +96,11 @@ input[type="checkbox"].input-validation-error {
     0 0 40px #ffffff; /* Дальний эффект для глубины */
 }
 
+/* Отступ для подвала */
+.address {
+    margin-top: 20px; /* Настройте значение по вашему усмотрению, например, 30px или 2rem */
+}
+
 /* Оформление контейнера с создательницами/-ем */
 /* Равномерное распределение */
 .row-about {
@@ -131,3 +136,28 @@ input[type="checkbox"].input-validation-error {
         border-radius: 50%;
         margin-bottom: 10px;
     }
+
+/* Основной текст страницы */
+.intro-text {
+    font-size: 20px;
+    text-indent: 60px;
+}
+
+/* Основной текст страницы: перечисление */
+.enumer-text {
+    font-size: 20px;
+    text-indent: -24px;
+    padding-left: 120px
+}
+
+/* Основной текст страницы: отступ */
+.enumer-intro-text {
+    font-size: 20px;
+    padding-left: 120px;
+}
+
+/* Основной текст страницы: заголовок */
+.title-text {
+    font-size: 28px;
+    text-indent: 60px;
+}
