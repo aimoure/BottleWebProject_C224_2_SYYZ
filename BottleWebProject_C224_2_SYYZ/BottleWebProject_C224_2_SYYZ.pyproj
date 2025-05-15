@@ -78,13 +78,14 @@
     </Content>
 
     <Content Include="views\purpose_theory.tpl" />
+    <Content Include="views\dual_lpp_theory.tpl" />
 
+    <Content Include="views\index.tpl" />
+    <Content Include="views\purpose_theory.tpl" />
     <Content Include="views\dual_theory.tpl" />
-
     <Content Include="views\direct_lpp_theory.tpl">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\index.tpl" />
     <Content Include="views\layout.tpl" />
   </ItemGroup>
   <ItemGroup>
