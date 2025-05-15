@@ -1,57 +1,81 @@
 % rebase('layout.tpl', title=title, year=year)
 
 <div class="jumbotron">
-	<h1>Direct linear programming problem</h1>
+	<h1>Двойственная задача линейного программирования</h1>
 	<p class="lead">
-       The direct linear programming problem task is to maximize or minimize the linear function of a goal under conditions expressed by a system of linear constraints.
+        Двойственная задача линейного программирования (ЗЛП) строится на основе прямой задачи и позволяет
+		решать её альтернативным способом, а также получать оценочные значения и анализировать чувствительность.
     </p>
 </div>
 
 <p class="intro-text">
-	A primal linear programming problem (LPP) is an optimization task where you need to maximize or minimize a linear objective function Z = c<sub>1</sub>x<sub>1</sub> + c<sub>2</sub>x<sub>2</sub> + … + c<sub>n</sub>x<sub>n</sub>, subject to a system of linear constraints, for example, a<sub>1</sub>x<sub>3</sub> + a<sub>2</sub>x<sub>5</sub> ≤ b<sub>1</sub> and non-negativity conditions xi ≥ 0.
+	Двойственная задача формируется для каждой прямой задачи ЗЛП. Если прямая задача имеет вид максимизации 
+	линейной функции при ограничениях, представленных в виде ≤, то двойственная задача будет задачей минимизации 
+	другой линейной функции при ограничениях вида ≥.
+</p> 
+<p class="intro-text">
+	Формально, если прямая задача:
+</p>
+<p class="intro-text" style="text-align: center">
+	Максимизировать Z = c<sub>1</sub>x<sub>1</sub> + c<sub>2</sub>x<sub>2</sub> + … + c<sub>n</sub>x<sub>n</sub>  
+</p>
+<p class="intro-text" style="text-align: center">
+	при условиях: a<sub>1</sub>x<sub>1</sub> + a<sub>2</sub>x<sub>2</sub> + … + a<sub>n</sub>x<sub>n</sub> ≤ b<sub>i</sub>
 </p>
 <p class="intro-text">
-	The goal is to find such x<sub>i</sub> that Z is optimal.
+	то двойственная задача будет:
+</p>
+<p class="intro-text" style="text-align: center">
+	Минимизировать W = b<sub>1</sub>y<sub>1</sub> + b<sub>2</sub>y<sub>2</sub> + … + b<sub>m</sub>y<sub>m</sub>
+</p>
+<p class="intro-text" style="text-align: center">
+	при условиях: a<sub>1</sub>y<sub>1</sub> + a<sub>2</sub>y<sub>2</sub> + … + a<sub>m</sub>y<sub>m</sub> ≥ c<sub>j</sub>
 </p>
 <p class="intro-text">
-	The main method for solving a primal LPP is the simplex method.
+	где y<sub>i</sub> ≥ 0.
 </p>
+<p class="intro-text">
+	Решая двойственную задачу, можно получить как значение оптимума прямой задачи, так и экономический смысл двойственных 
+	переменных — теневых цен.
+</p>
+
 <p class="title-text">
-	Simplex method
+	Решение двойственной задачи симплекс-методом
 </p>
 <p class="intro-text">
-	The Simplex Method is an algorithm for solving LPP, which works as follows:
+	Двойственная задача решается с помощью стандартного симплекс-метода. Процесс решения включает следующие шаги:
 </p>
 <p class="intro-text">
-	1.	Convert the problem to standard form by adding slack variables for inequalities.
+	1. Перевести задачу к стандартной форме: неравенства вида ≥ переводятся с помощью введения дополнительных переменных.
 </p>
 <p class="intro-text">
-	2.	Construct the initial simplex table, where the rows are constraints, and the last row is the objective function.
+	2. Составить начальную симплекс-таблицу.
 </p>
 <p class="intro-text">
-	3.	Iteratively:
+	3. Проводить итерации симплекс-метода:
 </p>
 <p class="enumer-text">
-	—	Check for optimality (are there negative coefficients in the Z-row?). 
+	— Проверить оптимальность текущего решения (проверяются коэффициенты целевой функции в последней строке таблицы).
 </p>
 <p class="enumer-text">
-	—	If there are, select the pivot column (the largest negative number by modulus from the Z-row) and row (the minimum positive ratio of the right-hand side to the pivot column element), then update the table by introducing a new variable into the basis.
+	— Если решение не оптимально, выбрать разрешающий столбец (наиболее отрицательный коэффициент), затем разрешающую строку
+	(наименьшее положительное отношение правой части к элементу разрешающего столбца).
 </p>
 <p class="enumer-intro-text">
-	All elements of the pivot row are divided by the pivot element, the elements of the pivot column are set to 0.
+	Все элементы разрешающей строки делятся на разрешающий элемент, элементы разрешающего столбца становятся нулями.
 </p>
 <p class="enumer-intro-text">
-	The remaining elements are calculated using the formula:
+	Остальные элементы пересчитываются по формуле:
 </p>
 <p class="enumer-intro-text" style='text-align: center'>
-	a<sub>ij</sub>' = a<sub>ij</sub>  -  (a<sub>iq</sub> * a<sub>pj</sub>) / a<sub>pq</sub>, 
+	a<sub>ij</sub>' = a<sub>ij</sub> - (a<sub>iq</sub> * a<sub>pj</sub>) / a<sub>pq</sub>
 </p>
 <p class="enumer-intro-text" style='text-align: center'>
-	where p is the pivot row, q is the pivot column
+	где p — разрешающая строка, q — разрешающий столбец.
 </p>
 <p class="enumer-text">
-	—	Repeat until Z becomes optimal.
+	— Повторять итерации до получения оптимального решения.
 </p>
 <p class="intro-text">
-	4. Extract the solution: the values of xi and Z.
+	4. Извлечь решение: значения переменных y<sub>i</sub> и значение целевой функции W.
 </p>
