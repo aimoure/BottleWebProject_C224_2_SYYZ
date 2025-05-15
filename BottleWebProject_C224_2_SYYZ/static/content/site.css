@@ -239,6 +239,15 @@ table.custom-table {
         padding-left: 12px;
     }
 
+    .hungarian-page h3 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #d35400;
+        border-left: 6px solid #e67e22;
+        padding-left: 12px;
+    }
+
     .hungarian-page p,
     .hungarian-page ul {
         margin-bottom: 25px;
