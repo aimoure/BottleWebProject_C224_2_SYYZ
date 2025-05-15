@@ -8,8 +8,11 @@
 <div class="hungarian-page">
 
     <div class="jumbotron">
-        <h1>Венгерский алгоритм</h1>
+        <h1>Задача о назначениях (Венгерский алгоритм)</h1>
         <p class="lead">Как математика помогает распределять задачи и экономить ресурсы</p>
+        <p>
+        <a href="/hungarian-calc" class="btn btn-warning btn-lg mt-3">Перейти к калькулятору</a>
+    </p>
     </div>
 
     <div class="container">
@@ -20,17 +23,23 @@
 
     <div class="float-wrap">
     <div class="float-text">
-        <h2>Пример задачи</h2>
-        <p>У нас есть 5 организаторов и 5 задач:</p>
-        <ul>
-            <li>настройка звука</li>
-            <li>освещение</li>
-            <li>изображение</li>
-            <li>регистрация гостей</li>
-            <li>кофе-брейки</li>
-        </ul>
-    </div>
-    <img src="/static/images/Condition.png" alt="Условие" class="float-img">
+        <div class="example-task-block">
+  <div class="example-task-text">
+
+    <div class="task-container">
+    <img src="/static/images/Condition.png" alt="Условие" class="task-image">
+    <h2>Пример задачи</h2>
+    <p>У нас есть 5 организаторов и 5 задач:</p>
+    <ul>
+        <li>настройка звука</li>
+        <li>освещение</li>
+        <li>изображение</li>
+        <li>регистрация гостей</li>
+        <li>кофе-брейки</li>
+    </ul>
+</div>
+</div>
+  
 </div>
 
     <p>Каждому организатору даны оценки по задачам. Нужно распределить их, чтобы суммарный балл был максимален.</p>
@@ -98,8 +107,9 @@
     </p>
     <p>Если это не так — добавляем фиктивных исполнителей или задачи с нулевыми затратами.</p>
 
-    <hr>
-    <p><em>Материал и изображения вдохновлены оригинальной статьёй на <a href="https://habr.com/ru/articles/422009/" target="_blank">Хабре</a>.</em></p>
- </div>
+    <div class="calc-start-box">
+    <h3>Готовы решить свою задачу?</h3>
+    <a href="/hungarian-calc" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
+
 
 </div>
