@@ -28,7 +28,7 @@
                     <li><a href="/purpose_theory">Assignment</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/dual_theory">Dual theory</a></li>
+                    <li><a href="/dual_lpp_theory">Dual theory</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/about">About</a></li>
