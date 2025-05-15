@@ -65,6 +65,12 @@
     <Content Include="static\scripts\respond.min.js" />
     <Content Include="static\scripts\_references.js" />
     <Content Include="views\about.tpl" />
+    <Content Include="views\direct_lpp_practice.tpl">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\direct_lpp_theory.tpl">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\index.tpl" />
     <Content Include="views\layout.tpl" />
   </ItemGroup>
