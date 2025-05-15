@@ -154,6 +154,7 @@ input[type="checkbox"].input-validation-error {
 .text {
     line-height: 1.5; /* Интервал для улучшения читабельности */
     margin-bottom: 10px; /* Отступ снизу */
+    margin-top: 10px;
 }
 
 /* Список с отступом */
@@ -221,7 +222,7 @@ table.custom-table {
 
     /* Заголовки второго уровня (h2) — стиль для разделов */
     .hungarian-page h2 {
-        margin-top: 60px; /* Большой отступ сверху */
+        margin-top: 40px; /* Большой отступ сверху */
         margin-bottom: 20px; /* Отступ снизу */
         font-size: 26px; /* Размер шрифта */
         color: #d35400; /* Оранжево-коричневый цвет */
@@ -294,7 +295,7 @@ table.custom-table {
         background: linear-gradient(to right, #f39c12, transparent); /* Градиентный стиль */
     }
 
-    /* Ссылки в подписях (например, "вдохновлено на Хабре") */
+    /* Ссылки в подписях */
     .hungarian-page em a {
         color: #e67e22;
         text-decoration: none;
@@ -322,7 +323,7 @@ table.custom-table {
     text-align: center;
     margin-top: 60px; /* Отступ сверху */
     padding-top: 30px; /* Внутренний отступ */
-    //border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
+    border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
 }
 
     /* Заголовок в блоке калькулятора */
