@@ -14,7 +14,6 @@ def home():
         year=datetime.now().year
     )
 
-=======
 
 @route('/direct_lpp_theory')
 @view('direct_lpp_theory')
