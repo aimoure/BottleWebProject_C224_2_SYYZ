@@ -360,3 +360,39 @@ table.custom-table {
             background-color: #e24d1b; /* Более тёмный оттенок при наведении */
             box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
         }
+
+
+/* Контейнер для каждой задачи с тенью и ховер-эффектом */
+.task-card {
+    background: #fff; /* Белый фон, как у .container */
+    border-radius: 8px; /* Скругленные углы */
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Тень, чуть сильнее чем у .container */
+    padding: 20px; /* Внутренние отступы */
+    transition: transform 0.3s, box-shadow 0.3s; /* Плавный переход для ховер-эффекта */
+    height: 380px; /* Фиксированная минимальная высота для выравнивания кнопок */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Кнопка внизу */
+}
+
+    .task-card:hover {
+        transform: translateY(-5px) scale(1.02); /* Подъем и легкое увеличение */
+        box-shadow: 0 0 25px rgba(0,0,0,0.2); /* Усиленная тень при наведении */
+    }
+
+.btn {
+    background-color: #ff6633; /* Яркая оранжевая кнопка */
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 10px;
+    transition: 0.3s; /* Плавный ховер-эффект */
+    color: white;
+    box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
+}
+
+/* Эффект наведения на кнопку */
+.btn:hover {
+    background-color: #e24d1b; /* Более тёмный оттенок при наведении */
+    box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
+}
