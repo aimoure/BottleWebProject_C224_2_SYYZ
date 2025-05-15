@@ -3,6 +3,7 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
     color: #ff6633;
+    background: #fafafa;
 }
 
 /* Отступы, чтобы контент не прижимался к краям */
@@ -107,26 +108,32 @@ input[type="checkbox"].input-validation-error {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
+    justify-content: center; /* Центрирование по горизонтали */
+    width: 100%; /* Убедимся, что контейнер занимает всю доступную ширину */
 }
 
-/* Расположение по горизонтали*/
+/* Расположение по горизонтали */
 .col-proud {
-    flex: 1;
-    max-width: 360px;
+    flex: 0 0 calc(50% - 10px); /* 50% ширины минус половину gap */
+    max-width: calc(50% - 10px); /* Ограничиваем ширину */
+    box-sizing: border-box; /* Включаем padding в ширину */
+    display: flex; /* Для центрирования содержимого внутри */
+    justify-content: center; /* Центрируем содержимое внутри .col-proud */
 }
 
-/* Карточка с создетельницей/-ем */
+/* Карточка с создателем */
 .creator {
     color: white;
     text-align: center;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    border-color: #faad79;
-    background-color: rgba(255, 102, 51, 0.6);
-    width: 260px;
-    flex-grow: 1;
+    border-color: #ffe6cc;
+    background-color: #ffe6cc;
+    color: #d35400;
+    width: 100%;
+    max-width: 340px; /* Учитываем gap */
+    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
 }
 
     /* Оформление аватаров создательниц */
@@ -201,7 +208,7 @@ table.custom-table {
     }
 
 
-/* Основной блок всей страницы про Венгерский алгоритм */
+/* Основной блок всей страницы */
 .hungarian-page {
     font-size: 18px; /* Увеличенный читаемый текст */
     line-height: 1.7; /* Пространство между строками для лёгкости чтения */
