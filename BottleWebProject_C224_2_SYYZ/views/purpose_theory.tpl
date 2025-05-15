@@ -12,7 +12,7 @@
         <h1>Задача о назначениях (Венгерский алгоритм)</h1>
         <p class="lead">Как математика помогает распределять задачи и экономить ресурсы</p>
         <p>
-            <a href="/hungarian-calc" class="btn btn-warning btn-lg mt-3">Перейти к калькулятору</a>
+            <a href="/purpose_practice" class="btn btn-warning btn-lg mt-3">Перейти к калькулятору</a>
         </p>
     </div>
 
@@ -108,7 +108,7 @@
         <hr>
         <div class="calc-start-section text-center">
         <h1 class="mb-4">Готовы решить свою задачу?</h1>
-        <a href="/hungarian-calc" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
+        <a href="/purpose_practice" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
     </div>
     </div>
 </div>
