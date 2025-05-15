@@ -104,10 +104,11 @@
         <p>Венгерский алгоритм работает, если задача <strong>закрытая</strong>: количество исполнителей \( = \) количеству задач. То есть:</p>
         <p>\[ n = m \]</p>
         <p>Если это не так — добавляем фиктивных исполнителей или задачи с нулевыми затратами.</p>
-
-        <div class="calc-start-box">
-            <h1>Готовы решить свою задачу?</h1>
-            <a href="/hungarian-calc" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
-        </div>
+        
+        <hr>
+        <div class="calc-start-section text-center">
+        <h1 class="mb-4">Готовы решить свою задачу?</h1>
+        <a href="/hungarian-calc" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
+    </div>
     </div>
 </div>
