@@ -1,77 +1,55 @@
 % rebase('layout.tpl', title=title, year=year)
 
 <div class="jumbotron">
-	<h1>Direct linear programming problem</h1>
+	<h1>Прямая задача линейного программирования</h1>
 	<p class="lead">
-       The direct linear programming problem task is to maximize or minimize the linear function of a goal under conditions expressed by a system of linear constraints.
+        Суть прямой задачи линейного программирования состоит в том, чтобы максимизировать или минимизировать линейную функцию в условиях, выраженных системой линейных ограничений.
     </p>
 </div>
 
 <div class="section">
-    <h2>Problem Definition</h2>
+    <h2>Определение задачи</h2>
     <p class="text">
-        A primal linear programming problem (LPP) is an optimization task where you need to maximize or minimize a linear objective function
+        Прямая задача линейного программирования (ЗЛП) — задача оптимизации, где нужно максимизировать или минимизировать линейную целевую функцию 
         <span class="center">Z = c<sub>1</sub>x<sub>1</sub> + c<sub>2</sub>x<sub>2</sub> + … + c<sub>n</sub>x<sub>n</sub></span>
-        subject to a system of linear constraints, for example, a<sub>1</sub>x<sub>3</sub> + a<sub>2</sub>x<sub>5</sub> ≤ b<sub>1</sub> and non-negativity conditions xi ≥ 0.
+        при условии, что переменные x<sub>i</sub> удовлетворяют системе линейных ограничений, например, a<sub>1</sub>x<sub>3</sub> + a<sub>2</sub>x<sub>5</sub> ≤ b<sub>1</sub> и условию неотрицательности x<sub>i</sub> ≥ 0.
     </p>
-    <p class="text">The goal is to find such x<sub>i</sub> that Z is optimal.</p>
-    <p class="text">The main method for solving a primal LPP is the simplex method.</p>
+    <p class="text">Цель — найти такие x<sub>i</sub>, чтобы Z была оптимальной.</p>
+    <p class="text">Основным методом для решения прямой ЗЛП является симплекс метод.</p>
 </div>
 
 <section class="section">
-    <h2>Simplex Method</h2>
+    <h2>Симплекс-метод</h2>
     <p class="text">
-        The Simplex Method is an algorithm for solving LPP, which works as follows:
+        Симплекс-метод — это алгоритм решения ЗЛП, который работает следующим образом:
     </p>
     <ol class="list">
-        <li class="text">&emsp;Convert the problem to standard form by adding slack variables for inequalities.</li>
-        <li class="text">&emsp;Construct the initial simplex table, where the rows are constraints, and the last row is the objective function.</li>
-        <li class="text">&emsp;Iteratively:<br>
-            <span class="step-item"><span>Check for optimality (are there negative coefficients in the Z-row?).</span></span>
-            <span class="step-item"><span>If there are, select the pivot column (the largest negative number by modulus from the Z-row) and row (the minimum positive ratio of the right-hand side to the pivot column element), then update the table by introducing a new variable into the basis.</span></span>
-            <span class="step-item"><span>Repeat until Z becomes optimal.</span></span>
-            <span class="indented-text">All elements of the pivot row are divided by the pivot element, the elements of the pivot column are set to 0.</span>
-            <span class="indented-text">The remaining elements are calculated using the formula:</span>
+        <li class="text">&emsp;Приведение задачи к стандартной форме, добавляя дополнительные переменные для неравенств.</li>
+        <li class="text">&emsp;Построение начальной симплекс-таблицы, где строки — ограничения, а последняя строка — целевая функция.</li>
+        <li class="text">&emsp;Итеративно:<br>
+            <span class="step-item"><span>Проверка оптимальности (есть ли отрицательные коэффициенты в строке Z).</span></span>
+            <span class="step-item"><span>Если есть, выбор ведущего столбца (наибольшее по модулю отрицательное число из столбца Z) и строки (минимальное положительное отношение свободного члена к элементу столбца), пересчет таблицы, вводя новую переменную в базис.</span></span>
+            <span class="indented-text">Все элементы ключевой строки делятся на ключевой элемент, элементы ключевого столбца равны 0.</span>
+            <span class="indented-text">Остальные элементы вычисляются по формуле:</span>
             <span class="formula">a<sub>ij</sub>' = a<sub>ij</sub> - (a<sub>iq</sub> * a<sub>pj</sub>) / a<sub>pq</sub>,</span>
-            <span class="formula">where p is the pivot row, q is the pivot column</span>
+            <span class="formula">где p – ключевая строка, q – ключевой столбец</span>
+            <span class="step-item"><span>Повтор, пока Z не станет оптимальным.</span></span>
         </li>
-        <li class="text">&emsp;Extract the solution: the values of x<sub>i</sub> and Z.</li>
+        <li class="text">&emsp;Извлекаем решение: значения x<sub>i</sub> и Z.</li>
     </ol>
 </section>
 
-<p class="title-text">
-	Example of Solving
-</p>
-<p class="intro-text">
-	Maximize:
-</p>
-<p class="intro-text" style='text-align: center'>
-Z = 3x<sub>1</sub> + 2x<sub>2</sub>
-</p>
-<p class="intro-text">
-	Subject to:
-</p>
-<p class="intro-text" style='text-align: center'>
-	2x<sub>1</sub> + x<sub>2</sub> ≤ 4 
-</p>
-<p class="intro-text" style='text-align: center'>
-	x<sub>1</sub> + 2x<sub>2</sub> ≤ 4  
-</p>
-<p class="intro-text" style='text-align: center'>
-	x<sub>1</sub>, x<sub>2</sub> ≥ 0
-</p>
-<p class="intro-text">
-	Step 1: Convert to standard form
-</p>
-<p class="intro-text" style='text-align: center'>
-	2x<sub>1</sub> + x<sub>2</sub> + s<sub>1</sub> = 4 
-</p>
-<p class="intro-text" style='text-align: center'>
-	x<sub>1</sub> + 2x<sub>2</sub> + s<sub>2</sub> = 4 
-</p>
-<p class="intro-text" style='text-align: center'>
-	Z = 3x<sub>1</sub> + 2x<sub>2</sub>,
-</p>
-<p class="intro-text">
-	where s<sub>1</sub>, s<sub>2</sub> ≥ 0
-</p>
+<div class="section">
+    <h2>Пример решения</h2>
+    <p class="text">Максимизировать:</p>
+    <p class="formula">Z = 3x<sub>1</sub> + 2x<sub>2</sub></p>
+    <p class="text">Ограничения:</p>
+    <p class="formula">2x<sub>1</sub> + x<sub>2</sub> ≤ 4</p>
+    <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> ≤ 4</p>
+    <p class="formula">x<sub>1</sub>, x<sub>2</sub> ≥ 0</p>
+    <p class="text">Шаг 1: Приведение к стандартной форме:</p>
+    <p class="formula">2x<sub>1</sub> + x<sub>2</sub> + s<sub>1</sub> = 4</p>
+    <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> + s<sub>2</sub> = 4</p>
+    <p class="formula">Z = 3x<sub>1</sub> + 2x<sub>2</sub></p>
+    <p class="formula">где s<sub>1</sub>, s<sub>2</sub> ≥ 0</p>
+</div>
