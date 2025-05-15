@@ -25,10 +25,10 @@
                     <li><a href="/direct_lpp_theory">Прямая ЗЛП</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/purpose_theory">Assignment</a></li>
+                    <li><a href="/dual_theory">Двойственная ЗЛП</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/dual_theory">Dual theory</a></li>
+                    <li><a href="/purpose_theory">Задача о назначениях</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/about">Об авторах</a></li>
