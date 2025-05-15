@@ -22,13 +22,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/direct_lpp_theory">Direct LPP</a></li>
+                    <li><a href="/direct_lpp_theory">Прямая ЗЛП</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/purpose_theory">Assignment</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/about">About</a></li>
+                    <li><a href="/about">Об авторах</a></li>
                 </ul>
             </div>
         </div>
@@ -38,7 +38,7 @@
         {{!base}}
         <hr />
         <footer>
-            <p>&copy; {{ year }} - DualSolve</p>
+            <p>&copy; {{ year }} — DualSolve</p>
         </footer>
     </div>
 
