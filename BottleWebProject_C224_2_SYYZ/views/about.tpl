@@ -3,7 +3,7 @@
 <div class="jumbotron">
 	<h1>About</h1>
 	<p class="lead">
-        Our website, <span class="highlight">DualSolve</span>, was created to solve Linear Programming (RLP) Problems, General RLP, Transport problem, Assignment Problem and Direct and dual RLP in the framework of educational practice in module 02
+        Our website, <span class="highlight">DualSolve</span>, was created to solve Linear Programming Problems (LPP): Direct LPP, Transport problem, Assignment Problem and Direct and dual LPP in the framework of educational practice in module 02.
     </p>
 </div>
 
@@ -59,5 +59,4 @@
     </div>
 </div>
 
-<p/>
-<p>Moskovsky ave, 149B, St. Petersburg, 196128</p>
+<p class="address">Moskovsky ave, 149B, St. Petersburg, 196128</p>
