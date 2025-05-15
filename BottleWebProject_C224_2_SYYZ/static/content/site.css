@@ -222,7 +222,7 @@ table.custom-table {
 }
 
     /* Основной контейнер с содержимым внутри */
-    .hungarian-page .container {
+    .hungarian-page .hungarian-container {
         max-width: 960px; /* Ограничение ширины текста, чтобы не расплывался */
         margin: 40px auto; /* Отступ сверху и снизу + центрирование */
         padding: 30px; /* Внутренние отступы */
