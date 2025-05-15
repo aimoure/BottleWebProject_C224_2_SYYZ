@@ -180,8 +180,16 @@ input[type="checkbox"].input-validation-error {
     display: block; /* Отображение как блочный элемент */
 }
 
+
+/* �������� ����� ��������: ��������� */
+.title-text {
+    font-size: 28px;
+    text-indent: 60px;
+}
+
 /* Отступ для вложенного текста */
 .indented-text {
     margin-left: 50px; /* Дополнительный отступ для вложенного текста */
     display: block; /* Отображение как блочный элемент */
 }
+
