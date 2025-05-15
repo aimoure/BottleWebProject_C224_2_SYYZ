@@ -47,9 +47,118 @@
     <p class="formula">2x<sub>1</sub> + x<sub>2</sub> ≤ 4</p>
     <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> ≤ 4</p>
     <p class="formula">x<sub>1</sub>, x<sub>2</sub> ≥ 0</p>
-    <p class="text">Шаг 1: Приведение к стандартной форме:</p>
+    <p class="text">Шаг 1: Приведение к стандартной форме</p>
     <p class="formula">2x<sub>1</sub> + x<sub>2</sub> + s<sub>1</sub> = 4</p>
     <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> + s<sub>2</sub> = 4</p>
     <p class="formula">Z = 3x<sub>1</sub> + 2x<sub>2</sub></p>
     <p class="formula">где s<sub>1</sub>, s<sub>2</sub> ≥ 0</p>
+    <p class="text">Шаг 2: Начальная таблица</p>
+    <table class="custom-table">
+        <tr>
+            <th>Базис</th>
+            <th>x<sub>1</sub></th>
+            <th>x<sub>2</sub></th>
+            <th>s<sub>1</sub></th>
+            <th>s<sub>2</sub></th>
+            <th>Свободный член</th>
+        </tr>
+        <tr>
+            <td>s<sub>1</sub></td>
+            <td>2</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>s<sub>2</sub></td>
+            <td>1</td>
+            <td>2</td>
+            <td>0</td>
+            <td>1</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>Z</td>
+            <td>-3</td>
+            <td>-2</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+    <p class="text">Шаг 3: Итерации</p> 
+    <span class="step-item"><span>Ведущий столбец x<sub>1</sub> (-3), строка — первая (4/2 = 2)</span></span>
+    <span class="step-item"><span>Пересчет таблицы</span></span>
+    <table class="custom-table">
+        <tr>
+            <th>Базис</th>
+            <th>x<sub>1</sub></th>
+            <th>x<sub>2</sub></th>
+            <th>s<sub>1</sub></th>
+            <th>s<sub>2</sub></th>
+            <th>Свободный член</th>
+        </tr>
+        <tr>
+            <td>s<sub>1</sub></td>
+            <td>1</td>
+            <td>0.5</td>
+            <td>0.5</td>
+            <td>0</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>s<sub>2</sub></td>
+            <td>0</td>
+            <td>1.5</td>
+            <td>-0.5</td>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>Z</td>
+            <td>0</td>
+            <td>-0.5</td>
+            <td>1.5</td>
+            <td>0</td>
+            <td>6</td>
+        </tr>
+    </table>
+    <span class="step-item"><span>Ведущий столбец x<sub>2</sub> (-0.5), строка — вторая (2/1.5 = 1.33)</span></span>
+    <span class="step-item"><span>Итоговая таблица</span></span>
+    <table class="custom-table">
+        <tr>
+            <th>Базис</th>
+            <th>x<sub>1</sub></th>
+            <th>x<sub>2</sub></th>
+            <th>s<sub>1</sub></th>
+            <th>s<sub>2</sub></th>
+            <th>Свободный член</th>
+        </tr>
+        <tr>
+            <td>s<sub>1</sub></td>
+            <td>1</td>
+            <td>0</td>
+            <td>0.67</td>
+            <td>-0.33</td>
+            <td>1.33</td>
+        </tr>
+        <tr>
+            <td>s<sub>2</sub></td>
+            <td>0</td>
+            <td>1</td>
+            <td>-0.33</td>
+            <td>0.67</td>
+            <td>1.33</td>
+        </tr>
+        <tr>
+            <td>Z</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1.33</td>
+            <td>0.33</td>
+            <td>6.67</td>
+        </tr>
+    </table>
+    <span class="step-item"><span>ИРезультат: x<sub>1</sub> = 1.33, x<sub>2</sub> = 1.33, Z = 6.67.</span></span>
 </div>
