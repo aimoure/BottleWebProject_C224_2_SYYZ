@@ -14,7 +14,6 @@ def home():
         year=datetime.now().year
     )
 
-
 @route('/direct_lpp_theory')
 @view('direct_lpp_theory')
 def direct_lpp_theory():
@@ -32,7 +31,6 @@ def direct_lpp_practice():
         title='The direct linear programming program',
         year=datetime.now().year
     )
-
 
 @route('/about')
 @view('about')

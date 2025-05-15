@@ -1,9 +1,9 @@
 % rebase('layout.tpl', title=title, year=year)
 
 <div class="jumbotron">
-	<h1>About</h1>
+	<h1>Об авторах</h1>
 	<p class="lead">
-        Our website � DualSolve � was created to solve Linear Programming Problems (LPP): Direct LPP, Transport problem, Assignment Problem and Direct and dual LPP in the framework of educational practice in module 02.
+        Наш сайт — DualSolve — был создан для решения задач линейного программирования (ЗЛП): прямой ЗЛП, транспортной задачи, задачи о назничениях, а также двойственной ЗЛП в рамках учебной практики по модулю 02.
     </p>
 </div>
 
@@ -12,9 +12,9 @@
 	<div class="col-proud">
         <div class="creator">
             <img src="/static/images/user_avatar.png">
-            <h2>Smirnova Irina Konstantinovna</h2>
+            <h2>Смирнова Ирина Константиновна</h2>
             <p>
-                what she has done
+                Создание страниц...
             </p>
             <p>
                 rjzns
@@ -24,9 +24,9 @@
     <div class="col-proud">
         <div class="creator">
             <img src="/static/images/user_avatar.png">
-            <h2>Yakovleva Anna Sergeevna</h2>
+            <h2>Яковлева Анна Сергеевна</h2>
             <p>
-                what she has done
+                Создание страниц...
             </p>
             <p>
                 aimoure
@@ -36,9 +36,9 @@
     <div class="col-proud">
         <div class="creator">
             <img src="/static/images/user_avatar.png">
-            <h2>Yaropolov Kirill Sergeevich</h2>
+            <h2>Ярополов Кирилл Сергеевич</h2>
             <p>
-                what he has done
+                Создание страниц...
             </p>
             <p>
                 4aekccaxarom
@@ -48,9 +48,9 @@
     <div class="col-proud">
         <div class="creator">
             <img src="/static/images/user_avatar.png">
-            <h2>Zolina Viktoriya Alekseevna</h2>
+            <h2>Золина Виктория Алексеевна</h2>
             <p>
-                what she has done
+                Создание страниц...
             </p>
             <p>
                 Takeda-Takahashi
@@ -59,4 +59,4 @@
     </div>
 </div>
 
-<p class="address">Moskovsky ave, 149B, St. Petersburg, 196128</p>
+<p class="address">Московский проспект, 149B, Санкт-Петербург, 196128</p>
