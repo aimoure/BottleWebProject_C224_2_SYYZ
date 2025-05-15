@@ -25,6 +25,9 @@
                     <li><a href="/direct_lpp_theory">Direct LPP</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
+                    <li><a href="/purpose_theory">Assignment</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
                     <li><a href="/about">About</a></li>
                 </ul>
             </div>
