@@ -180,19 +180,36 @@ input[type="checkbox"].input-validation-error {
     display: block; /* Отображение как блочный элемент */
 }
 
-
-/* �������� ����� ��������: ��������� */
-.title-text {
-    font-size: 28px;
-    text-indent: 60px;
-}
-
 /* Отступ для вложенного текста */
 .indented-text {
     margin-left: 50px; /* Дополнительный отступ для вложенного текста */
     display: block; /* Отображение как блочный элемент */
 }
 
+/* Оформление таблицы */
+table.custom-table {
+    margin: 0 auto; /* Центрирование таблицы */
+    border-collapse: collapse;
+}
+
+    table.custom-table th, table.custom-table td {
+        text-align: center; /* Выравнивание текста по центру */
+        font-weight: normal; /* Обычный шрифт, не жирный */
+        border: 1px solid #ccc; /* Чтобы таблица была с границами */
+        padding: 8px 12px;
+    }
+
+table.custom-table {
+    margin: 0 auto; /* Центрирование таблицы */
+    border-collapse: collapse;
+}
+
+    table.custom-table th, table.custom-table td {
+        text-align: center; /* Выравнивание текста по центру */
+        font-weight: normal; /* Обычный шрифт, не жирный */
+        border: 1px solid #ccc; /* Чтобы таблица была с границами */
+        padding: 8px 12px;
+    }
 
 
 /* Основной блок всей страницы про Венгерский алгоритм */
@@ -224,7 +241,17 @@ input[type="checkbox"].input-validation-error {
         padding-left: 12px; /* Отступ между полосой и текстом */
     }
 
+
     /* Параграфы и списки: общий отступ снизу */
+    .hungarian-page h3 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #d35400;
+        border-left: 6px solid #e67e22;
+        padding-left: 12px;
+    }
+
     .hungarian-page p,
     .hungarian-page ul {
         margin-bottom: 25px;
