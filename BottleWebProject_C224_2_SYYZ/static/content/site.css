@@ -193,3 +193,96 @@ input[type="checkbox"].input-validation-error {
     display: block; /* Отображение как блочный элемент */
 }
 
+
+/* СТИИЛ ВИКУЛИ КОНТЕКСТ */
+
+.hungarian-page {
+    font-size: 18px;
+    line-height: 1.7;
+    font-family: 'Segoe UI', sans-serif;
+    color: #222;
+    background-color: #fafafa;
+}
+
+    .hungarian-page .container {
+        max-width: 960px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    .hungarian-page h2 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 26px;
+        color: #d35400;
+        border-left: 6px solid #e67e22;
+        padding-left: 12px;
+    }
+
+    .hungarian-page p,
+    .hungarian-page ul {
+        margin-bottom: 25px;
+    }
+
+    .hungarian-page ul {
+        padding-left: 30px;
+    }
+
+    .hungarian-page li {
+        margin-bottom: 10px;
+    }
+
+    .hungarian-page img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 25px auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .hungarian-page .jumbotron {
+        background-color: #ffe6cc;
+        padding: 40px;
+        border-radius: 10px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+        .hungarian-page .jumbotron h1 {
+            font-size: 38px;
+            color: #d35400;
+        }
+
+        .hungarian-page .jumbotron p.lead {
+            font-size: 20px;
+            color: #6e2c00;
+        }
+
+    .hungarian-page hr {
+        margin: 60px 0;
+        border: 0;
+        height: 2px;
+        background: linear-gradient(to right, #f39c12, transparent);
+    }
+
+    .hungarian-page em a {
+        color: #e67e22;
+        text-decoration: none;
+    }
+
+        .hungarian-page em a:hover {
+            text-decoration: underline;
+        }
+
+    .hungarian-page .img-float-right {
+        float: right;
+        width: 1500px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
