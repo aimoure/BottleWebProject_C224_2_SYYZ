@@ -22,7 +22,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/direct_lpp_theory">������ ���</a></li>
+                    <li><a href="/direct_lpp_theory">Прямая ЗЛП</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/purpose_theory">Assignment</a></li>
