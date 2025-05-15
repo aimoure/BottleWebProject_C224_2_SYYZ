@@ -19,6 +19,7 @@
     <Name>BottleWebProject_C224_2_SYYZ</Name>
     <RootNamespace>BottleWebProject_C224_2_SYYZ</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
