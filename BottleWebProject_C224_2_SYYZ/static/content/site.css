@@ -154,11 +154,12 @@ input[type="checkbox"].input-validation-error {
 .text {
     line-height: 1.5; /* Интервал для улучшения читабельности */
     margin-bottom: 10px; /* Отступ снизу */
+    margin-top: 10px;
 }
 
 /* Список с отступом */
 .list {
-    margin-left: 20px;
+    margin-left: 30px;
 }
 
 /* Элемент шага в инструкции */
@@ -199,18 +200,6 @@ table.custom-table {
         padding: 8px 12px;
     }
 
-table.custom-table {
-    margin: 0 auto; /* Центрирование таблицы */
-    border-collapse: collapse;
-}
-
-    table.custom-table th, table.custom-table td {
-        text-align: center; /* Выравнивание текста по центру */
-        font-weight: normal; /* Обычный шрифт, не жирный */
-        border: 1px solid #ccc; /* Чтобы таблица была с границами */
-        padding: 8px 12px;
-    }
-
 
 /* Основной блок всей страницы про Венгерский алгоритм */
 .hungarian-page {
@@ -233,7 +222,7 @@ table.custom-table {
 
     /* Заголовки второго уровня (h2) — стиль для разделов */
     .hungarian-page h2 {
-        margin-top: 60px; /* Большой отступ сверху */
+        margin-top: 40px; /* Большой отступ сверху */
         margin-bottom: 20px; /* Отступ снизу */
         font-size: 26px; /* Размер шрифта */
         color: #d35400; /* Оранжево-коричневый цвет */
@@ -306,7 +295,7 @@ table.custom-table {
         background: linear-gradient(to right, #f39c12, transparent); /* Градиентный стиль */
     }
 
-    /* Ссылки в подписях (например, "вдохновлено на Хабре") */
+    /* Ссылки в подписях */
     .hungarian-page em a {
         color: #e67e22;
         text-decoration: none;
@@ -352,6 +341,7 @@ table.custom-table {
         border-radius: 10px;
         transition: 0.3s; /* Плавный ховер-эффект */
         color: white;
+        margin-top: 30px;
         box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
     }
 
