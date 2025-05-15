@@ -334,7 +334,7 @@ table.custom-table {
     text-align: center;
     margin-top: 60px; /* Отступ сверху */
     padding-top: 30px; /* Внутренний отступ */
-    border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
+    //border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
 }
 
     /* Заголовок в блоке калькулятора */
@@ -352,6 +352,7 @@ table.custom-table {
         border-radius: 10px;
         transition: 0.3s; /* Плавный ховер-эффект */
         color: white;
+        margin-top: 30px;
         box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
     }
 
