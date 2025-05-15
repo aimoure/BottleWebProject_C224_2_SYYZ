@@ -49,3 +49,12 @@ def direct_lpp_practice():
         title='The assignment problem',
         year=datetime.now().year
     )
+
+@route('/dual_theory')
+@view('dual_theory')
+def dual_theory():
+    """Renders the dual_theory page."""
+    return dict(
+        title='The dual linear programming problem',
+        year=datetime.now().year
+    )

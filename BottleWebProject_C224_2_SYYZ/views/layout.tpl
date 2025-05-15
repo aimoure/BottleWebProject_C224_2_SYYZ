@@ -22,10 +22,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/direct_lpp_theory">Прямая ЗЛП</a></li>
+                    <li><a href="/direct_lpp_theory">������ ���</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/purpose_theory">Assignment</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="/dual_theory">Dual theory</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/about">Об авторах</a></li>
@@ -33,6 +36,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="container body-content">
         {{!base}}

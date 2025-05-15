@@ -50,6 +50,13 @@
     <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="static\images\Condition.png" />
+    <Content Include="static\images\Step1.png" />
+    <Content Include="static\images\Step2.png" />
+    <Content Include="static\images\Step3_1.png" />
+    <Content Include="static\images\Step3_2.png" />
+    <Content Include="static\images\Step4.png" />
+    <Content Include="static\images\Step5.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
@@ -69,15 +76,16 @@
     <Content Include="views\direct_lpp_practice.tpl">
       <SubType>Code</SubType>
     </Content>
+
+    <Content Include="views\purpose_theory.tpl" />
+
     <Content Include="views\dual_theory.tpl" />
+
     <Content Include="views\direct_lpp_theory.tpl">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\index.tpl" />
     <Content Include="views\layout.tpl" />
-    <Content Include="views\purpose_theory.tpl">
-      <SubType>Code</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
