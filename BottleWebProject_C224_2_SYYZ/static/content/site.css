@@ -50,8 +50,8 @@ input[type="checkbox"].input-validation-error {
 
 /* Цвет navbar */
 .navbar-inverse {
-    background-color: #ff855c;
-    border-color: #ff855c;
+    background-color: #d35400;
+    border-color: #d35400;
 }
     /* Цвет текста логотипа */
     .navbar-inverse .navbar-brand {
@@ -211,34 +211,38 @@ table.custom-table {
         padding: 8px 12px;
     }
 
-/* СТИИЛ ВИКУЛИ КОНТЕКСТ */
 
+/* Основной блок всей страницы про Венгерский алгоритм */
 .hungarian-page {
-    font-size: 18px;
-    line-height: 1.7;
-    font-family: 'Segoe UI', sans-serif;
-    color: #222;
-    background-color: #fafafa;
+    font-size: 18px; /* Увеличенный читаемый текст */
+    line-height: 1.7; /* Пространство между строками для лёгкости чтения */
+    font-family: 'Segoe UI', sans-serif; /* Современный шрифт */
+    color: #222; /* Тёмно-серый цвет текста */
+    background-color: #fafafa; /* Светлый фон страницы */
 }
 
+    /* Основной контейнер с содержимым внутри */
     .hungarian-page .container {
-        max-width: 960px;
-        margin: 40px auto;
-        padding: 30px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        max-width: 960px; /* Ограничение ширины текста, чтобы не расплывался */
+        margin: 40px auto; /* Отступ сверху и снизу + центрирование */
+        padding: 30px; /* Внутренние отступы */
+        background: #fff; /* Белый фон контейнера */
+        border-radius: 12px; /* Скруглённые углы */
+        box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Едва заметная тень */
     }
 
+    /* Заголовки второго уровня (h2) — стиль для разделов */
     .hungarian-page h2 {
-        margin-top: 60px;
-        margin-bottom: 20px;
-        font-size: 26px;
-        color: #d35400;
-        border-left: 6px solid #e67e22;
-        padding-left: 12px;
+        margin-top: 60px; /* Большой отступ сверху */
+        margin-bottom: 20px; /* Отступ снизу */
+        font-size: 26px; /* Размер шрифта */
+        color: #d35400; /* Оранжево-коричневый цвет */
+        border-left: 6px solid #e67e22; /* Яркая полоса слева */
+        padding-left: 12px; /* Отступ между полосой и текстом */
     }
 
+
+    /* Параграфы и списки: общий отступ снизу */
     .hungarian-page h3 {
         margin-top: 60px;
         margin-bottom: 20px;
@@ -253,48 +257,56 @@ table.custom-table {
         margin-bottom: 25px;
     }
 
+    /* Списки: отступ слева */
     .hungarian-page ul {
         padding-left: 30px;
     }
 
+    /* Элементы списка: расстояние между пунктами */
     .hungarian-page li {
         margin-bottom: 10px;
     }
 
+    /* Все изображения в статье */
     .hungarian-page img {
         display: block;
-        max-width: 100%;
+        max-width: 100%; /* Адаптивность — не выходит за контейнер */
         height: auto;
-        margin: 25px auto;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        margin: 25px auto; /* Центрирование и отступы */
+        border-radius: 8px; /* Скругление */
+        box-shadow: 0 0 10px rgba(0,0,0,0.05); /* Мягкая тень */
     }
 
+    /* Шапка (jumbotron) страницы */
     .hungarian-page .jumbotron {
-        background-color: #ffe6cc;
-        padding: 40px;
-        border-radius: 10px;
+        background-color: #ffe6cc; /* Тёплый оранжевый фон */
+        padding: 40px; /* Просторный отступ */
+        border-radius: 10px; /* Скруглённые углы */
         margin-bottom: 40px;
-        text-align: center;
+        text-align: center; /* Центрирование текста */
     }
 
+        /* Заголовок в шапке */
         .hungarian-page .jumbotron h1 {
             font-size: 38px;
-            color: #d35400;
+            color: #d35400; /* Яркий акцент */
         }
 
+        /* Подзаголовок в шапке */
         .hungarian-page .jumbotron p.lead {
             font-size: 20px;
             color: #6e2c00;
         }
 
+    /* Горизонтальная линия */
     .hungarian-page hr {
-        margin: 60px 0;
+        margin: 60px 0; /* Простор сверху и снизу */
         border: 0;
         height: 2px;
-        background: linear-gradient(to right, #f39c12, transparent);
+        background: linear-gradient(to right, #f39c12, transparent); /* Градиентный стиль */
     }
 
+    /* Ссылки в подписях (например, "вдохновлено на Хабре") */
     .hungarian-page em a {
         color: #e67e22;
         text-decoration: none;
@@ -304,11 +316,47 @@ table.custom-table {
             text-decoration: underline;
         }
 
-    .hungarian-page .img-float-right {
-        float: right;
-        width: 1500px;
-        margin-left: 20px;
+/* Контейнер для задачи с изображением */
+.task-container {
+    overflow: auto; /* Чтобы картинка с текстом не вылезала за блок */
+}
+
+/* Картинка задачи, плавающая вправо */
+.task-image {
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 400px;
+}
+
+/* Нижний блок с кнопкой "Перейти к калькулятору" */
+.calc-start-box {
+    text-align: center;
+    margin-top: 60px; /* Отступ сверху */
+    padding-top: 30px; /* Внутренний отступ */
+    border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
+}
+
+    /* Заголовок в блоке калькулятора */
+    .calc-start-box h3 {
+        color: #d35400;
         margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
+
+    /* Кнопка перехода к калькулятору */
+    .calc-start-box .btn {
+        background-color: #ff6633; /* Яркая оранжевая кнопка */
+        border: none;
+        padding: 12px 25px;
+        font-size: 18px;
+        border-radius: 10px;
+        transition: 0.3s; /* Плавный ховер-эффект */
+        color: white;
+        box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
+    }
+
+        /* Эффект наведения на кнопку */
+        .calc-start-box .btn:hover {
+            background-color: #e24d1b; /* Более тёмный оттенок при наведении */
+            box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
+        }
