@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
         td.style.padding = '0';
         td.style.margin = '0';
         td.style.textAlign = 'center';
-        td.style.fontSize = '14px';
+        td.style.fontSize = '18px';
     }
     // Input для ввода
     function styleInput(inp) {
@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
         inp.style.outline = 'none';
         inp.style.borderRadius = '4px';
         inp.style.textAlign = 'center';
-        inp.style.fontSize = '14px';
+        inp.style.fontSize = '18px';
     }
     // Выпадающий список
     function styleSelect(sel) {
@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
         sel.style.outline = 'none';
         sel.style.borderRadius = '4px';
         sel.style.textAlign = 'center';
-        sel.style.fontSize = '14px';
+        sel.style.fontSize = '18px';
         sel.style.whiteSpace = 'nowrap';
     }
 
@@ -133,7 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
             styleSelect(sel); // Стилизация выпадающего списка
             sel.name = `cons_sign_${i}`; // Уникальное имя поля
             // Добавление опций с символами ≤, = и ≥
-            ['<=', '=', '>='].forEach(sym => {
+            ['≤', '=', '≥'].forEach(sym => {
                 const opt = document.createElement('option'); // Для каждого элемента массива создаётся новый элемент <option>
                 opt.value = sym; // Значение атрибута value у <option> устанавливается равным текущей строке sym
                 opt.textContent = sym; // Текстовое содержимое <option>, отображаемое в выпадающем списке, тоже устанавливается в sym

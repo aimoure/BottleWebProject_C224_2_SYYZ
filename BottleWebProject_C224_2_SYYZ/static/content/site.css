@@ -384,6 +384,15 @@ table.custom-table {
         z-index: 2; /* Поднимаем над другими элементами */
     }
 
+    .task-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: -36px;
+        margin-top: -4px;
+        align-content: center;
+    }
+
 .btn {
     background-color: #d35400; /* Яркая оранжевая кнопка */
     border: none;

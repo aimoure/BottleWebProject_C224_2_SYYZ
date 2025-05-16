@@ -32,6 +32,7 @@
                     <div id="constraints_rhs"></div>
                 </div>
             </div>
+            <br>
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
         </form>
 
@@ -44,7 +45,7 @@
         </div>
         <div class="example-panel task-container">
             <h3>Двойственная задача</h3>
-            <p>Нужно найти двойственную задачу? Можешь перейти здесь.</p>
+            <p>Нужно найти и решить двойственную задачу? Можешь перейти здесь.</p>
             <p>
                 <a href="/dual_lpp_practice" class="btn btn-warning btn-lg mt-3">Двойственная ЗЛП</a>
             </p>
