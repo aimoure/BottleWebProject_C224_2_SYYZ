@@ -59,6 +59,7 @@
     <Content Include="static\images\Step5.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
+    <Content Include="static\scripts\dynamic_table.js" />
     <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="static\scripts\jquery-1.10.2.js" />
     <Content Include="static\scripts\jquery-1.10.2.min.js" />
@@ -81,7 +82,6 @@
     <Content Include="views\dual_lpp_theory.tpl" />
     <Content Include="views\index.tpl" />
     <Content Include="views\purpose_theory.tpl" />
-    <Content Include="views\dual_theory.tpl" />
     <Content Include="views\direct_lpp_theory.tpl">
       <SubType>Code</SubType>
     </Content>
