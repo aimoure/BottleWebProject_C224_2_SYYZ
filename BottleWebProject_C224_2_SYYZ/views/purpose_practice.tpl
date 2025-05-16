@@ -10,8 +10,8 @@
     <div class="container">
         <!-- Основная форма: ввод размера и значений матрицы -->
         <form method="post" action="/hungarian-calc">
-            <label for="size">Размер матрицы (n × n):</label>
-            <input type="number" id="size" name="size" min="2" max="10" value="4" required>
+            <label for="size">Размер матрицы (n × n):&emsp;</label>
+            <input class="always-visible" type="number" id="size" name="size" min="2" max="10" value="4" required>
             
             <br><br>
 

@@ -471,7 +471,7 @@ table.custom-table {
 }
 
 /* Стиль для ввода ввода цифр */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input.always-visible::-webkit-inner-spin-button,
+input.always-visible::-webkit-outer-spin-button {
     opacity: 1;
 }

@@ -9,7 +9,7 @@
     <div class="container">
         <form method="post" action="/hungarian-calc">
             <label for="size">Количество переменных:&emsp;</label>
-            <input style="text-align: center; border-radius: 10px;" type="number" id="number_of_variable" name="size" min="2" max="10" value="2" required>
+            <input class="always-visible" type="number" id="number_of_variable" name="size" min="2" max="10" value="2" required>
             <br>
             <div id="variable_container"></div>
             <br>
@@ -20,7 +20,7 @@
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
             <form method="post" action="/hungarian-calc" enctype="multipart/form-data" class="example-form">
-                <button type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
         <div class="example-panel task-container">
