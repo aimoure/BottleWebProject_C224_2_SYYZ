@@ -308,6 +308,12 @@ table.custom-table {
             text-decoration: underline;
         }
 
+    /* Стиль для input */
+    .hungarian-page input[type=number] {
+        text-align: center;
+        border-radius: 10px;
+    }
+
 /* Контейнер для задачи с изображением */
 .task-container {
     overflow: auto; /* Чтобы картинка с текстом не вылезала за блок */
@@ -401,7 +407,7 @@ table.custom-table {
     font-size: 3rem;
     font-weight: bold;
     color: black;
-    margin-bottom: 30px; /* отступ снизу под заголовком */
+    margin-bottom: 30px; /* Отступ снизу под заголовком */
 }
 
 /* Контейнер настроек матрицы: поле ввода размера и кнопка */
@@ -462,4 +468,10 @@ table.custom-table {
 .example-button {
     padding: 8px 20px; /* Контроль размера кнопки (вертикальный и горизонтальный отступы) */
     /* Можно также добавить: font-weight: bold; и border-radius для стиля */
+}
+
+/* Стиль для ввода ввода цифр */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
 }

@@ -6,6 +6,9 @@
 	    <p class="lead">
             Суть прямой задачи линейного программирования состоит в том, чтобы максимизировать или минимизировать линейную функцию в условиях, выраженных системой линейных ограничений.
         </p>
+        <p>
+            <a href="/direct_lpp_practice" class="btn btn-warning btn-lg mt-3">Перейти к калькулятору</a>
+        </p>
     </div>
 
     <div class="container">
@@ -163,6 +166,12 @@
                 </tr>
             </table>
             <span class="text"><span>Результат: x<sub>1</sub> = 1.33, x<sub>2</sub> = 1.33, Z = 6.67.</span></span>
+        </div>
+
+        <hr>
+        <div class="calc-start-section text-center">
+            <h1 class="mb-4">Готовы решить свою задачу?</h1>
+            <a href="/direct_lpp_practice" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
         </div>
     </div>
 </div>
