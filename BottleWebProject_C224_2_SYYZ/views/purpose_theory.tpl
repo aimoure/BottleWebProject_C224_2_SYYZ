@@ -107,8 +107,8 @@
         
         <hr>
         <div class="calc-start-section text-center">
-        <h1 class="mb-4">Готовы решить свою задачу?</h1>
-        <a href="/purpose_practice" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
-    </div>
+            <h1 class="mb-4">Готовы решить свою задачу?</h1>
+            <a href="/purpose_practice" class="btn btn-primary btn-lg">Перейти к калькулятору</a>
+        </div>
     </div>
 </div>

@@ -1,8 +1,56 @@
 % rebase('layout.tpl', title=title, year=year)
 
-<div class="jumbotron">
-	<h1>About</h1>
-	<p class="lead">
-        Our website, <span class="highlight">DualSolve</span>, was created to solve Linear Programming Problems (RLP): General RLP, Transport problem, Assignment Problem and Direct and dual RLP in the framework of educational practice in module 02.
-    </p>
+<div class="hungarian-page">
+    <div class="jumbotron">
+        <h1>Калькулятор прямой задачи линейного программирования</h1>
+        <p class="lead">Введи размер матрицы и значения затрат</p>
+    </div>
+
+    <div class="container">
+        <form method="post" action="/hungarian-calc">
+            <label>Количество переменных:&emsp;</label>
+            <input class="always-visible" type="number" id="number_of_variables" min="2" max="10" value="2" required>
+            <br>
+            <label>Коэфициенты:&emsp;</label>
+            <div id="variables_container"></div>
+            <br>
+            <label>Количество ограничений:&emsp;</label>
+            <input class="always-visible" type="number" id="number_of_constraints" min="1" max="10" value="1" required>
+            <br>
+            <label>Ограничения:&emsp;</label>
+            <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
+                <!-- Коэффициенты -->
+                <div>
+                    <div id="constraints_vars"></div>
+                </div>
+                <!-- Знак -->
+                <div>
+                    <div id="constraints_signs"></div>
+                </div>
+                <!-- Свободный член -->
+                <div>
+                    <div id="constraints_rhs"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+        </form>
+
+        <div class="example-panel task-container">
+            <h3>Пример решения</h3>
+            <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
+            <form method="post" action="/hungarian-calc" enctype="multipart/form-data" class="example-form">
+                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+            </form>
+        </div>
+        <div class="example-panel task-container">
+            <h3>Двойственная задача</h3>
+            <p>Нужно найти двойственную задачу? Можешь перейти здесь.</p>
+            <p>
+                <a href="/dual_lpp_practice" class="btn btn-warning btn-lg mt-3">Двойственная ЗЛП</a>
+            </p>
+        </div>
+    </div>
 </div>
+
+
+<script src="/static/scripts/dynamic_table.js"></script>

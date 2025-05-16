@@ -57,23 +57,25 @@ input[type="checkbox"].input-validation-error {
     /* Цвет текста логотипа */
     .navbar-inverse .navbar-brand {
         color: white;
+        transition: transform 0.3s ease, color 0.3s ease; /* Плавный переход для масштабирования и цвета */
     }
 
         /* Логотип при наведении */
         .navbar-inverse .navbar-brand:hover {
             color: white;
-            font-size: 20px;
+            transform: scale(1.1); /* Увеличение текста на 10% */
         }
 
     /* Цвет текста в navbar  */
     .navbar-inverse .navbar-nav > li > a {
         color: white;
+        transition: transform 0.3s ease, color 0.3s ease; /* Плавный переход для масштабирования и цвета */
     }
 
         /* Цвет текста в navbar при наведении */
         .navbar-inverse .navbar-nav > li > a:hover {
             color: white;
-            font-size: 16px;
+            transform: scale(1.1); /* Увеличение текста на 10% */
         }
 
 /* Цвет фона для контейнера на главной странице */
@@ -306,6 +308,12 @@ table.custom-table {
             text-decoration: underline;
         }
 
+    /* Стиль для input */
+    .hungarian-page input[type=number] {
+        text-align: center;
+        border-radius: 10px;
+    }
+
 /* Контейнер для задачи с изображением */
 .task-container {
     overflow: auto; /* Чтобы картинка с текстом не вылезала за блок */
@@ -358,18 +366,22 @@ table.custom-table {
 .task-card {
     background: #fff; /* Белый фон, как у .container */
     border-radius: 8px; /* Скругленные углы */
-    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Тень, чуть сильнее чем у .container */
+    box-shadow: 0 0 10px 3px rgba(0,0,0,0.1); /* Тень с радиусом расширения */
     padding: 20px; /* Внутренние отступы */
-    transition: transform 0.3s, box-shadow 0.3s; /* Плавный переход для ховер-эффекта */
-    height: 380px; /* Фиксированная минимальная высота для выравнивания кнопок */
+    margin: 15px; /* Отступы для пространства под тень */
+    transition: transform 0.3s, box-shadow 0.3s, z-index 0.3s; /* Плавный переход */
+    height: 380px; /* Фиксированная минимальная высота */
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Кнопка внизу */
+    position: relative; /* Для управления z-index */
+    z-index: 1; /* Базовый уровень */
 }
 
     .task-card:hover {
-        transform: translateY(-5px) scale(1.02); /* Подъем и легкое увеличение */
-        box-shadow: 0 0 25px rgba(0,0,0,0.2); /* Усиленная тень при наведении */
+        transform: translateY(-5px) scale(1.02); /* Подъем и увеличение */
+        box-shadow: 0 0 10px 3px rgba(0,0,0,0.2); /* Усиленная тень */
+        z-index: 2; /* Поднимаем над другими элементами */
     }
 
 .btn {
@@ -395,7 +407,7 @@ table.custom-table {
     font-size: 3rem;
     font-weight: bold;
     color: black;
-    margin-bottom: 30px; /* отступ снизу под заголовком */
+    margin-bottom: 30px; /* Отступ снизу под заголовком */
 }
 
 /* Контейнер настроек матрицы: поле ввода размера и кнопка */
@@ -456,4 +468,10 @@ table.custom-table {
 .example-button {
     padding: 8px 20px; /* Контроль размера кнопки (вертикальный и горизонтальный отступы) */
     /* Можно также добавить: font-weight: bold; и border-radius для стиля */
+}
+
+/* Стиль для ввода ввода цифр */
+input.always-visible::-webkit-inner-spin-button,
+input.always-visible::-webkit-outer-spin-button {
+    opacity: 1;
 }
