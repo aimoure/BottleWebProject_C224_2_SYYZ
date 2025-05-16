@@ -59,13 +59,10 @@ input[type="checkbox"].input-validation-error {
         color: white;
     }
 
-        /* Цвет текста логотипа при наведении */
+        /* Логотип при наведении */
         .navbar-inverse .navbar-brand:hover {
             color: white;
-            text-shadow: 0 0 5px #ffffff, /* Мягкое внутреннее свечение */
-            0 0 10px #ffffff, /* Средний слой */
-            0 0 20px #ffffff, /* Более яркое свечение */
-            0 0 40px #ffffff; /* Дальний эффект для глубины */
+            font-size: 20px;
         }
 
     /* Цвет текста в navbar  */
@@ -76,10 +73,7 @@ input[type="checkbox"].input-validation-error {
         /* Цвет текста в navbar при наведении */
         .navbar-inverse .navbar-nav > li > a:hover {
             color: white;
-            text-shadow: 0 0 5px #ffffff, /* Мягкое внутреннее свечение */
-            0 0 10px #ffffff, /* Средний слой */
-            0 0 20px #ffffff, /* Более яркое свечение */
-            0 0 40px #ffffff; /* Дальний эффект для глубины */
+            font-size: 16px;
         }
 
 /* Цвет фона для контейнера на главной странице */
@@ -389,11 +383,12 @@ table.custom-table {
     box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
 }
 
-/* Эффект наведения на кнопку */
-.btn:hover {
-    background-color: #e24d1b; /* Более тёмный оттенок при наведении */
-    box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
-}
+    /* Эффект наведения на кнопку */
+    .btn:hover {
+        background-color: #F76C0F; /* Более светлый оттенок при наведении */
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
+    }
 
 /* Секция с призывом к действию (в самом низу страницы) */
 .calc-start-section h1{
@@ -452,4 +447,3 @@ table.custom-table {
 .example-button {
     padding: 8px 20px; /* Контроль размера кнопки */
 }
-
