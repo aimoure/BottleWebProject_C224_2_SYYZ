@@ -68,6 +68,15 @@ def dual_theory():
         year=datetime.now().year
     )
 
+@route('/dual_lpp_practice')
+@view('dual_lpp_practice')
+def direct_lpp_practice():
+    """Renders the direct_lpp_practice page."""
+    return dict(
+        title='The dual linear programming program',
+        year=datetime.now().year
+    )
+
 @route('/transport_theory')
 @view('transport_theory')
 def dual_theory():

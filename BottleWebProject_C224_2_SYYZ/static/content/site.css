@@ -384,6 +384,15 @@ table.custom-table {
         z-index: 2; /* Поднимаем над другими элементами */
     }
 
+    .task-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: -36px;
+        margin-top: -4px;
+        align-content: center;
+    }
+
 .btn {
     background-color: #d35400; /* Яркая оранжевая кнопка */
     border: none;
@@ -471,7 +480,7 @@ table.custom-table {
 }
 
 /* Стиль для ввода ввода цифр */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input.always-visible::-webkit-inner-spin-button,
+input.always-visible::-webkit-outer-spin-button {
     opacity: 1;
 }

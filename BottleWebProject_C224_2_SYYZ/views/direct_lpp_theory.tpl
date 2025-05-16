@@ -52,12 +52,12 @@
             <p class="formula">2x<sub>1</sub> + x<sub>2</sub> ≤ 4</p>
             <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> ≤ 4</p>
             <p class="formula">x<sub>1</sub>, x<sub>2</sub> ≥ 0</p>
-            <p class="text">Шаг 1: Приведение к стандартной форме</p>
+            <h3>Шаг 1: Приведение к стандартной форме</h3>
             <p class="formula">2x<sub>1</sub> + x<sub>2</sub> + s<sub>1</sub> = 4</p>
             <p class="formula">x<sub>1</sub> + 2x<sub>2</sub> + s<sub>2</sub> = 4</p>
             <p class="formula">Z = 3x<sub>1</sub> + 2x<sub>2</sub></p>
             <p class="formula">где s<sub>1</sub>, s<sub>2</sub> ≥ 0</p>
-            <p class="text">Шаг 2: Начальная таблица</p>
+            <h3>Шаг 2: Начальная таблица</h3>
             <table class="custom-table">
                 <tr>
                     <th>Базис</th>
@@ -92,7 +92,7 @@
                     <td>0</td>
                 </tr>
             </table>
-            <p class="text">Шаг 3: Итерации</p> 
+            <h3>Шаг 3: Итерации</h3> 
             <span class="step-item"><span>Ведущий столбец x<sub>1</sub> (-3), строка — первая (4/2 = 2)</span></span>
             <span class="step-item"><span>Пересчет таблицы</span></span>
             <table class="custom-table">
