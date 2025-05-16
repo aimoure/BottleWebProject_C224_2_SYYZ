@@ -67,3 +67,12 @@ def dual_theory():
         title='The dual linear programming problem',
         year=datetime.now().year
     )
+
+@route('/transport_theory')
+@view('transport_theory')
+def dual_theory():
+    """Renders the transport_theory page."""
+    return dict(
+        title='The transport programming problem',
+        year=datetime.now().year
+    )
