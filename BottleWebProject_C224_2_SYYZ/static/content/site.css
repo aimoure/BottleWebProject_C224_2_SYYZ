@@ -330,7 +330,7 @@ table.custom-table {
     text-align: center;
     margin-top: 60px; /* Отступ сверху */
     padding-top: 30px; /* Внутренний отступ */
-    border-top: 2px dashed #d35400; /* Пунктирная линия как визуальное разделение */
+    
 }
 
     /* Заголовок в блоке калькулятора */
@@ -389,9 +389,67 @@ table.custom-table {
     box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
 }
 
-    /* Эффект наведения на кнопку */
-    .btn:hover {
-        background-color: #F76C0F; /* Более светлый оттенок при наведении */
-        color: #fff;
-        box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
-    }
+/* Эффект наведения на кнопку */
+.btn:hover {
+    background-color: #e24d1b; /* Более тёмный оттенок при наведении */
+    box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
+}
+
+/* Секция с призывом к действию (в самом низу страницы) */
+.calc-start-section h1{
+    font-size: 3rem;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 30px; /* отступ снизу под заголовком */
+}
+
+.matrix-settings {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.matrix-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.matrix-cell {
+    width: 60px;
+    padding: 8px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.task-container {
+    overflow: auto;
+}
+
+.task-image {
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 200px;
+}
+
+.example-form {
+    margin-top: 20px;
+}
+
+.example-file-input {
+    margin-bottom: 20px; 
+}
+
+.example-button {
+    padding: 8px 20px; /* Контроль размера кнопки */
+}
+

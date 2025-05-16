@@ -50,6 +50,15 @@ def direct_lpp_practice():
         year=datetime.now().year
     )
 
+@route('/purpose_practice')
+@view('purpose_practice')
+def direct_lpp_practice():
+    """Renders the purpose_theory page."""
+    return dict(
+        title='The assignment problem',
+        year=datetime.now().year
+    )
+
 @route('/dual_lpp_theory')
 @view('dual_lpp_theory')
 def dual_theory():
