@@ -95,6 +95,7 @@
     <Content Include="views\direct_lpp_practice.tpl">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\transport_practice.tpl" />
     <Content Include="views\purpose_practice.tpl" />
     <Content Include="views\transport_theory.tpl" />
     <Content Include="views\purpose_theory.tpl" />
