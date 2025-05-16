@@ -416,7 +416,7 @@ table.custom-table {
     font-size: 3rem;
     font-weight: bold;
     color: black;
-    margin-bottom: 30px; /* Отступ снизу под заголовком */
+    margin-bottom: 30px; /* отступ снизу под заголовком */
 }
 
 /* Контейнер настроек матрицы: поле ввода размера и кнопка */
