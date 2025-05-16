@@ -38,6 +38,7 @@
     <Folder Include="static\content\" />
     <Folder Include="static\fonts\" />
     <Folder Include="static\images\" />
+    <Folder Include="static\images\transport_img\" />
     <Folder Include="static\scripts\" />
     <Folder Include="views\" />
   </ItemGroup>
@@ -57,6 +58,24 @@
     <Content Include="static\images\Step3_2.png" />
     <Content Include="static\images\Step4.png" />
     <Content Include="static\images\Step5.png" />
+    <Content Include="static\images\transport_img\transport1.png" />
+    <Content Include="static\images\transport_img\transport10.png" />
+    <Content Include="static\images\transport_img\transport11.png" />
+    <Content Include="static\images\transport_img\transport12.png" />
+    <Content Include="static\images\transport_img\transport13.png" />
+    <Content Include="static\images\transport_img\transport14.png" />
+    <Content Include="static\images\transport_img\transport15.png" />
+    <Content Include="static\images\transport_img\transport16.png" />
+    <Content Include="static\images\transport_img\transport17.png" />
+    <Content Include="static\images\transport_img\transport18.png" />
+    <Content Include="static\images\transport_img\transport2.png" />
+    <Content Include="static\images\transport_img\transport3.png" />
+    <Content Include="static\images\transport_img\transport4.png" />
+    <Content Include="static\images\transport_img\transport5.png" />
+    <Content Include="static\images\transport_img\transport6.png" />
+    <Content Include="static\images\transport_img\transport7.png" />
+    <Content Include="static\images\transport_img\transport8.png" />
+    <Content Include="static\images\transport_img\transport9.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
@@ -77,6 +96,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\purpose_practice.tpl" />
+    <Content Include="views\transport_theory.tpl" />
     <Content Include="views\purpose_theory.tpl" />
     <Content Include="views\dual_lpp_theory.tpl" />
     <Content Include="views\index.tpl" />

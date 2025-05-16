@@ -31,6 +31,9 @@
                     <li><a href="/purpose_theory">Задача о назначениях</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
+                    <li><a href="/transport_theory">Транспортная задача</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
                     <li><a href="/about">Об авторах</a></li>
                 </ul>
             </div>
