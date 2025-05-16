@@ -22,6 +22,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a href="/transport_theory">Транспортная задача</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
                     <li><a href="/purpose_theory">Задача о назначениях</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
@@ -29,9 +32,6 @@
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/dual_lpp_theory">Двойственная ЗЛП</a></li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li><a href="/transport_theory">Транспортная задача</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li><a href="/about">Об авторах</a></li>

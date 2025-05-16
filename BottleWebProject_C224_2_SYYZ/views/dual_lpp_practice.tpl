@@ -2,7 +2,7 @@
 
 <div class="hungarian-page">
     <div class="jumbotron">
-        <h1>Калькулятор прямой задачи линейного программирования</h1>
+        <h1>Калькулятор двойственной задачи линейного программирования</h1>
         <p class="lead">Введи размер матрицы и значения затрат</p>
     </div>
 
@@ -43,15 +43,7 @@
                 <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
-        <div class="example-panel task-container">
-            <h3>Двойственная задача</h3>
-            <p>Нужно найти и решить двойственную задачу? Можешь перейти здесь.</p>
-            <p>
-                <a href="/dual_lpp_practice" class="btn btn-warning btn-lg mt-3">Двойственная ЗЛП</a>
-            </p>
-        </div>
     </div>
 </div>
-
 
 <script src="/static/scripts/dynamic_table.js"></script>
