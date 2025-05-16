@@ -398,52 +398,62 @@ table.custom-table {
     margin-bottom: 30px; /* отступ снизу под заголовком */
 }
 
+/* Контейнер настроек матрицы: поле ввода размера и кнопка */
 .matrix-settings {
-    margin-bottom: 30px;
-    text-align: center;
+    margin-bottom: 30px; /* Отступ снизу, чтобы не прилипать к следующему блоку */
+    text-align: center; /* Центрирование содержимого (текста и кнопок) */
 }
 
+/* Грид-сетка для ввода матрицы */
 .matrix-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 40px;
+    display: grid; /* Используем CSS Grid для расположения инпутов */
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Автоматически подбираем число колонок, каждая минимум 50px */
+    gap: 10px; /* Расстояние между ячейками */
+    justify-content: center; /* Центрирование всей сетки по горизонтали */
+    margin-bottom: 40px; /* Отступ снизу от следующего блока */
 }
 
+/* Один ряд матрицы в виде flex-контейнера (альтернативный способ для генерации через JS) */
 .matrix-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    display: flex; /* Используем флексбокс для размещения инпутов в строку */
+    justify-content: center; /* Центрирование инпутов по горизонтали */
+    gap: 10px; /* Отступ между инпутами */
+    margin-bottom: 10px; /* Расстояние между строками */
 }
 
+/* Стилизация инпутов (ячейки матрицы) */
 .matrix-cell {
-    width: 60px;
-    padding: 8px;
-    font-size: 16px;
-    text-align: center;
+    width: 60px; /* Фиксированная ширина ячейки */
+    padding: 8px; /* Внутренние отступы для "воздуха" внутри инпута */
+    font-size: 16px; /* Размер текста в ячейке */
+    text-align: center; /* Центрируем текст внутри инпута */
 }
 
+/* Общий контейнер для задач, включая панель с примером */
 .task-container {
-    overflow: auto;
+    overflow: auto; /* Позволяет прокручивать содержимое, если оно выходит за границы */
 }
 
+/* Изображение задачи (например, условие задачи или шаги алгоритма) */
 .task-image {
-    float: right;
-    margin-left: 20px;
-    margin-bottom: 20px;
-    width: 400px;
+    float: right; /* Отправляем изображение вправо от текста */
+    margin-left: 20px; /* Отступ слева от текста */
+    margin-bottom: 20px; /* Отступ снизу для воздуха */
+    width: 400px; /* Желаемая ширина картинки */
 }
 
+/* Контейнер формы загрузки примера */
 .example-form {
-    margin-top: 20px;
+    margin-top: 20px; /* Отступ сверху от текста над формой */
 }
 
+/* Стилизация поля выбора файла (если используется) */
 .example-file-input {
-    margin-bottom: 20px; 
+    margin-bottom: 20px; /* Отступ снизу до кнопки */
 }
 
+/* Кнопка "Загрузить пример" */
 .example-button {
-    padding: 8px 20px; /* Контроль размера кнопки */
+    padding: 8px 20px; /* Контроль размера кнопки (вертикальный и горизонтальный отступы) */
+    /* Можно также добавить: font-weight: bold; и border-radius для стиля */
 }
