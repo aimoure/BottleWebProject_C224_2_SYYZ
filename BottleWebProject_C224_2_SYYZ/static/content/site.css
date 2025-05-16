@@ -330,7 +330,7 @@ table.custom-table {
     text-align: center;
     margin-top: 60px; /* Отступ сверху */
     padding-top: 30px; /* Внутренний отступ */
-    border-top: 2px dashed #faad79; /* Пунктирная линия как визуальное разделение */
+    border-top: 2px dashed #d35400; /* Пунктирная линия как визуальное разделение */
 }
 
     /* Заголовок в блоке калькулятора */
@@ -341,7 +341,7 @@ table.custom-table {
 
     /* Кнопка перехода к калькулятору */
     .calc-start-box .btn {
-        background-color: #ff6633; /* Яркая оранжевая кнопка */
+        background-color: #d35400; /* Яркая оранжевая кнопка */
         border: none;
         padding: 12px 25px;
         font-size: 18px;
@@ -354,7 +354,8 @@ table.custom-table {
 
         /* Эффект наведения на кнопку */
         .calc-start-box .btn:hover {
-            background-color: #e24d1b; /* Более тёмный оттенок при наведении */
+            background-color: #F76C0F; /* Более светлый оттенок при наведении */
+            color: #fff;
             box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
         }
 
@@ -378,7 +379,7 @@ table.custom-table {
     }
 
 .btn {
-    background-color: #ff6633; /* Яркая оранжевая кнопка */
+    background-color: #d35400; /* Яркая оранжевая кнопка */
     border: none;
     padding: 12px 25px;
     font-size: 18px;
@@ -388,8 +389,9 @@ table.custom-table {
     box-shadow: 0 0 10px rgba(255,102,51,0.4); /* Тень с оттенком кнопки */
 }
 
-/* Эффект наведения на кнопку */
-.btn:hover {
-    background-color: #e24d1b; /* Более тёмный оттенок при наведении */
-    box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
-}
+    /* Эффект наведения на кнопку */
+    .btn:hover {
+        background-color: #F76C0F; /* Более светлый оттенок при наведении */
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
+    }
