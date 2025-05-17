@@ -78,6 +78,7 @@
     <Content Include="static\images\transport_img\transport9.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
+    <Content Include="static\scripts\dynamic_table_purpose.js" />
     <Content Include="static\scripts\dynamic_table_transport.js" />
     <Content Include="static\scripts\dynamic_table.js" />
     <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
