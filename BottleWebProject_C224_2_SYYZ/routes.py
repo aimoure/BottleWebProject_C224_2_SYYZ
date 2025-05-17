@@ -59,6 +59,7 @@ def direct_lpp_practice():
         year=datetime.now().year
     )
 
+
 @route('/dual_lpp_theory')
 @view('dual_lpp_theory')
 def dual_theory():
@@ -94,3 +95,5 @@ def dual_theory():
         title='The transport programming problem',
         year=datetime.now().year
     )
+
+
