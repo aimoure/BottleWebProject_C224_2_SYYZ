@@ -37,7 +37,7 @@
 
             <!-- Форма с кнопкой загрузки примера -->
             <form method="post" action="/transport-calc-example" class="example-form">
-                <button type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
     </div>
