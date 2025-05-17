@@ -384,6 +384,15 @@ table.custom-table {
         z-index: 2; /* Поднимаем над другими элементами */
     }
 
+    .task-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: -36px;
+        margin-top: -4px;
+        align-content: center;
+    }
+
 .btn {
     background-color: #d35400; /* Яркая оранжевая кнопка */
     border: none;
@@ -407,7 +416,7 @@ table.custom-table {
     font-size: 3rem;
     font-weight: bold;
     color: black;
-    margin-bottom: 30px; /* Отступ снизу под заголовком */
+    margin-bottom: 30px; /* отступ снизу под заголовком */
 }
 
 /* Контейнер настроек матрицы: поле ввода размера и кнопка */
