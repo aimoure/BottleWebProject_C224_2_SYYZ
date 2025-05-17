@@ -51,7 +51,10 @@
     <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="static\images\anya.jpg" />
     <Content Include="static\images\Condition.png" />
+    <Content Include="static\images\erya.jpg" />
+    <Content Include="static\images\kirill.jpg" />
     <Content Include="static\images\Step1.png" />
     <Content Include="static\images\Step2.png" />
     <Content Include="static\images\Step3_1.png" />
@@ -76,6 +79,7 @@
     <Content Include="static\images\transport_img\transport7.png" />
     <Content Include="static\images\transport_img\transport8.png" />
     <Content Include="static\images\transport_img\transport9.png" />
+    <Content Include="static\images\vika.jpg" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\dynamic_table_purpose.js" />
@@ -115,7 +119,7 @@
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>0.0</Version>
-      <Description>env (Python 3.13 (64-bit))</Description>
+      <Description>env (Python 3.12 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

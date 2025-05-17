@@ -163,6 +163,7 @@ input[type="checkbox"].input-validation-error {
 /* Список с отступом */
 .list {
     margin-left: 30px;
+    margin-top: 10px;
 }
 
 /* Элемент шага в инструкции */
@@ -170,6 +171,8 @@ input[type="checkbox"].input-validation-error {
     display: flex; /* Выравнивание элементов по горизонтали */
     align-items: flex-start; /* Выровнять по верхнему краю */
     margin-left: 20px; /* Отступ для визуального выравнивания */
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
     /* Добавляем тире перед каждым шагом */
