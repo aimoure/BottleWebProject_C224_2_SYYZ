@@ -1,12 +1,15 @@
 
 function generateMatrix(n) {
+    // Находим контейнер для таблицы
     const container = document.getElementById('matrix-container');
+    // Чистим если там уже была таблица
     container.innerHTML = '';
 
+    // Создаём HTML-таблицу вручную (
     const table = document.createElement('table');
-    table.border = "1";
-    table.cellPadding = "5";
-    table.cellSpacing = "0";
+    table.border = "1";             // Внешняя рамка таблицы
+    table.cellPadding = "5";        // Отступы внутри ячеек
+    table.cellSpacing = "0";        // Расстояние между ячейками (0 = плотно)
 
     // Генерация первой строки с подписями (пустая ячейка + заголовки столбцов)
     const headerRow = document.createElement('tr');
@@ -14,18 +17,23 @@ function generateMatrix(n) {
     corner.innerHTML = ''; // верхний левый угол
     headerRow.appendChild(corner);
 
+    // Создаём заголовки столбцов (m1, m2, ..., mn)
     for (let j = 0; j < n; j++) {
-        const th = document.createElement('th');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = `label-x${j}`;
-        input.value = `m${j + 1}`;
+        const th = document.createElement('th'); // Заголовочная ячейка
+        const input = document.createElement('input'); // Внутри будет input
+
+        input.type = 'text';                    // Текстовое поле — пользователь может переименовать
+        input.name = `label-x${j}`;             // Имя поля, для формы (например: label-x0)
+        input.value = `m${j + 1}`;              // Значение по умолчанию: m1, m2, m3...
+
         input.style.width = '60px';
             input.style.padding = '0';
         input.style.border = 'none'; 
         input.style.outline = 'none';
         input.style.textAlign = 'center';
         input.required = true;
+
+        // Кладём input внутрь заголовочной ячейки
         th.appendChild(input);
         headerRow.appendChild(th);
     }
@@ -77,15 +85,17 @@ function generateMatrix(n) {
 }
 
 document.getElementById('size').addEventListener('input', function () {
-    const size = parseInt(this.value);
+    const size = parseInt(this.value); // Получаем значение из поля ввода
     if (size >= 2 && size <= 10) {
-        generateMatrix(size);
+        generateMatrix(size); // Если размер в допустимых пределах, строим таблицу
     }
 });
 
+// Строим таблицу с дефолтными размерами
 window.onload = function () {
     const sizeInput = document.getElementById('size');
     generateMatrix(parseInt(sizeInput.value));
 }
+
 
 

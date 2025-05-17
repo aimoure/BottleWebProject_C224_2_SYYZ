@@ -10,6 +10,7 @@
 
     <div class="container">
         <div class="row">
+            <!-- Золина Виктория -->
             <div class="col-md-6 task-container" style="margin-bottom: 40px;">
                 <div class="task-card">
                     <div>
@@ -21,6 +22,7 @@
                 </div>
             </div>
 
+            <!-- Смирнова Ирина -->
             <div class="col-md-6 task-container" style="margin-bottom: 40px;">
                 <div class="task-card">
                     <div>
@@ -34,6 +36,7 @@
         </div>
 
         <div class="row">
+            <!-- Яковлева Анна -->
             <div class="col-md-6 task-container" style="margin-bottom: 40px;">
                 <div class="task-card">
                     <div>
@@ -45,6 +48,7 @@
                 </div>
             </div>
 
+            <!-- Ярополов Кирилл -->
             <div class="col-md-6 task-container" style="margin-bottom: 40px;">
                 <div class="task-card">
                     <div>
