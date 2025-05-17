@@ -3,7 +3,7 @@
 <div class="hungarian-page">
     <!-- Заголовок страницы -->
     <div class="jumbotron">
-        <h1>Калькулятор задачи о назначений</h1>
+        <h1>Калькулятор задачи о назначениях</h1>
         <p class="lead">Введите размер матрицы и значения затрат.</p>
     </div>
 
@@ -30,7 +30,7 @@
 
             <!-- Форма с кнопкой загрузки примера -->
             <form method="post" action="/hungarian-calc-example" class="example-form">
-                <button type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
     </div>
