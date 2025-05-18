@@ -1,4 +1,5 @@
 % rebase('layout.tpl', title=title, year=year)
+% result_table = result_table if 'result_table' in locals() else None
 
 <div class="hungarian-page">
     <div class="jumbotron">
@@ -7,7 +8,7 @@
     </div>
 
     <div class="container">
-        <form method="post" action="/hungarian-calc">
+        <form method="post" action="/dual_lpp_practice">
             <label>Количество переменных:&emsp;</label>
             <input class="always-visible" type="number" id="number_of_variables" min="2" max="10" value="2" required>
             <br>
@@ -35,6 +36,20 @@
             <br>
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
         </form>
+
+        % if result_table:
+            <hr>
+            <h3>Результат</h3>
+            <table class="custom-table">
+                % for row in result_table:
+                    <tr>
+                    % for cell in row:
+                        <td>{{cell}}</td>
+                    % end
+                    </tr>
+                % end
+            </table>
+        % end
 
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
