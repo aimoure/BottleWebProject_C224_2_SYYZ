@@ -100,60 +100,23 @@ window.onload = function () {
     generateMatrix(parseInt(sizeInput.value));
 }
 
-document.getElementById('json-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        try {
-            const data = JSON.parse(e.target.result);
+document.getElementById('uploadRandomBtn').addEventListener('click', function () {
+    const size = parseInt(document.getElementById('size').value);
+    if (isNaN(size) || size < 2 || size > 10) {
+        alert('Размер матрицы должен быть от 2 до 10');
+        return;
+    }
 
-            if (!Array.isArray(data.matrix)) {
-                alert('Некорректный формат JSON: нужна матрица');
-                return;
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const input = document.querySelector(`input[name="matrix-${i}-${j}"]`);
+            if (input) {
+                input.value = Math.floor(Math.random() * 101); // 0-100
             }
-
-            const n = data.matrix.length;
-            if (n < 2 || n > 10) {
-                alert('Размер матрицы должен быть от 2 до 10');
-                return;
-            }
-
-            generateMatrix(n); // Строим таблицу нужного размера
-
-            // Заполняем заголовки задач (label-x)
-            if (Array.isArray(data.tasks)) {
-                for (let j = 0; j < data.tasks.length; j++) {
-                    const input = document.querySelector(`input[name="label-x${j}"]`);
-                    if (input) input.value = data.tasks[j];
-                }
-            }
-
-            // Заполняем заголовки работников (label-y)
-            if (Array.isArray(data.workers)) {
-                for (let i = 0; i < data.workers.length; i++) {
-                    const input = document.querySelector(`input[name="label-y${i}"]`);
-                    if (input) input.value = data.workers[i];
-                }
-            }
-
-            // Заполняем саму матрицу
-            for (let i = 0; i < n; i++) {
-                for (let j = 0; j < n; j++) {
-                    const input = document.querySelector(`input[name="matrix-${i}-${j}"]`);
-                    if (input) input.value = data.matrix[i][j];
-                }
-            }
-
-        } catch (err) {
-            alert('Ошибка при чтении файла: ' + err.message);
         }
-    };
-
-    reader.readAsText(file);
+    }
 });
-
 
 
 
