@@ -67,6 +67,9 @@ function generateMatrix(n) {
             input.type = 'number';
             input.name = `matrix-${i}-${j}`;
             input.value = 0;
+            input.min = 0;        // запретить отрицательные числа
+            input.max = 1000;     // ограничить сверху
+            input.step = 1;       // только целые числа
             input.style.margin = '0';
             input.style.padding = '0';
             input.style.border = 'none'; 
@@ -96,6 +99,61 @@ window.onload = function () {
     const sizeInput = document.getElementById('size');
     generateMatrix(parseInt(sizeInput.value));
 }
+
+document.getElementById('json-upload').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        try {
+            const data = JSON.parse(e.target.result);
+
+            if (!Array.isArray(data.matrix)) {
+                alert('Некорректный формат JSON: нужна матрица');
+                return;
+            }
+
+            const n = data.matrix.length;
+            if (n < 2 || n > 10) {
+                alert('Размер матрицы должен быть от 2 до 10');
+                return;
+            }
+
+            generateMatrix(n); // Строим таблицу нужного размера
+
+            // Заполняем заголовки задач (label-x)
+            if (Array.isArray(data.tasks)) {
+                for (let j = 0; j < data.tasks.length; j++) {
+                    const input = document.querySelector(`input[name="label-x${j}"]`);
+                    if (input) input.value = data.tasks[j];
+                }
+            }
+
+            // Заполняем заголовки работников (label-y)
+            if (Array.isArray(data.workers)) {
+                for (let i = 0; i < data.workers.length; i++) {
+                    const input = document.querySelector(`input[name="label-y${i}"]`);
+                    if (input) input.value = data.workers[i];
+                }
+            }
+
+            // Заполняем саму матрицу
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    const input = document.querySelector(`input[name="matrix-${i}-${j}"]`);
+                    if (input) input.value = data.matrix[i][j];
+                }
+            }
+
+        } catch (err) {
+            alert('Ошибка при чтении файла: ' + err.message);
+        }
+    };
+
+    reader.readAsText(file);
+});
+
 
 
 

@@ -97,3 +97,48 @@ def dual_theory():
     )
 
 
+from bottle import route, request, view, redirect
+from hungarian_solver import solve_assignment  
+import json
+
+@route('/purpose_practice', method=['GET', 'POST'])
+@view('purpose_practice')
+def purpose_practice():
+    result = None
+    matrix = None
+    error = None
+    task_labels = []
+    worker_labels = []
+
+    if request.method == 'POST':
+        try:
+            size = int(request.forms.get('size'))
+            
+            
+            task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
+            
+            worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
+
+            matrix = []
+            for i in range(size):
+                row = []
+                for j in range(size):
+                    val = request.forms.get(f'matrix-{i}-{j}')
+                    row.append(int(val))
+                matrix.append(row)
+
+           
+            result = solve_assignment(matrix)
+
+        except Exception as e:
+            error = str(e)
+
+    return dict(
+        title="The assignment problem",
+        year=datetime.now().year,
+        result=result,
+        matrix=matrix,
+        error=error,
+        task_labels=task_labels,
+        worker_labels=worker_labels
+    )
