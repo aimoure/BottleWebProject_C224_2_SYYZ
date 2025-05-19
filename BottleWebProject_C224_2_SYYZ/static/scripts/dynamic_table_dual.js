@@ -20,12 +20,9 @@ window.addEventListener('DOMContentLoaded', () => {
         td.style.fontSize = '18px';
     }
 
-    function styleInput(inp) {
+    function styleInput(inp, minVal = -99, maxVal = 99) {
         inp.type = 'number';
-        inp.min = '-1000';
-        inp.max = '1000';
-        inp.step = '0.01'; // Шаг — 2 знака после запятой
-        inp.style.width = '60px';
+        inp.style.width = '72px';
         inp.style.height = '30px';
         inp.style.margin = '0';
         inp.style.padding = '0';
@@ -34,6 +31,36 @@ window.addEventListener('DOMContentLoaded', () => {
         inp.style.borderRadius = '4px';
         inp.style.textAlign = 'center';
         inp.style.fontSize = '18px';
+        inp.step = '0.01';
+        inp.setAttribute('min', String(minVal));
+        inp.setAttribute('max', String(maxVal));
+        inp._lastValid = '';
+        inp.addEventListener('input', function () {
+            const val = this.value;
+
+            // Разрешаем пустую строку, одиночный минус и одиночную точку
+            if (val === '' || val === '-' || val === '.') {
+                this._lastValid = val;
+                return;
+            }
+
+            // Проверка до 2 цифр перед точкой и до 2 после
+            const re = /^-?\d{1,2}(?:\.\d{0,2})?$/;
+            if (!re.test(val)) {
+                this.value = this._lastValid;
+                return;
+            }
+
+            // Проверка на максимальное и минимальное значения
+            const num = parseFloat(val);
+            if (isNaN(num) || num < minVal || num > maxVal) {
+                this.value = this._lastValid;
+                return;
+            }
+
+            // Сохранение
+            this._lastValid = val;
+        });
     }
 
 

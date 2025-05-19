@@ -1,13 +1,17 @@
 from bottle import route, request, template, static_file
 import numpy as np
 
+class NoSolutionError(Exception):
+    """Исключение для нерешаемой задачи."""
+    pass
+
 @route('/static/scripts/<filename>')
 def serve_static(filename):
     return static_file(filename, root='static/scripts')
 
-
 @route('/dual_lpp_practice', method=['GET', 'POST'])
 def dual_lpp_practice():
+    # общие переменные
     result_table = []
     steps = []
     answer_vars = {}
@@ -17,6 +21,8 @@ def dual_lpp_practice():
     primal_constraints = []
     dual_constraints = []
     duality_check = ''
+    no_solution = False
+    error_message = ''
 
     num_vars = request.forms.get('num_vars', '2')
     num_cons = request.forms.get('num_cons', '1')
@@ -26,8 +32,9 @@ def dual_lpp_practice():
             num_vars = int(num_vars)
             num_cons = int(num_cons)
 
+            # считываем коэффициенты цели
             c = [float(request.forms.get(f'x_{j}', '0') or '0') for j in range(num_vars)]
-
+            # считываем матрицу ограничений
             A = []
             b = []
             for i in range(num_cons):
@@ -35,75 +42,53 @@ def dual_lpp_practice():
                 A.append(row)
                 b.append(float(request.forms.get(f'cons_rhs_{i}', '0') or '0'))
 
+            # решаем двойственным симплексом
             steps, result_values, W = solve_dual_simplex(c, A, b)
 
+            # разбираем решение
             answer_vars = {k: v for k, v in result_values.items() if k.startswith('y')}
             F = -W
             duality_check = "Все условия двойственности выполняются."
 
-            result_table.append(['Базис'] + [f'y{i+1}' for i in range(len(answer_vars))] + ['Свободный член'])
+            # форматируем вывод таблицы
+            result_table.append(['Базис'] + [f'y{i+1}' for i in range(len(answer_vars))] + ['Св.член'])
             last_table = steps[-1]['table']
             for row in last_table[:-1]:
                 result_table.append([row[0]] + [round(x, 2) for x in row[1:]])
             result_table.append(['W'] + [round(x, 2) for x in last_table[-1][1:]])
 
-            # Форматирование задач
+            # формируем текстовые задачи
             x_vars = [f'x{i+1}' for i in range(num_vars)]
             y_vars = [f'y{i+1}' for i in range(num_cons)]
             primal_obj = f"Z = {format_expression(c, x_vars)}"
             primal_constraints = [format_expression(A[i], x_vars, b[i], '≤') for i in range(num_cons)]
-
             A_dual = np.array(A).T.tolist()
             dual_obj = f"W = {format_expression(b, y_vars)}"
             dual_constraints = [format_expression(A_dual[i], y_vars, c[i], '≥') for i in range(num_vars)]
 
-            return template('dual_lpp_practice.tpl',
-                            title='Двойственная ЗЛП',
-                            year=2025,
-                            result_table=result_table,
-                            num_vars=num_vars,
-                            num_cons=num_cons,
-                            dual_steps=steps,
-                            answer_vars=answer_vars,
-                            F=round(F, 3),
-                            duality_check=duality_check,
-                            primal_obj=primal_obj,
-                            primal_constraints=primal_constraints,
-                            dual_obj=dual_obj,
-                            dual_constraints=dual_constraints)
-
+        except NoSolutionError as ne:
+            no_solution = True
+            error_message = str(ne)
         except Exception as e:
-            result_table = [['Ошибка обработки данных:', str(e)]]
-            return template('dual_lpp_practice.tpl',
-                            title='Двойственная ЗЛП',
-                            year=2025,
-                            result_table=result_table,
-                            num_vars=num_vars,
-                            num_cons=num_cons,
-                            dual_steps=[],
-                            answer_vars={},
-                            F=None,
-                            duality_check='',
-                            primal_obj='',
-                            dual_obj='',
-                            primal_constraints=[],
-                            dual_constraints=[])
+            no_solution = True
+            error_message = f"Ошибка: {e}"
 
-    # GET-запрос
     return template('dual_lpp_practice.tpl',
                     title='Двойственная ЗЛП',
                     year=2025,
-                    result_table=result_table,
                     num_vars=num_vars,
                     num_cons=num_cons,
+                    result_table=result_table,
                     dual_steps=steps,
-                    answer_vars={},
-                    F=None,
-                    duality_check='',
-                    primal_obj='',
-                    dual_obj='',
-                    primal_constraints=[],
-                    dual_constraints=[])
+                    answer_vars=answer_vars,
+                    F=F,
+                    duality_check=duality_check,
+                    primal_obj=primal_obj,
+                    primal_constraints=primal_constraints,
+                    dual_obj=dual_obj,
+                    dual_constraints=dual_constraints,
+                    no_solution=no_solution,
+                    error_message=error_message)
 
 
 def solve_dual_simplex(c, A, b):
@@ -111,7 +96,6 @@ def solve_dual_simplex(c, A, b):
     c = np.array(c, dtype=float)
     b = np.array(b, dtype=float)
 
-    # Построение двойственной задачи
     A_dual = A.T
     b_dual = c
     c_dual = b
@@ -136,35 +120,32 @@ def solve_dual_simplex(c, A, b):
     z_row = list(c_dual) + [0]*num_cons + [0]
     tableau.append(z_row)
 
-    steps = []
-    steps.append({
+    steps = [{
         "title": "Начальная таблица",
-        "table": [ [basis[i]] + tableau[i] for i in range(len(basis)) ] + [["W"] + tableau[-1]],
-        "pivot": None,
+        "table": [[basis[i]] + tableau[i] for i in range(num_cons)] + [["W"] + tableau[-1]],
         "explanation": "Начальная симплекс-таблица"
-    })
+    }]
 
     while True:
         rhs = [row[-1] for row in tableau[:-1]]
         if all(r >= 0 for r in rhs):
             break
 
-        leaving = np.argmin(rhs)
+        leaving = int(np.argmin(rhs))
         row = tableau[leaving]
 
         ratios = []
-        for j in range(len(row) - 1):
+        for j in range(len(row)-1):
             coeff = row[j]
             zjcj = tableau[-1][j]
             if coeff < 0:
                 ratios.append((zjcj / abs(coeff), j))
         if not ratios:
-            raise Exception("Задача не имеет решения: не найден допустимый ведущий столбец.")
+            raise NoSolutionError("Задача не имеет допустимого решения.")
 
         _, entering = min(ratios)
-
-        pivot_val = tableau[leaving][entering]
-        tableau[leaving] = [v / pivot_val for v in tableau[leaving]]
+        pivot = tableau[leaving][entering]
+        tableau[leaving] = [v / pivot for v in tableau[leaving]]
         basis[leaving] = all_vars[entering]
 
         for i in range(len(tableau)):
@@ -175,11 +156,9 @@ def solve_dual_simplex(c, A, b):
                     for j in range(len(tableau[i]))
                 ]
 
-        step_table = [ [basis[i]] + tableau[i] for i in range(len(basis)) ] + [["W"] + tableau[-1]]
         steps.append({
             "title": "Итерация",
-            "table": step_table,
-            "pivot": (leaving, entering),
+            "table": [[basis[i]] + tableau[i] for i in range(num_cons)] + [["W"] + tableau[-1]],
             "explanation": f"Ведущий столбец: {all_vars[entering]}, ведущая строка: {basis[leaving]}"
         })
 
@@ -192,20 +171,17 @@ def solve_dual_simplex(c, A, b):
 
 
 def format_term(coef, var):
-    if coef == 0:
-        return ''
+    if coef == 0: return ''
     coef_int = int(coef)
-    if coef == 1:
-        return var
-    elif coef == -1:
-        return f"-{var}"
-    return f"{coef_int if coef == coef_int else coef}{var}"
+    if coef == 1: return var
+    if coef == -1: return f"-{var}"
+    return f"{coef_int if coef==coef_int else coef}{var}"
 
 def format_expression(coeffs, vars_list, rhs=None, sign=None):
     terms = [format_term(c, v) for c, v in zip(coeffs, vars_list)]
-    expression = ' + '.join(filter(None, terms)).replace('+ -', '- ')
+    expr = ' + '.join(filter(None, terms)).replace('+ -', '- ')
     if sign and rhs is not None:
         rhs_int = int(rhs)
-        rhs_str = str(rhs_int if rhs == rhs_int else rhs)
-        return f"{expression} {sign} {rhs_str}"
-    return expression
+        rhs_str = str(rhs_int if rhs==rhs_int else rhs)
+        return f"{expr} {sign} {rhs_str}"
+    return expr
