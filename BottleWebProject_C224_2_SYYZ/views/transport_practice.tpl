@@ -28,6 +28,7 @@
             <br>
 
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+            <button type="submit" class="btn btn-secondary btn-lg" style="margin-left: 15px;">Очистить</button>
         </form>
 
         <!-- Боковая панель справа от матрицы -->

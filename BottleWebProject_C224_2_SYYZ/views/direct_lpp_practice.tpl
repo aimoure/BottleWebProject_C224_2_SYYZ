@@ -6,6 +6,7 @@
         <p class="lead">Введи размер матрицы и значения затрат</p>
     </div>
 
+    <!-- Основной контейнер -->
     <div class="container">
         <form method="post" action="/hungarian-calc">
             <label>Количество переменных:&emsp;</label>
@@ -36,6 +37,7 @@
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
         </form>
 
+        <!-- Возможность загрузить готовый пример -->
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
@@ -43,6 +45,7 @@
                 <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
+        <!-- Переход к калькулятору двойственной задачи -->
         <div class="example-panel task-container">
             <h3>Двойственная задача</h3>
             <p>Нужно найти и решить двойственную задачу? Можешь перейти здесь.</p>

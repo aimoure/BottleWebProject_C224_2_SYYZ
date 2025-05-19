@@ -45,7 +45,7 @@
         {{!base}}
         <hr />
         <footer>
-            <p>&copy; {{ year }} — DualSolve</p>
+            <p>&copy; {{ year }} — ООО "Разработчицы и Кирилл"</p>
         </footer>
     </div>
 

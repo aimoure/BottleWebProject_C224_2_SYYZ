@@ -31,12 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+
     <Compile Include="hungarian_solver.py">
+
+    <Compile Include="dual_lpp_practice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="direct_lpp.py">
+
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="input\" />
+    <Folder Include="output\" />
     <Folder Include="static\" />
     <Folder Include="static\content\" />
     <Folder Include="static\fonts\" />
@@ -46,6 +55,12 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="input\direct_lpp_input.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="output\direct_lpp_output.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
     <Content Include="static\content\bootstrap.css" />
     <Content Include="static\content\bootstrap.min.css" />
@@ -85,6 +100,7 @@
     <Content Include="static\images\vika.jpg" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
+    <Content Include="static\scripts\dynamic_table_dual.js" />
     <Content Include="static\scripts\dynamic_table_purpose.js" />
     <Content Include="static\scripts\dynamic_table_transport.js" />
     <Content Include="static\scripts\dynamic_table.js" />
