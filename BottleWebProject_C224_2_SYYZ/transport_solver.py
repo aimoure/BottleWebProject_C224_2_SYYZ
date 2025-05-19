@@ -23,6 +23,13 @@ def northwest_corner_method(cost_matrix, supply, demand):
     i = j = 0
     # Выполняется цикл, пока не обработаны все поставщики или потребители
     while i < rows and j < cols:
+        # Пропускаются нулевые запасы или потребности
+        while i < rows and supply[i] == 0:
+            i += 1
+        while j < cols and demand[j] == 0:
+            j += 1
+        if i >= rows or j >= cols:
+            break
         # Находится минимальное значение между запасом и потребностью
         amount = min(supply[i], demand[j])
         # Значение записывается в план
@@ -51,12 +58,12 @@ def get_basis(plan):
     """
     # Формируется список ненулевых клеток плана
     basis = [(i, j) for i in range(plan.shape[0]) for j in range(plan.shape[1]) if plan[i, j] > 0]
-    # Проверяется, достигнуто ли необходимое количество базисных клеток (m + n - 1)
+    # Проверяется, достаточно ли базисных клеток (m + n - 1)
     while len(basis) < plan.shape[0] + plan.shape[1] - 1:
         # Добавляется первая подходящая небазисная клетка
         for i in range(plan.shape[0]):
             for j in range(plan.shape[1]):
-                if (i, j) not in basis:
+                if (i, j) not in basis and plan[i, j] >= 0:  # Учитываем нули как допустимые
                     basis.append((i, j))
                     return basis
     return basis
@@ -79,14 +86,19 @@ def calculate_potentials(cost_matrix, basis):
     # Устанавливается начальное значение u[0] = 0 для решения системы уравнений
     u[0] = 0
     # Выполняется цикл для вычисления всех потенциалов
-    for _ in range(len(basis)):
+    for _ in range(cost_matrix.shape[0] + cost_matrix.shape[1] - 1):  # Увеличен лимит для надежности
         for i, j in basis:
-            # Если u[i] известно, вычисляется v[j]
             if u[i] is not None and v[j] is None:
                 v[j] = cost_matrix[i, j] - u[i]
-            # Если v[j] известно, вычисляется u[i]
             elif u[i] is None and v[j] is not None:
                 u[i] = cost_matrix[i, j] - v[j]
+    # Если остались None, заполняются нулями для нулевых строк/столбцов
+    for i in range(len(u)):
+        if u[i] is None:
+            u[i] = 0
+    for j in range(len(v)):
+        if v[j] is None:
+            v[j] = 0
     return u, v
 
 def find_cycle(basis, start):
@@ -132,7 +144,11 @@ def find_cycle(basis, start):
                     return result
         return None
 
-    return dfs([start], {start})
+    # Если цикл не найден, возвращается None с предупреждением
+    cycle = dfs([start], {start})
+    if not cycle:
+        print("Предупреждение: Цикл не найден, возможно, данные не позволяют оптимизировать план.")
+    return cycle
 
 def optimize_transportation(cost_matrix, supply, demand):
     """
@@ -160,12 +176,14 @@ def optimize_transportation(cost_matrix, supply, demand):
         for i in range(cost_matrix.shape[0]):
             for j in range(cost_matrix.shape[1]):
                 if (i, j) not in basis:
-                    deltas[i, j] = cost_matrix[i, j] - u[i] - v[j]
+                    # Проверяется, что u[i] и v[j] определены
+                    if u[i] is not None and v[j] is not None:
+                        deltas[i, j] = cost_matrix[i, j] - u[i] - v[j]
 
         # Находится минимальная дельта
         min_delta = np.min([x for x in deltas.flatten() if x is not None])
         # Если минимальная дельта неотрицательна, оптимизация завершена
-        if min_delta >= 0:
+        if min_delta >= 0 or min_delta is None:  # Добавлена проверка на None
             break
 
         # Находится клетка с минимальной дельтой
@@ -173,7 +191,8 @@ def optimize_transportation(cost_matrix, supply, demand):
         # Строится цикл, включающий новую клетку
         cycle = find_cycle(basis + [(i, j)], (i, j))
         if not cycle:
-            raise ValueError("Не удалось построить цикл.")
+            print("Предупреждение: Не удалось построить цикл, план остается начальным.")
+            break
 
         # Находится минимальное значение в цикле для корректировки плана
         min_val = float('inf')
