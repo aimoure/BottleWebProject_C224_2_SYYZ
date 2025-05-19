@@ -18,13 +18,13 @@
     <div class="container">
         <form method="post" action="/dual_lpp_practice">
             <label>Количество переменных:</label>
-            <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" value="{{num_vars or 2}}" required>
+            <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" step="1" value="{{num_cons or 2}}" required onkeydown="return false;">
             <br>
             <label>Коэффициенты целевой функции:</label>
             <div id="variables_container"></div>
             <br>
             <label>Количество ограничений:</label>
-            <input type="number" id="number_of_constraints" name="num_cons" min="1" max="10" value="{{num_cons or 1}}" required>
+            <input type="number" id="number_of_constraints" name="num_cons" min="1" max="10" value="{{num_cons or 1}}" required onkeydown="return false;">
             <br>
             <label>Ограничения:&emsp;</label>
             <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
