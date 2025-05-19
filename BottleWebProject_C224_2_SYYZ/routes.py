@@ -170,12 +170,34 @@ def hungarian_calc():
         ctx['error'] = "Нет допустимого решения."
         return ctx
 
+
+
+import os
+import json
+from datetime import datetime
+from bottle import route, request, view
+from hungarian_solver import solve_assignment
+import numpy as np
+
+def convert_numpy(obj):
+    if isinstance(obj, dict):
+        return {k: convert_numpy(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy(i) for i in obj]
+    elif isinstance(obj, tuple):
+        return tuple(convert_numpy(i) for i in obj)
+    elif hasattr(obj, 'item'):
+        return obj.item()
+    else:
+        return obj
+
     # Успешный результат – добавление в контекст для шаблона
     ctx.update({
         'x_values': result['x'],
         'objective_value': result['objective_value'],
     })
     return ctx
+
 
 @route('/purpose_practice', method=['GET', 'POST'])
 @view('purpose_practice')
@@ -189,6 +211,7 @@ def purpose_practice():
     if request.method == 'POST':
         try:
             size = int(request.forms.get('size'))
+
             task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
             worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
 
@@ -197,10 +220,41 @@ def purpose_practice():
                 row = []
                 for j in range(size):
                     val = request.forms.get(f'matrix-{i}-{j}')
+                    if val is None:
+                        raise ValueError(f"Ячейка matrix-{i}-{j} пуста")
                     row.append(int(val))
                 matrix.append(row)
 
             result = solve_assignment(matrix)
+
+            # сохраняем данные
+            save_data = {
+                "timestamp": datetime.now().isoformat(),
+                "size": size,
+                "tasks": task_labels,
+                "workers": worker_labels,
+                "matrix": matrix,
+                "result": result
+            }
+
+            output_dir = 'input'
+            os.makedirs(output_dir, exist_ok=True)
+            file_path = os.path.join(output_dir, 'purpose_input.json')
+
+            # Читаем старые данные, если есть
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    try:
+                        all_data = json.load(f)
+                    except json.JSONDecodeError:
+                        all_data = []
+            else:
+                all_data = []
+
+            all_data.append(convert_numpy(save_data))
+
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(convert_numpy(all_data), f, ensure_ascii=False, indent=4)
 
         except Exception as e:
             error = str(e)
@@ -215,8 +269,5 @@ def purpose_practice():
         worker_labels=worker_labels
     )
 
-    # Возврат результата
-    return template('direct_lpp_result',
-                    x_values=result['x'],
-                    objective_value=result['objective_value'],
-                    status=result['status'])
+ 
+
