@@ -51,12 +51,73 @@ window.addEventListener('DOMContentLoaded', () => {
         sel.style.whiteSpace = 'nowrap';
     }
 
+    function saveToStorage() {
+        const data = {
+            numVars: numVarsInput.value,
+            numCons: numConsInput.value,
+            vars: {},
+            consVars: {},
+            consSigns: {},
+            consRhs: {}
+        };
+
+        varsContainer.querySelectorAll('input').forEach(input => {
+            data.vars[input.name] = input.value;
+        });
+        consVarsContainer.querySelectorAll('input').forEach(input => {
+            data.consVars[input.name] = input.value;
+        });
+        consSignsContainer.querySelectorAll('select').forEach(select => {
+            data.consSigns[select.name] = select.value;
+        });
+        consRhsContainer.querySelectorAll('input').forEach(input => {
+            data.consRhs[input.name] = input.value;
+        });
+
+        localStorage.setItem('directLppData', JSON.stringify(data));
+    }
+
+    function loadFromStorage() {
+        const saved = localStorage.getItem('directLppData');
+        if (!saved) {
+            redraw(); // Вызов даже если нет сохранённых данных
+            return;
+        }
+
+        const data = JSON.parse(saved);
+        numVarsInput.value = data.numVars;
+        numConsInput.value = data.numCons;
+
+        redraw();
+
+        for (let [name, value] of Object.entries(data.vars)) {
+            const input = document.querySelector(`input[name="${name}"]`);
+            if (input) input.value = value;
+        }
+        for (let [name, value] of Object.entries(data.consVars)) {
+            const input = document.querySelector(`input[name="${name}"]`);
+            if (input) input.value = value;
+        }
+        for (let [name, value] of Object.entries(data.consSigns)) {
+            const select = document.querySelector(`select[name="${name}"]`);
+            if (select) select.value = value;
+        }
+        for (let [name, value] of Object.entries(data.consRhs)) {
+            const input = document.querySelector(`input[name="${name}"]`);
+            if (input) input.value = value;
+        }
+    }
+
     // Основная функция перерисовки всех таблиц на странице
     function redraw() {
         // Определение текущего количества переменных и ограничений
         const nVars = parseInt(numVarsInput.value, 10) || 2;
         const nCons = parseInt(numConsInput.value, 10) || 1;
 
+        let oldVarsValues = {};
+        varsContainer.querySelectorAll('input').forEach(inp => {
+            oldVarsValues[inp.name] = inp.value;
+        });
         // Отрисовка таблицы коэффициентов целевой функции
         varsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
         const tblObj = document.createElement('table'); // Создание нового элемента <table> для хранения целевой функции
@@ -78,12 +139,18 @@ window.addEventListener('DOMContentLoaded', () => {
             const inp = document.createElement('input'); // Создание поля ввода
             styleInput(inp); // Стилизация input
             inp.name = `x_${j}`; // Уникальное имя поля
+            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+            inp.addEventListener('input', saveToStorage); // Сохранение данных
             td.appendChild(inp); // Помещение <input> внутрь ячейки
             rowObj.appendChild(td); // Добавление заполненной ячейки в строку
         }
         tblObj.appendChild(rowObj); // Добавление заполненной строки в таблицу
         varsContainer.appendChild(tblObj); // Вставка таблицы на страницу
 
+        let oldConsVarsValues = {};
+        consVarsContainer.querySelectorAll('input').forEach(inp => {
+            oldConsVarsValues[inp.name] = inp.value;
+        });
         // Ограничения: коэфициенты
         consVarsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
         const tblL = document.createElement('table'); // Создание нового элемента <table> для хранения коэфициентов ограничений
@@ -106,6 +173,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 const inp = document.createElement('input'); // Создание поля ввода
                 styleInput(inp); // Стилизация input
                 inp.name = `cons_${i}_${j}`; // Уникальное имя поля
+                if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+                inp.addEventListener('input', saveToStorage); // Сохранение данных
                 td.appendChild(inp); // Помещение <input> внутрь ячейки
                 tr.appendChild(td); // Добавление заполненной ячейки в строку
             }
@@ -113,6 +182,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consVarsContainer.appendChild(tblL); // Вставка таблицы на страницу
 
+        let oldConsSignsValues = {};
+        consSignsContainer.querySelectorAll('select').forEach(sel => {
+            oldConsSignsValues[sel.name] = sel.value;
+        });
         // Ограничения: знак
         consSignsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
         const tblS = document.createElement('table'); // Создание нового элемента <table> для хранения знаков
@@ -139,12 +212,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = sym; // Текстовое содержимое <option>, отображаемое в выпадающем списке, тоже устанавливается в sym
                 sel.appendChild(opt); // Вставка готового <option> внутрь элемента <select> (селектора)
             });
+            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+            inp.addEventListener('input', saveToStorage); // Сохранение данных
             td.appendChild(sel); // Помещение выпадающего списка внутрь ячейки
             tr.appendChild(td); // Добавление заполненной ячейки в строку
             tblS.appendChild(tr); // Добавление заполненной строки в таблицу
         }
         consSignsContainer.appendChild(tblS); // Вставка таблицы на страницу
 
+        let oldConsRhsValues = {};
+        consRhsContainer.querySelectorAll('input').forEach(inp => {
+            oldConsRhsValues[inp.name] = inp.value;
+        });
         // Ограничения: свободный член
         consRhsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
         const tblR = document.createElement('table'); // Создание нового элемента <table> для хранения свободных членов
@@ -164,11 +243,22 @@ window.addEventListener('DOMContentLoaded', () => {
             const inp = document.createElement('input'); // Создание поля ввода
             styleInput(inp); // Стилизация input
             inp.name = `cons_rhs_${i}`; // Уникальное имя поля
+            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+            inp.addEventListener('input', saveToStorage); // Сохранение данных
             td.appendChild(inp); // Помещение <input> внутрь ячейки
             tr.appendChild(td); // Добавление заполненной ячейки в строку
             tblR.appendChild(tr); // Добавление заполненной строки в таблицу
         }
         consRhsContainer.appendChild(tblR); // Вставка таблицы на страницу
+
+        const nonnegDiv = document.getElementById('nonnegativity_condition');
+        let varsList = [];
+        for (let i = 0; i < nVars; i++) {
+            varsList.push(`x<sub>${i + 1}</sub>`);
+        }
+        nonnegDiv.innerHTML = varsList.join(', ') + ' ≥ 0';
+
+        saveToStorage(); // Сохранение сразу после отрисовки
     }
 
     // Навешивание обработчиков на изменение числа переменных и ограничений
@@ -177,4 +267,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Инициализация
     redraw();
+
+    numVarsInput.addEventListener('input', () => {
+        redraw();
+    });
+
+    numConsInput.addEventListener('input', () => {
+        redraw();
+    });
+
+    loadFromStorage();
+
+    const resetBtn = document.getElementById('reset_button');
+    resetBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Не отправлять форму
+
+        // Устанавливаем начальные значения переменных
+        numVarsInput.value = 2;
+        numConsInput.value = 1;
+
+        // Удаляем сохранённые данные
+        localStorage.removeItem('dualLppData');
+
+        // Перерисовываем поля
+        redraw();
+
+        // Явно очищаем все input'ы и select'ы после перерисовки
+        varsContainer.querySelectorAll('input').forEach(input => input.value = '');
+        consVarsContainer.querySelectorAll('input').forEach(input => input.value = '');
+        consSignsContainer.querySelectorAll('select').forEach(select => select.value = '≤');
+        consRhsContainer.querySelectorAll('input').forEach(input => input.value = '');
+
+        // Удалить блок с результатами
+        const resultBlock = document.getElementById('results');
+        if (resultBlock) {
+            resultBlock.innerHTML = '';
+        }
+    });
 });
