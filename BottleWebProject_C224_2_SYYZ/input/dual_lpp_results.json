@@ -1,0 +1,73 @@
+﻿[
+  {
+    "timestamp": "2025-05-20T02:09:55.662414",
+    "input": {
+      "objective_coeffs": [
+        1.0,
+        1.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "rhs_values": [
+        -1.0
+      ],
+      "constraint_signs": [
+        "≥"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.0
+      },
+      "dual_objective_value": -1.0
+    }
+  },
+  {
+    "timestamp": "2025-05-20T02:10:02.862892",
+    "input": {
+      "objective_coeffs": [
+        1.0,
+        1.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          -1.0
+        ]
+      ],
+      "rhs_values": [
+        1.0
+      ],
+      "constraint_signs": [
+        "â¥"
+      ]
+    },
+    "error": "Задача не имеет допустимого решения."
+  },
+  {
+    "timestamp": "2025-05-20T02:12:55.030518",
+    "input": {
+      "objective_coeffs": [
+        1.0,
+        1.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          -1.0
+        ]
+      ],
+      "rhs_values": [
+        1.0
+      ],
+      "constraint_signs": [
+        "≤"
+      ]
+    },
+    "error": "Задача не имеет допустимого решения."
+  }
+]
