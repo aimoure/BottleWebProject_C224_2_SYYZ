@@ -24,11 +24,9 @@
 
         <div class="example-panel task-container p-3 mb-4 border rounded bg-light">
             <h3>Пример решения</h3>
-            <p>Хочешь протестировать алгоритм? Загрузи один из наших готовых примеров!</p>
-            <form method="post" action="/purpose_practice" class="example-form">
-                <input type="file" id="jsonFileInput" accept=".json" style="display:none" />
-                <button type="submit" class="btn btn-warning btn-lg">Загрузить пример</button>
-            </form>
+            <p>Хочешь протестировать алгоритм? Сгенерируй рандомные значения!</p>
+
+            <button type="button" id="uploadRandomBtn" class="btn btn-warning btn-lg">Сгенерировать</button>
         </div>
 
         % if result:

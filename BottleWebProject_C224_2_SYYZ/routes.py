@@ -6,6 +6,7 @@ from bottle import route, view, request, template, redirect
 from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
+
 from hungarian_solver import solve_assignment  
 import json
 
@@ -19,6 +20,11 @@ def base_context():
         'objective_value': None,
         'status': None,
     }
+=======
+from transport_solver import optimize_transportation
+import numpy as np
+
+
 
 @route('/')
 @route('/home')
@@ -170,12 +176,34 @@ def hungarian_calc():
         ctx['error'] = "Нет допустимого решения."
         return ctx
 
+
+
+import os
+import json
+from datetime import datetime
+from bottle import route, request, view
+from hungarian_solver import solve_assignment
+import numpy as np
+
+def convert_numpy(obj):
+    if isinstance(obj, dict):
+        return {k: convert_numpy(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy(i) for i in obj]
+    elif isinstance(obj, tuple):
+        return tuple(convert_numpy(i) for i in obj)
+    elif hasattr(obj, 'item'):
+        return obj.item()
+    else:
+        return obj
+
     # Успешный результат – добавление в контекст для шаблона
     ctx.update({
         'x_values': result['x'],
         'objective_value': result['objective_value'],
     })
     return ctx
+
 
 @route('/purpose_practice', method=['GET', 'POST'])
 @view('purpose_practice')
@@ -189,6 +217,7 @@ def purpose_practice():
     if request.method == 'POST':
         try:
             size = int(request.forms.get('size'))
+
             task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
             worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
 
@@ -197,10 +226,41 @@ def purpose_practice():
                 row = []
                 for j in range(size):
                     val = request.forms.get(f'matrix-{i}-{j}')
+                    if val is None:
+                        raise ValueError(f"Ячейка matrix-{i}-{j} пуста")
                     row.append(int(val))
                 matrix.append(row)
 
             result = solve_assignment(matrix)
+
+            # сохраняем данные
+            save_data = {
+                "timestamp": datetime.now().isoformat(),
+                "size": size,
+                "tasks": task_labels,
+                "workers": worker_labels,
+                "matrix": matrix,
+                "result": result
+            }
+
+            output_dir = 'input'
+            os.makedirs(output_dir, exist_ok=True)
+            file_path = os.path.join(output_dir, 'purpose_input.json')
+
+            # Читаем старые данные, если есть
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    try:
+                        all_data = json.load(f)
+                    except json.JSONDecodeError:
+                        all_data = []
+            else:
+                all_data = []
+
+            all_data.append(convert_numpy(save_data))
+
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(convert_numpy(all_data), f, ensure_ascii=False, indent=4)
 
         except Exception as e:
             error = str(e)
@@ -215,8 +275,127 @@ def purpose_practice():
         worker_labels=worker_labels
     )
 
+
     # Возврат результата
     return template('direct_lpp_result',
                     x_values=result['x'],
                     objective_value=result['objective_value'],
                     status=result['status'])
+
+@route('/transport_practice', method=['GET', 'POST'])
+@view('transport_practice')
+def transport_practice():
+    """
+    Обрабатывается запрос к странице транспортной задачи.
+    Поддерживаются GET и POST запросы для отображения формы и обработки данных.
+    """
+    # Инициализируются переменные по умолчанию
+    rows = 3
+    cols = 4
+    result = None
+    total_cost = None
+    error = ''
+    cost_matrix = None
+    supply = None
+    demand = None
+
+    if request.method == 'POST':
+        action = request.forms.get('action')
+        if action == 'clear':
+            # При очистке формы возвращаются значения по умолчанию
+            return dict(
+                title='The transport programming problem',
+                year=datetime.now().year,
+                rows=rows,
+                cols=cols,
+                result=None,
+                total_cost=None,
+                error='',
+                cost_matrix_json='null',
+                supply_json='null',
+                demand_json='null'
+            )
+
+        try:
+            # Получаются размеры матрицы из формы
+            rows = int(request.forms.get('rows', 3))
+            cols = int(request.forms.get('cols', 4))
+            # Проверяются допустимые размеры
+            if rows < 1 or cols < 1 or rows > 10 or cols > 10:
+                raise ValueError("Размеры матрицы должны быть от 1 до 10.")
+
+            # Инициализируются массивы для данных формы
+            cost_matrix = []
+            supply = []
+            demand = []
+
+            # Проверяется заполнение матрицы тарифов
+            for i in range(rows):
+                row = []
+                for j in range(cols):
+                    value = request.forms.get(f'matrix-{i}-{j}')
+                    if value is None or value.strip() == '':
+                        raise ValueError("Все поля матрицы тарифов должны быть заполнены числами.")
+                    row.append(float(value))
+                cost_matrix.append(row)
+
+            # Проверяется заполнение запасов
+            for i in range(rows):
+                value = request.forms.get(f'supply-{i}')
+                if value is None or value.strip() == '':
+                    raise ValueError("Все поля запасов должны быть заполнены числами.")
+                supply.append(float(value))
+
+            # Проверяется заполнение потребностей
+            for j in range(cols):
+                value = request.forms.get(f'demand-{j}')
+                if value is None or value.strip() == '':
+                    raise ValueError("Все поля потребностей должны быть заполнены числами.")
+                demand.append(float(value))
+
+            # Проверяется неотрицательность всех значений
+            if any(x < 0 for row in cost_matrix for x in row) or any(x < 0 for x in supply) or any(x < 0 for x in demand):
+                raise ValueError("Все значения должны быть неотрицательными.")
+
+            # Проверяется равенство суммы запасов и потребностей
+            if abs(sum(supply) - sum(demand)) > 1e-10:
+                error = "Сумма запасов не равна сумме потребностей."
+            else:
+                # Выполняется оптимизация транспортной задачи
+                result, total_cost = optimize_transportation(
+                    np.array(cost_matrix),
+                    np.array(supply),
+                    np.array(demand)
+                )
+
+        except ValueError as e:
+            error = f"Ошибка: {str(e)}"
+            result = None
+            total_cost = None
+            # Данные сохраняются даже при ошибке
+            if cost_matrix is None:
+                cost_matrix = [[0] * cols for _ in range(rows)]
+            if supply is None:
+                supply = [0] * rows
+            if demand is None:
+                demand = [0] * cols
+
+    # Преобразуются данные в JSON для передачи в шаблон
+    cost_matrix_json = json.dumps(cost_matrix) if cost_matrix else 'null'
+    supply_json = json.dumps(supply) if supply else 'null'
+    demand_json = json.dumps(demand) if demand else 'null'
+
+    # Возвращается словарь с данными для шаблона
+    return dict(
+        title='The transport programming problem',
+        year=datetime.now().year,
+        rows=rows,
+        cols=cols,
+        result=result,
+        total_cost=total_cost,
+        error=error,
+        cost_matrix_json=cost_matrix_json,
+        supply_json=supply_json,
+        demand_json=demand_json
+    )
+
