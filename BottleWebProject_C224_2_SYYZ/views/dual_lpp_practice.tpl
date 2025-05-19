@@ -5,6 +5,7 @@
 % num_cons = num_cons if 'num_cons' in locals() else None
 % primal_obj = primal_obj if 'primal_obj' in locals() else None
 % dual_obj = dual_obj if 'dual_obj' in locals() else None
+% no_solution = no_solution if 'no_solution' in locals() else None
 % answer_vars = answer_vars if 'answer_vars' in locals() and answer_vars is not None else {}
 
 <script src="/static/scripts/dynamic_table_dual.js"></script>
@@ -49,69 +50,76 @@
         </form>
 
         <div id="results">
-            % if primal_obj and dual_obj:
-                <div class="section">
-                    <h3>Исходная задача:</h3>
-                    <p><b>Целевая функция:</b> {{primal_obj}}</p>
-                    <p><b>Ограничения:</b></p>
-                    <ul>
-                        % for cons in primal_constraints:
-                            <li>{{cons}}</li>
-                        % end
-                        <li>x1, x2 ≥ 0</li>
-                    </ul>
-
-                    <h3>Двойственная задача:</h3>
-                    <p><b>Целевая функция:</b> {{dual_obj}}</p>
-                    <p><b>Ограничения:</b></p>
-                    <ul>
-                        % for cons in dual_constraints:
-                            <li>{{cons}}</li>
-                        % end
-                        <li>y1, y2 ≥ 0</li>
-                    </ul>
+            <br>
+            % if no_solution:
+                <div class="alert alert-danger" role="alert">
+                    {{error_message}}
                 </div>
-            % end
-
-            % if answer_vars:
-                <h3>Ответ:</h3>
-                <p>
-                    % for var, val in answer_vars.items():
-                        {{var}} = {{round(val, 2)}}&emsp;
-                    % end
-                    W = {{F}}
-                </p>
-            % end
-
-            % if dual_steps:
-                <div class="section">
-                    <h3>Решение двойственной задачи:</h3>
-                    % for step in dual_steps:
-                        <h4>{{step['title']}}</h4>
-                        <p>{{step['explanation']}}</p>
-                        <table class="custom-table">
-                            <tr>
-                                <th>Базис</th>
-                                % for i in range(len(step['table'][0]) - 2):
-                                    <th>y{{i+1}}</th>
-                                % end
-                                <th>Свободный член</th>
-                            </tr>
-                            % for row in step['table']:
-                                <tr>
-                                    % for cell in row:
-                                        <td>{{round(cell, 2) if isinstance(cell, float) else cell}}</td>
-                                    % end
-                                </tr>
+            % else:
+                % if primal_obj and dual_obj:
+                    <div class="section">
+                        <h3>Исходная задача:</h3>
+                        <p><b>Целевая функция:</b> {{primal_obj}}</p>
+                        <p><b>Ограничения:</b></p>
+                        <ul>
+                            % for cons in primal_constraints:
+                                <li>{{cons}}</li>
                             % end
-                        </table>
-                    % end
-                </div>
-            % end
+                            <li>x1, x2 ≥ 0</li>
+                        </ul>
 
-            % if answer_vars:
-                <h4>Проверка двойственности:</h4>
-                <p><b>{{duality_check}} Z = W = {{F}}</b></p>
+                        <h3>Двойственная задача:</h3>
+                        <p><b>Целевая функция:</b> {{dual_obj}}</p>
+                        <p><b>Ограничения:</b></p>
+                        <ul>
+                            % for cons in dual_constraints:
+                                <li>{{cons}}</li>
+                            % end
+                            <li>y1, y2 ≥ 0</li>
+                        </ul>
+                    </div>
+                % end
+
+                % if answer_vars:
+                    <h3>Ответ:</h3>
+                    <p>
+                        % for var, val in answer_vars.items():
+                            {{var}} = {{round(val, 2)}}&emsp;
+                        % end
+                        W = {{F}}
+                    </p>
+                % end
+
+                % if dual_steps:
+                    <div class="section">
+                        <h3>Решение двойственной задачи:</h3>
+                        % for step in dual_steps:
+                            <h4>{{step['title']}}</h4>
+                            <p>{{step['explanation']}}</p>
+                            <table class="custom-table">
+                                <tr>
+                                    <th>Базис</th>
+                                    % for i in range(len(step['table'][0]) - 2):
+                                        <th>y{{i+1}}</th>
+                                    % end
+                                    <th>Свободный член</th>
+                                </tr>
+                                % for row in step['table']:
+                                    <tr>
+                                        % for cell in row:
+                                            <td>{{round(cell, 2) if isinstance(cell, float) else cell}}</td>
+                                        % end
+                                    </tr>
+                                % end
+                            </table>
+                        % end
+                    </div>
+                % end
+
+                % if answer_vars:
+                    <h4>Проверка двойственности:</h4>
+                    <p><b>{{duality_check}} Z = W = {{round(F,2)}}</b></p>
+                % end
             % end
         </div>
 
