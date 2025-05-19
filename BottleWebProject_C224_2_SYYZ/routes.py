@@ -6,9 +6,12 @@ from bottle import route, view, request, template, redirect
 from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
-
 from hungarian_solver import solve_assignment  
+from transport_solver import optimize_transportation
 import json
+import random
+import os
+import numpy as np
 
 # Общая вспомогательная функция: базовые данные для шаблона
 def base_context():
@@ -20,10 +23,6 @@ def base_context():
         'objective_value': None,
         'status': None,
     }
-=======
-from transport_solver import optimize_transportation
-import numpy as np
-
 
 
 @route('/')
@@ -176,15 +175,6 @@ def hungarian_calc():
         ctx['error'] = "Нет допустимого решения."
         return ctx
 
-
-
-import os
-import json
-from datetime import datetime
-from bottle import route, request, view
-from hungarian_solver import solve_assignment
-import numpy as np
-
 def convert_numpy(obj):
     if isinstance(obj, dict):
         return {k: convert_numpy(v) for k, v in obj.items()}
@@ -288,6 +278,7 @@ def transport_practice():
     """
     Обрабатывается запрос к странице транспортной задачи.
     Поддерживаются GET и POST запросы для отображения формы и обработки данных.
+    После успешного решения записываются данные в transport_results.json.
     """
     # Инициализируются переменные по умолчанию
     rows = 3
@@ -298,6 +289,27 @@ def transport_practice():
     cost_matrix = None
     supply = None
     demand = None
+
+    # Обработка GET-запроса с параметрами от примера
+    if request.method == 'GET':
+        try:
+            rows = int(request.query.get('rows', 3))
+            cols = int(request.query.get('cols', 4))
+            cost_matrix_json = request.query.get('cost_matrix_json', 'null')
+            supply_json = request.query.get('supply_json', 'null')
+            demand_json = request.query.get('demand_json', 'null')
+            
+            if cost_matrix_json != 'null':
+                cost_matrix = json.loads(cost_matrix_json)
+            if supply_json != 'null':
+                supply = json.loads(supply_json)
+            if demand_json != 'null':
+                demand = json.loads(demand_json)
+            error = request.query.get('error', '')
+        except (ValueError, json.JSONDecodeError) as e:
+            error = f"Ошибка загрузки примера: {str(e)}"
+            rows = 3
+            cols = 4
 
     if request.method == 'POST':
         action = request.forms.get('action')
@@ -318,8 +330,12 @@ def transport_practice():
 
         try:
             # Получаются размеры матрицы из формы
-            rows = int(request.forms.get('rows', 3))
-            cols = int(request.forms.get('cols', 4))
+            rows = request.forms.get('rows')
+            cols = request.forms.get('cols')
+            if not rows or not cols:
+                raise ValueError("Укажите количество поставщиков и потребителей.")
+            rows = int(rows)
+            cols = int(cols)
             # Проверяются допустимые размеры
             if rows < 1 or cols < 1 or rows > 10 or cols > 10:
                 raise ValueError("Размеры матрицы должны быть от 1 до 10.")
@@ -336,7 +352,13 @@ def transport_practice():
                     value = request.forms.get(f'matrix-{i}-{j}')
                     if value is None or value.strip() == '':
                         raise ValueError("Все поля матрицы тарифов должны быть заполнены числами.")
-                    row.append(float(value))
+                    try:
+                        val = float(value)
+                        if val < 0:
+                            raise ValueError("Значения матрицы тарифов должны быть неотрицательными.")
+                        row.append(val)
+                    except (ValueError, TypeError):
+                        raise ValueError(f"Некорректное значение в матрице тарифов на позиции ({i+1}, {j+1}).")
                 cost_matrix.append(row)
 
             # Проверяется заполнение запасов
@@ -344,18 +366,30 @@ def transport_practice():
                 value = request.forms.get(f'supply-{i}')
                 if value is None or value.strip() == '':
                     raise ValueError("Все поля запасов должны быть заполнены числами.")
-                supply.append(float(value))
+                try:
+                    val = float(value)
+                    if val < 0:
+                        raise ValueError("Значения запасов должны быть неотрицательными.")
+                    supply.append(val)
+                except (ValueError, TypeError):
+                    raise ValueError(f"Некорректное значение в запасах на позиции {i+1}.")
 
             # Проверяется заполнение потребностей
             for j in range(cols):
                 value = request.forms.get(f'demand-{j}')
                 if value is None or value.strip() == '':
                     raise ValueError("Все поля потребностей должны быть заполнены числами.")
-                demand.append(float(value))
+                try:
+                    val = float(value)
+                    if val < 0:
+                        raise ValueError("Значения потребностей должны быть неотрицательными.")
+                    demand.append(val)
+                except (ValueError, TypeError):
+                    raise ValueError(f"Некорректное значение в потребностях на позиции {j+1}.")
 
-            # Проверяется неотрицательность всех значений
-            if any(x < 0 for row in cost_matrix for x in row) or any(x < 0 for x in supply) or any(x < 0 for x in demand):
-                raise ValueError("Все значения должны быть неотрицательными.")
+            # Проверяется, что не все запасы или потребности равны нулю
+            if all(s == 0 for s in supply) or all(d == 0 for d in demand):
+                raise ValueError("Запасы и потребности не могут быть одновременно равны нулю.")
 
             # Проверяется равенство суммы запасов и потребностей
             if abs(sum(supply) - sum(demand)) > 1e-10:
@@ -367,6 +401,44 @@ def transport_practice():
                     np.array(supply),
                     np.array(demand)
                 )
+                # После успешного решения записываются данные в файл
+                if result is not None and total_cost is not None:
+                    # Формируется запись
+                    record = {
+                        "timestamp": datetime.now().isoformat(),
+                        "input_data": {
+                            "rows": rows,
+                            "cols": cols,
+                            "cost_matrix": cost_matrix,
+                            "supply": supply,
+                            "demand": demand
+                        },
+                        "result": result,
+                        "total_cost": total_cost
+                    }
+                    
+                    # Путь к файлу transport_results.json
+                    results_file = os.path.join('input', 'transport_results.json')
+                    
+                    # Чтение текущих данных или создание пустого списка
+                    try:
+                        if os.path.exists(results_file):
+                            with open(results_file, 'r', encoding='utf-8') as f:
+                                results = json.load(f)
+                        else:
+                            results = []
+                    except (json.JSONDecodeError, IOError):
+                        results = []
+                    
+                    # Добавление новой записи
+                    results.append(record)
+                    
+                    # Запись обновленного списка в файл
+                    try:
+                        with open(results_file, 'w', encoding='utf-8') as f:
+                            json.dump(results, f, ensure_ascii=False, indent=4)
+                    except IOError as e:
+                        error = f"Ошибка записи результатов в файл: {str(e)}"
 
         except ValueError as e:
             error = f"Ошибка: {str(e)}"
@@ -399,3 +471,45 @@ def transport_practice():
         demand_json=demand_json
     )
 
+@route('/transport_practice_example', method='POST')
+def transport_practice_example():
+    """
+    Обрабатывается запрос на загрузку случайного примера из transport_output.json.
+    Выбирается случайный пример и перенаправляется на страницу транспортной задачи с данными.
+    """
+    # Путь к файлу с примерами (в папке output)
+    examples_file = os.path.join('output', 'transport_example.json')
+    
+    try:
+        # Чтение файла JSON
+        with open(examples_file, 'r', encoding='utf-8') as f:
+            examples = json.load(f)
+        
+        # Проверка, что файл не пустой
+        if not examples:
+            return redirect('/transport_practice?error=Файл с примерами пуст.')
+        
+        # Выбор случайного примера
+        example = random.choice(examples)
+        
+        # Подготовка данных для перенаправления
+        rows = example['rows']
+        cols = example['cols']
+        cost_matrix = example['cost_matrix']
+        supply = example['supply']
+        demand = example['demand']
+        
+        # Преобразование в JSON для передачи через параметры запроса
+        cost_matrix_json = json.dumps(cost_matrix)
+        supply_json = json.dumps(supply)
+        demand_json = json.dumps(demand)
+        
+        # Перенаправление на страницу с данными примера
+        return redirect(f'/transport_practice?rows={rows}&cols={cols}&cost_matrix_json={cost_matrix_json}&supply_json={supply_json}&demand_json={demand_json}')
+    
+    except FileNotFoundError:
+        return redirect('/transport_practice?error=Файл transport_output.json не найден в папке output.')
+    except json.JSONDecodeError:
+        return redirect('/transport_practice?error=Ошибка декодирования JSON в файле transport_output.json.')
+    except KeyError as e:
+        return redirect(f'/transport_practice?error=Неверная структура файла transport_output.json (отсутствует ключ {e}).')
