@@ -7,9 +7,11 @@ from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
 from hungarian_solver import solve_assignment  
+from transport_solver import optimize_transportation
 import json
 import random
 import os
+import numpy as np
 
 # Общая вспомогательная функция: базовые данные для шаблона
 def base_context():
@@ -21,10 +23,6 @@ def base_context():
         'objective_value': None,
         'status': None,
     }
-
-from transport_solver import optimize_transportation
-import numpy as np
-
 
 
 @route('/')
@@ -176,15 +174,6 @@ def hungarian_calc():
         # Нет допустимого решения
         ctx['error'] = "Нет допустимого решения."
         return ctx
-
-
-
-import os
-import json
-from datetime import datetime
-from bottle import route, request, view
-from hungarian_solver import solve_assignment
-import numpy as np
 
 def convert_numpy(obj):
     if isinstance(obj, dict):
