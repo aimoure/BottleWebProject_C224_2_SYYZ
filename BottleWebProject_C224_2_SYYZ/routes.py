@@ -2,10 +2,23 @@
 Routes and views for the bottle application.
 """
 
-from bottle import route, view, request, template
+from bottle import route, view, request, template, redirect
 from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
+from hungarian_solver import solve_assignment  
+import json
+
+# Общая вспомогательная функция: базовые данные для шаблона
+def base_context():
+    return {
+        'title': 'Калькулятор прямой ЗЛП',
+        'year': datetime.now().year,
+        'error': '',
+        'x_values': None,
+        'objective_value': None,
+        'status': None,
+    }
 
 @route('/')
 @route('/home')
@@ -99,9 +112,11 @@ def about():
 
 # Маршрут для прямой задачи ЛП
 @route('/hungarian-calc', method=['GET','POST'])
+@view('direct_lpp_practice') # Единый шаблон и для GET, и для POST
 def hungarian_calc():
+    ctx = base_context()
     if request.method == 'GET':
-        return template('direct_lpp_practice')
+        return ctx
 
     # Сбор данных из формы
     n_vars = int(request.forms.get('number_of_variables', 2))
@@ -145,12 +160,16 @@ def hungarian_calc():
             signs=signs,
             rhs=rhs
         )
-        result: Optional[dict] = lp.solve()
+        result = lp.solve()
     except Exception as e:
-        return template('direct_lpp_practice', error=str(e))
+        ctx['error'] = str(e)
+        return ctx
 
     if result is None:
-        return template('direct_lpp_practice', error="No feasible solution.")
+        # Нет допустимого решения
+        ctx['error'] = "Нет допустимого решения."
+        return ctx
+
 
 
 import os
@@ -171,6 +190,14 @@ def convert_numpy(obj):
         return obj.item()
     else:
         return obj
+
+    # Успешный результат – добавление в контекст для шаблона
+    ctx.update({
+        'x_values': result['x'],
+        'objective_value': result['objective_value'],
+    })
+    return ctx
+
 
 @route('/purpose_practice', method=['GET', 'POST'])
 @view('purpose_practice')
@@ -241,3 +268,6 @@ def purpose_practice():
         task_labels=task_labels,
         worker_labels=worker_labels
     )
+
+ 
+

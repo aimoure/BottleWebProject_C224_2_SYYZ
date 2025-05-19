@@ -22,6 +22,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function styleInput(inp) {
         inp.type = 'number';
+        inp.min = '-1000';
+        inp.max = '1000';
+        inp.step = '0.01'; // Шаг — 2 знака после запятой
         inp.style.width = '60px';
         inp.style.height = '30px';
         inp.style.margin = '0';
@@ -32,6 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
         inp.style.textAlign = 'center';
         inp.style.fontSize = '18px';
     }
+
 
     function styleSelect(sel) {
         sel.style.width = '60px';
@@ -257,21 +261,26 @@ window.addEventListener('DOMContentLoaded', () => {
     loadFromStorage();
 
     const resetBtn = document.getElementById('reset_button');
-    resetBtn.addEventListener('click', () => {
-        numVarsInput.value = 2;
-        numConsInput.value = 1;
-        redraw();
+    resetBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Отмена стандартного поведения (отправка формы)
 
+        // Явная очистка всех input и select после перерисовки
         varsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consVarsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consSignsContainer.querySelectorAll('select').forEach(select => select.value = '≤');
         consRhsContainer.querySelectorAll('input').forEach(input => input.value = '');
+        saveToStorage();
 
-        localStorage.removeItem('dualLppData');
+        // Устанавка начальных значения переменных
+        numVarsInput.value = 2;
+        numConsInput.value = 1;
 
-        const solutionSection = document.querySelector('.section');
-        if (solutionSection) {
-            solutionSection.remove();
+        redraw(); // Перерисовка полей
+
+        // Удаление блока с результатами
+        const resultBlock = document.getElementById('results');
+        if (resultBlock) {
+            resultBlock.innerHTML = '';
         }
     });
 });

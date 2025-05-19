@@ -1,6 +1,10 @@
 % rebase('layout.tpl', title=title, year=year)
 % result_table = result_table if 'result_table' in locals() else None
 % dual_steps = dual_steps if 'dual_steps' in locals() else None
+% num_vars = num_vars if 'num_vars' in locals() else None
+% num_cons = num_cons if 'num_cons' in locals() else None
+% primal_obj = primal_obj if 'primal_obj' in locals() else None
+% dual_obj = dual_obj if 'dual_obj' in locals() else None
 % answer_vars = answer_vars if 'answer_vars' in locals() and answer_vars is not None else {}
 
 <script src="/static/scripts/dynamic_table_dual.js"></script>
@@ -8,19 +12,19 @@
 <div class="hungarian-page">
     <div class="jumbotron">
         <h1>Калькулятор двойственной задачи линейного программирования</h1>
-        <p class="lead">Введи размер матрицы и значения затрат</p>
+        <p class="lead">Введите коэффициенты задачи и получите решение двойственной задачи</p>
     </div>
 
     <div class="container">
         <form method="post" action="/dual_lpp_practice">
-            <label>Количество переменных:&emsp;</label>
-            <input class="always-visible" type="number" id="number_of_variables" name="num_vars" min="2" max="10" value="2" required>
+            <label>Количество переменных:</label>
+            <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" step="1" value="{{num_cons or 2}}" required onkeydown="return false;">
             <br>
-            <label>Коэфициенты:&emsp;</label>
+            <label>Коэффициенты целевой функции:</label>
             <div id="variables_container"></div>
             <br>
-            <label>Количество ограничений:&emsp;</label>
-            <input class="always-visible" type="number" id="number_of_constraints" name="num_cons" min="1" max="10" value="1" required>
+            <label>Количество ограничений:</label>
+            <input type="number" id="number_of_constraints" name="num_cons" min="1" max="10" value="{{num_cons or 1}}" required onkeydown="return false;">
             <br>
             <label>Ограничения:&emsp;</label>
             <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
@@ -37,64 +41,80 @@
                     <div id="constraints_rhs"></div>
                 </div>
             </div>
-
             <!-- Добавляем условие неотрицательности -->
             <div id="nonnegativity_condition" style="margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
-
             <br>
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
-            <button type="submit" id="reset_button" class="btn btn-secondary btn-lg" style="margin-left: 15px;">Очистить</button>
+            <button type="button" id="reset_button" class="btn btn-secondary btn-lg" style="margin-left: 15px;">Очистить</button>
         </form>
 
-        % if answer_vars:
-            <h3>Ответ:</h3>
-            <p>
-                % for var, val in answer_vars.items():
-                    {{var}} = {{round(val, 2)}}&emsp;
-                % end
-            </p>
-            <p>Значение целевой функции: W = {{F}}</p>
-        % endif
-
-        % if dual_steps:
-            <div class="section">
-                <h3>Решение двойственной задачи:</h3>
-                % for step in dual_steps:
-                    <h4>{{step['title']}}</h4>
-                    <p>{{step['explanation']}}</p>
-                    <table class="custom-table">
-                        <tr>
-                            <th>Базис</th>
-                            % for i in range(len(step['table'][0])-2):
-                                <th>y{{i+1}}</th>
-                            % end
-                            <th>Свободный член</th>
-                        </tr>
-                        % for row in step['table']:
-                            <tr>
-                                % for cell in row:
-                                    <td>{{round(cell, 2) if isinstance(cell, float) else cell}}</td>
-                                % end
-                            </tr>
+        <div id="results">
+            % if primal_obj and dual_obj:
+                <div class="section">
+                    <h3>Исходная задача:</h3>
+                    <p><b>Целевая функция:</b> {{primal_obj}}</p>
+                    <p><b>Ограничения:</b></p>
+                    <ul>
+                        % for cons in primal_constraints:
+                            <li>{{cons}}</li>
                         % end
-                    </table>
-                % end
-            </div>
-        % end
+                        <li>x1, x2 ≥ 0</li>
+                    </ul>
 
-        % if answer_vars:
-            <h3>Результат:</h3>
-            <p>
-                % for var, val in answer_vars.items():
-                    {{var}} = {{round(val, 2)}}&emsp;
-                % end
-            </p>
-            <p>Значение целевой функции: W = {{F}}</p>
-            <h4>Проверим двойственность:</h4>
-            <p><b>{{duality_check}}</b></p>
-        % end
+                    <h3>Двойственная задача:</h3>
+                    <p><b>Целевая функция:</b> {{dual_obj}}</p>
+                    <p><b>Ограничения:</b></p>
+                    <ul>
+                        % for cons in dual_constraints:
+                            <li>{{cons}}</li>
+                        % end
+                        <li>y1, y2 ≥ 0</li>
+                    </ul>
+                </div>
+            % end
 
-        
+            % if answer_vars:
+                <h3>Ответ:</h3>
+                <p>
+                    % for var, val in answer_vars.items():
+                        {{var}} = {{round(val, 2)}}&emsp;
+                    % end
+                    W = {{F}}
+                </p>
+            % end
+
+            % if dual_steps:
+                <div class="section">
+                    <h3>Решение двойственной задачи:</h3>
+                    % for step in dual_steps:
+                        <h4>{{step['title']}}</h4>
+                        <p>{{step['explanation']}}</p>
+                        <table class="custom-table">
+                            <tr>
+                                <th>Базис</th>
+                                % for i in range(len(step['table'][0]) - 2):
+                                    <th>y{{i+1}}</th>
+                                % end
+                                <th>Свободный член</th>
+                            </tr>
+                            % for row in step['table']:
+                                <tr>
+                                    % for cell in row:
+                                        <td>{{round(cell, 2) if isinstance(cell, float) else cell}}</td>
+                                    % end
+                                </tr>
+                            % end
+                        </table>
+                    % end
+                </div>
+            % end
+
+            % if answer_vars:
+                <h4>Проверка двойственности:</h4>
+                <p><b>{{duality_check}} Z = W = {{F}}</b></p>
+            % end
+        </div>
+
         <!-- Возможность загрузить готовый пример -->
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
@@ -105,5 +125,3 @@
         </div>
     </div>
 </div>
-
-
