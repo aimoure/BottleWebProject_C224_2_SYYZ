@@ -31,10 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+
+    <Compile Include="hungarian_solver.py">
+
     <Compile Include="dual_lpp_practice.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="direct_lpp.py">
+
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes.py" />
