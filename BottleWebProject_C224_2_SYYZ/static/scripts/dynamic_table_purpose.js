@@ -67,6 +67,9 @@ function generateMatrix(n) {
             input.type = 'number';
             input.name = `matrix-${i}-${j}`;
             input.value = 0;
+            input.min = 0;        // запретить отрицательные числа
+            input.max = 1000;     // ограничить сверху
+            input.step = 1;       // только целые числа
             input.style.margin = '0';
             input.style.padding = '0';
             input.style.border = 'none'; 
@@ -96,6 +99,24 @@ window.onload = function () {
     const sizeInput = document.getElementById('size');
     generateMatrix(parseInt(sizeInput.value));
 }
+
+
+document.getElementById('uploadRandomBtn').addEventListener('click', function () {
+    const size = parseInt(document.getElementById('size').value);
+    if (isNaN(size) || size < 2 || size > 10) {
+        alert('Размер матрицы должен быть от 2 до 10');
+        return;
+    }
+
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const input = document.querySelector(`input[name="matrix-${i}-${j}"]`);
+            if (input) {
+                input.value = Math.floor(Math.random() * 101); // 0-100
+            }
+        }
+    }
+});
 
 
 

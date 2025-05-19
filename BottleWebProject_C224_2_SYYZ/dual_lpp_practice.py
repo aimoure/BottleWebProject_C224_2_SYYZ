@@ -5,12 +5,17 @@ import numpy as np
 def serve_static(filename):
     return static_file(filename, root='static/scripts')
 
+
 @route('/dual_lpp_practice', method=['GET', 'POST'])
 def dual_lpp_practice():
     result_table = []
     steps = []
     answer_vars = {}
     F = None
+    primal_obj = ''
+    dual_obj = ''
+    primal_constraints = []
+    dual_constraints = []
     duality_check = ''
 
     num_vars = request.forms.get('num_vars', '2')
@@ -42,6 +47,16 @@ def dual_lpp_practice():
                 result_table.append([row[0]] + [round(x, 2) for x in row[1:]])
             result_table.append(['W'] + [round(x, 2) for x in last_table[-1][1:]])
 
+            # Форматирование задач
+            x_vars = [f'x{i+1}' for i in range(num_vars)]
+            y_vars = [f'y{i+1}' for i in range(num_cons)]
+            primal_obj = f"Z = {format_expression(c, x_vars)}"
+            primal_constraints = [format_expression(A[i], x_vars, b[i], '≤') for i in range(num_cons)]
+
+            A_dual = np.array(A).T.tolist()
+            dual_obj = f"W = {format_expression(b, y_vars)}"
+            dual_constraints = [format_expression(A_dual[i], y_vars, c[i], '≥') for i in range(num_vars)]
+
             return template('dual_lpp_practice.tpl',
                             title='Двойственная ЗЛП',
                             year=2025,
@@ -51,7 +66,11 @@ def dual_lpp_practice():
                             dual_steps=steps,
                             answer_vars=answer_vars,
                             F=round(F, 3),
-                            duality_check=duality_check)
+                            duality_check=duality_check,
+                            primal_obj=primal_obj,
+                            primal_constraints=primal_constraints,
+                            dual_obj=dual_obj,
+                            dual_constraints=dual_constraints)
 
         except Exception as e:
             result_table = [['Ошибка обработки данных:', str(e)]]
@@ -64,9 +83,13 @@ def dual_lpp_practice():
                             dual_steps=[],
                             answer_vars={},
                             F=None,
-                            duality_check='')
+                            duality_check='',
+                            primal_obj='',
+                            dual_obj='',
+                            primal_constraints=[],
+                            dual_constraints=[])
 
-    # Для GET-запроса:
+    # GET-запрос
     return template('dual_lpp_practice.tpl',
                     title='Двойственная ЗЛП',
                     year=2025,
@@ -76,8 +99,11 @@ def dual_lpp_practice():
                     dual_steps=steps,
                     answer_vars={},
                     F=None,
-                    duality_check='')
-
+                    duality_check='',
+                    primal_obj='',
+                    dual_obj='',
+                    primal_constraints=[],
+                    dual_constraints=[])
 
 
 def solve_dual_simplex(c, A, b):
@@ -93,23 +119,20 @@ def solve_dual_simplex(c, A, b):
     num_vars = A_dual.shape[1]
     num_cons = A_dual.shape[0]
 
-    # Имена переменных
     var_names = [f"y{i+1}" for i in range(num_vars)]
     slack_names = [f"t{i+1}" for i in range(num_cons)]
     all_vars = var_names + slack_names
 
-    # Построение начальной таблицы
     tableau = []
     basis = []
     for i in range(num_cons):
-        row = list(-A_dual[i])  # знак "≤"
+        row = list(-A_dual[i])
         slack = [1 if j == i else 0 for j in range(num_cons)]
         row += slack
         row.append(-b_dual[i])
         tableau.append(row)
         basis.append(slack_names[i])
 
-    # Целевая функция W = c_dual^T * y
     z_row = list(c_dual) + [0]*num_cons + [0]
     tableau.append(z_row)
 
@@ -122,17 +145,15 @@ def solve_dual_simplex(c, A, b):
     })
 
     while True:
-        # Шаг 1: Найти строку с отрицательным свободным членом (rhs)
         rhs = [row[-1] for row in tableau[:-1]]
         if all(r >= 0 for r in rhs):
-            break  # оптимум достигнут
+            break
 
-        leaving = np.argmin(rhs)  # самая отрицательная строка
+        leaving = np.argmin(rhs)
         row = tableau[leaving]
 
-        # Шаг 2: Найти допустимый ведущий столбец (min ratio test по отрицательным коэффициентам)
         ratios = []
-        for j in range(len(row) - 1):  # не учитываем свободный член
+        for j in range(len(row) - 1):
             coeff = row[j]
             zjcj = tableau[-1][j]
             if coeff < 0:
@@ -140,7 +161,6 @@ def solve_dual_simplex(c, A, b):
         if not ratios:
             raise Exception("Задача не имеет решения: не найден допустимый ведущий столбец.")
 
-        # Шаг 3: Выбор столбца с минимальным отношением
         _, entering = min(ratios)
 
         pivot_val = tableau[leaving][entering]
@@ -155,7 +175,6 @@ def solve_dual_simplex(c, A, b):
                     for j in range(len(tableau[i]))
                 ]
 
-        # Сохраняем шаг
         step_table = [ [basis[i]] + tableau[i] for i in range(len(basis)) ] + [["W"] + tableau[-1]]
         steps.append({
             "title": "Итерация",
@@ -164,10 +183,29 @@ def solve_dual_simplex(c, A, b):
             "explanation": f"Ведущий столбец: {all_vars[entering]}, ведущая строка: {basis[leaving]}"
         })
 
-    # Финальные значения
     result_values = {name: 0 for name in all_vars}
     for i, var in enumerate(basis):
         result_values[var] = tableau[i][-1]
     W = tableau[-1][-1]
 
     return steps, result_values, W
+
+
+def format_term(coef, var):
+    if coef == 0:
+        return ''
+    coef_int = int(coef)
+    if coef == 1:
+        return var
+    elif coef == -1:
+        return f"-{var}"
+    return f"{coef_int if coef == coef_int else coef}{var}"
+
+def format_expression(coeffs, vars_list, rhs=None, sign=None):
+    terms = [format_term(c, v) for c, v in zip(coeffs, vars_list)]
+    expression = ' + '.join(filter(None, terms)).replace('+ -', '- ')
+    if sign and rhs is not None:
+        rhs_int = int(rhs)
+        rhs_str = str(rhs_int if rhs == rhs_int else rhs)
+        return f"{expression} {sign} {rhs_str}"
+    return expression

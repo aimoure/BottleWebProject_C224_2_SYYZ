@@ -48,7 +48,7 @@ class LinearProgrammingProblem:
 
     def solve(self) -> Optional[dict]:
         # Подготовка коэффициентов для linprog
-        c = np.array(self.objective, dtype=float)
+        c = -np.array(self.objective, dtype=float)
 
         # A_ub и b_ub — для всех ограничений вида ai x ≤ bi
         # A_eq и b_eq — для всех ограничений вида ai x = bi
@@ -83,11 +83,10 @@ class LinearProgrammingProblem:
             return None
 
         # Собираем ответ
-        x = res.x.tolist()
-        value = res.fun
+        x = [round(val, 2) for val in res.x.tolist()]
+        value = round(-res.fun, 2)
 
         return {
             'x': x, # Список значений переменных
             'objective_value': value, # Значение функции
-            'status': res.message # Описание статуса
         }

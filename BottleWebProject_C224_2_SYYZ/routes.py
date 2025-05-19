@@ -2,13 +2,28 @@
 Routes and views for the bottle application.
 """
 
-from bottle import route, view, request, template
+from bottle import route, view, request, template, redirect
 from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
-from transport_solver import optimize_transportation
+
+from hungarian_solver import solve_assignment  
 import json
+
+# Общая вспомогательная функция: базовые данные для шаблона
+def base_context():
+    return {
+        'title': 'Калькулятор прямой ЗЛП',
+        'year': datetime.now().year,
+        'error': '',
+        'x_values': None,
+        'objective_value': None,
+        'status': None,
+    }
+=======
+from transport_solver import optimize_transportation
 import numpy as np
+
 
 
 @route('/')
@@ -103,9 +118,11 @@ def about():
 
 # Маршрут для прямой задачи ЛП
 @route('/hungarian-calc', method=['GET','POST'])
+@view('direct_lpp_practice') # Единый шаблон и для GET, и для POST
 def hungarian_calc():
+    ctx = base_context()
     if request.method == 'GET':
-        return template('direct_lpp_practice')
+        return ctx
 
     # Сбор данных из формы
     n_vars = int(request.forms.get('number_of_variables', 2))
@@ -149,12 +166,115 @@ def hungarian_calc():
             signs=signs,
             rhs=rhs
         )
-        result: Optional[dict] = lp.solve()
+        result = lp.solve()
     except Exception as e:
-        return template('direct_lpp_practice', error=str(e))
+        ctx['error'] = str(e)
+        return ctx
 
     if result is None:
-        return template('direct_lpp_practice', error="No feasible solution.")
+        # Нет допустимого решения
+        ctx['error'] = "Нет допустимого решения."
+        return ctx
+
+
+
+import os
+import json
+from datetime import datetime
+from bottle import route, request, view
+from hungarian_solver import solve_assignment
+import numpy as np
+
+def convert_numpy(obj):
+    if isinstance(obj, dict):
+        return {k: convert_numpy(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy(i) for i in obj]
+    elif isinstance(obj, tuple):
+        return tuple(convert_numpy(i) for i in obj)
+    elif hasattr(obj, 'item'):
+        return obj.item()
+    else:
+        return obj
+
+    # Успешный результат – добавление в контекст для шаблона
+    ctx.update({
+        'x_values': result['x'],
+        'objective_value': result['objective_value'],
+    })
+    return ctx
+
+
+@route('/purpose_practice', method=['GET', 'POST'])
+@view('purpose_practice')
+def purpose_practice():
+    result = None
+    matrix = None
+    error = None
+    task_labels = []
+    worker_labels = []
+
+    if request.method == 'POST':
+        try:
+            size = int(request.forms.get('size'))
+
+            task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
+            worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
+
+            matrix = []
+            for i in range(size):
+                row = []
+                for j in range(size):
+                    val = request.forms.get(f'matrix-{i}-{j}')
+                    if val is None:
+                        raise ValueError(f"Ячейка matrix-{i}-{j} пуста")
+                    row.append(int(val))
+                matrix.append(row)
+
+            result = solve_assignment(matrix)
+
+            # сохраняем данные
+            save_data = {
+                "timestamp": datetime.now().isoformat(),
+                "size": size,
+                "tasks": task_labels,
+                "workers": worker_labels,
+                "matrix": matrix,
+                "result": result
+            }
+
+            output_dir = 'input'
+            os.makedirs(output_dir, exist_ok=True)
+            file_path = os.path.join(output_dir, 'purpose_input.json')
+
+            # Читаем старые данные, если есть
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    try:
+                        all_data = json.load(f)
+                    except json.JSONDecodeError:
+                        all_data = []
+            else:
+                all_data = []
+
+            all_data.append(convert_numpy(save_data))
+
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(convert_numpy(all_data), f, ensure_ascii=False, indent=4)
+
+        except Exception as e:
+            error = str(e)
+
+    return dict(
+        title="The assignment problem",
+        year=datetime.now().year,
+        result=result,
+        matrix=matrix,
+        error=error,
+        task_labels=task_labels,
+        worker_labels=worker_labels
+    )
+
 
     # Возврат результата
     return template('direct_lpp_result',
@@ -278,3 +398,4 @@ def transport_practice():
         supply_json=supply_json,
         demand_json=demand_json
     )
+
