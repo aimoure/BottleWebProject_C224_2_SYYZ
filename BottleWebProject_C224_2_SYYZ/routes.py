@@ -20,7 +20,6 @@ def base_context():
         'objective_value': None,
         'status': None,
     }
-=======
 from transport_solver import optimize_transportation
 import numpy as np
 

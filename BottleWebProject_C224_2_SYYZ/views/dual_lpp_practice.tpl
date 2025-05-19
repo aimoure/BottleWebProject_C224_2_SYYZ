@@ -1,4 +1,6 @@
 % rebase('layout.tpl', title=title, year=year)
+
+<!-- Определение переменных с безопасной инициализацией -->
 % result_table = result_table if 'result_table' in locals() else None
 % dual_steps = dual_steps if 'dual_steps' in locals() else None
 % num_vars = num_vars if 'num_vars' in locals() else None
@@ -8,6 +10,7 @@
 % no_solution = no_solution if 'no_solution' in locals() else None
 % answer_vars = answer_vars if 'answer_vars' in locals() and answer_vars is not None else {}
 
+<!--  Подключение JavaScript для динамического управления таблицей -->
 <script src="/static/scripts/dynamic_table_dual.js"></script>
 
 <div class="hungarian-page">
@@ -17,46 +20,55 @@
     </div>
 
     <div class="container">
+        <!-- Форма для ввода данных задачи -->
         <form method="post" action="/dual_lpp_practice">
             <label>Количество переменных:</label>
             <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" step="1" value="{{num_cons or 2}}" required onkeydown="return false;">
             <br>
+
             <label>Коэффициенты целевой функции:</label>
             <div id="variables_container"></div>
             <br>
+
             <label>Количество ограничений:</label>
             <input type="number" id="number_of_constraints" name="num_cons" min="1" max="10" value="{{num_cons or 1}}" required onkeydown="return false;">
             <br>
+
             <label>Ограничения:&emsp;</label>
+            <!-- Контейнеры для ограничений: коэффициенты, знаки, свободные члены -->
             <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
-                <!-- Коэффициенты -->
                 <div>
                     <div id="constraints_vars"></div>
                 </div>
-                <!-- Знак -->
                 <div>
                     <div id="constraints_signs"></div>
                 </div>
-                <!-- Свободный член -->
                 <div>
                     <div id="constraints_rhs"></div>
                 </div>
             </div>
-            <!-- Добавляем условие неотрицательности -->
+
+            <!-- Автоматическое добавление условий неотрицательности -->
             <div id="nonnegativity_condition" style="margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
             <br>
+
+            <!-- Кнопки отправки и очистки формы -->
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
             <button type="button" id="reset_button" class="btn btn-secondary btn-lg" style="margin-left: 15px;">Очистить</button>
         </form>
 
+        <!-- Отображение результатов решения задачи -->
         <div id="results">
             <br>
+
             % if no_solution:
+                <!-- Сообщение об ошибке при отсутствии решения -->
                 <div class="alert alert-danger" role="alert">
                     {{error_message}}
                 </div>
             % else:
                 % if primal_obj and dual_obj:
+                    <!-- Вывод исходной и двойственной задач -->
                     <div class="section">
                         <h3>Исходная задача:</h3>
                         <p><b>Целевая функция:</b> {{primal_obj}}</p>
@@ -81,16 +93,18 @@
                 % end
 
                 % if answer_vars:
+                    <!-- Отображение найденного оптимального решения -->
                     <h3>Ответ:</h3>
                     <p>
                         % for var, val in answer_vars.items():
                             {{var}} = {{round(val, 2)}}&emsp;
                         % end
-                        W = {{F}}
+                        W = {{round(F, 2)}}
                     </p>
                 % end
 
                 % if dual_steps:
+                    <!-- Пошаговое решение двойственной задачи -->
                     <div class="section">
                         <h3>Решение двойственной задачи:</h3>
                         % for step in dual_steps:
@@ -117,13 +131,14 @@
                 % end
 
                 % if answer_vars:
+                    <!-- Проверка равенства значений целевых функций -->
                     <h4>Проверка двойственности:</h4>
-                    <p><b>{{duality_check}} Z = W = {{round(F,2)}}</b></p>
+                    <p><b>{{duality_check}} Z = W = {{round(F, 2)}}</b></p>
                 % end
             % end
         </div>
 
-        <!-- Возможность загрузить готовый пример -->
+        <!-- Панель загрузки готового примера -->
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
