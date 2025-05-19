@@ -15,6 +15,7 @@
         </p>
     </div>
 
+    <!-- Основной контейнер -->
     <div class="container">
         <div class="section">
             <h2>Определение задачи</h2>
@@ -27,6 +28,7 @@
             <p class="text">Основным методом для решения прямой ЗЛП является симплекс-метод.</p>
         </div>
 
+        <!-- Симплек метод -->
         <section class="section">
             <h2>Симплекс-метод</h2>
             <p class="text">
@@ -52,6 +54,7 @@
             </ol>
         </section>
 
+        <!-- Пример решения -->
         <div class="section">
             <h2>Пример решения</h2>
             <p class="text">Максимизировать:</p>
@@ -88,6 +91,7 @@
                 \]
             </div>
             <h3>Шаг 2: Начальная таблица</h3>
+            <!-- Таблица -->
             <table class="custom-table">
                 <tr>
                     <th>Базис</th>
@@ -122,10 +126,10 @@
                     <td>0</td>
                 </tr>
             </table>
-
             <h3>Шаг 3: Итерации</h3>
             <span class="step-item"><span>Ведущий столбец \( x_1 \) (-3), строка — первая (4/2 = 2)</span></span>
             <span class="step-item"><span>Пересчет таблицы</span></span>
+            <!-- Таблица -->
             <table class="custom-table">
                 <tr>
                     <th>Базис</th>
@@ -160,9 +164,9 @@
                     <td>6</td>
                 </tr>
             </table>
-
             <span class="step-item"><span>Ведущий столбец \( x_2 \) (-0.5), строка — вторая (2/1.5 = 1.33)</span></span>
             <span class="step-item"><span>Итоговая таблица</span></span>
+            <!-- Таблица -->
             <table class="custom-table">
                 <tr>
                     <th>Базис</th>
@@ -199,8 +203,8 @@
             </table>
             <p class="text">Результат: \( x_1 = 1.33, x_2 = 1.33, Z = 6.67 \).</p>
         </div>
-
         <hr>
+        <!-- Переход к калькулятору -->
         <div class="calc-start-section text-center">
             <h1 class="mb-4">Готовы решить свою задачу?</h1>
             <a href="/direct_lpp_practice" class="btn btn-primary btn-lg">Перейти к калькулятору</a>

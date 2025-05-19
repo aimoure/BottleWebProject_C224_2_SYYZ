@@ -117,6 +117,7 @@ input[type="checkbox"].input-validation-error {
     justify-content: center; /* Центрируем содержимое внутри .col-proud */
 }
 
+/* ВОЗМОЖНО можно убить */
 /* Карточка с создателем */
 .creator {
     color: white;

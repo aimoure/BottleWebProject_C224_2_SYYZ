@@ -20,7 +20,7 @@
 
             <br>
 
-            <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+            <button type="submit" class="btn btn-primary btn-lg" onclick="solveHungarian()">Решить задачу</button>
         </form>
 
         <!-- Боковая панель справа от матрицы -->
