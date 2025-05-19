@@ -14,13 +14,13 @@
     <div class="container">
         <form method="post" action="/hungarian-calc">
             <label>Количество переменных:&emsp;</label>
-            <input class="always-visible" type="number" id="number_of_variables" min="2" max="10" value="2" required>
+            <input class="always-visible" type="number" id="number_of_variables" name="number_of_variables" min="2" max="10" value="2" required onkeydown="return false;">
             <br>
             <label>Коэфициенты целевой функции:&emsp;</label>
             <div id="variables_container"></div>
             <br>
             <label>Количество ограничений:&emsp;</label>
-            <input class="always-visible" type="number" id="number_of_constraints" min="1" max="10" value="1" required>
+            <input class="always-visible" type="number" id="number_of_constraints" name="number_of_constraints" min="1" max="10" value="1" required onkeydown="return false;">
             <br>
             <label>Ограничения:&emsp;</label>
             <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
