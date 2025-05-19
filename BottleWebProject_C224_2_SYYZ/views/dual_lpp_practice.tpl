@@ -54,7 +54,7 @@
                 % end
             </p>
             <p>Значение целевой функции: W = {{F}}</p>
-        % endif
+        % end
 
         % if dual_steps:
             <div class="section">
