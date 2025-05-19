@@ -118,7 +118,7 @@
 
                 % if answer_vars:
                     <h4>Проверка двойственности:</h4>
-                    <p><b>{{duality_check}} Z = W = {{F}}</b></p>
+                    <p><b>{{duality_check}} Z = W = {{round(F,2)}}</b></p>
                 % end
             % end
         </div>
