@@ -83,8 +83,8 @@ class LinearProgrammingProblem:
             return None
 
         # Собираем ответ
-        x = res.x.tolist()
-        value = -res.fun
+        x = [round(val, 2) for val in res.x.tolist()]
+        value = round(-res.fun, 2)
 
         return {
             'x': x, # Список значений переменных

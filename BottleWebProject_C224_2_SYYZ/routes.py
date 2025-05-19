@@ -2,10 +2,12 @@
 Routes and views for the bottle application.
 """
 
-from bottle import route, view, request, template
+from bottle import route, view, request, template, redirect
 from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
+from hungarian_solver import solve_assignment  
+import json
 
 # Общая вспомогательная функция: базовые данные для шаблона
 def base_context():
@@ -168,16 +170,12 @@ def hungarian_calc():
         ctx['error'] = "Нет допустимого решения."
         return ctx
 
-    # Успешный результат – добавляется в контекст для шаблона
+    # Успешный результат – добавление в контекст для шаблона
     ctx.update({
         'x_values': result['x'],
         'objective_value': result['objective_value'],
     })
     return ctx
-
-from bottle import route, request, view, redirect
-from hungarian_solver import solve_assignment  
-import json
 
 @route('/purpose_practice', method=['GET', 'POST'])
 @view('purpose_practice')
@@ -191,10 +189,7 @@ def purpose_practice():
     if request.method == 'POST':
         try:
             size = int(request.forms.get('size'))
-            
-            
             task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
-            
             worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
 
             matrix = []
@@ -205,7 +200,6 @@ def purpose_practice():
                     row.append(int(val))
                 matrix.append(row)
 
-           
             result = solve_assignment(matrix)
 
         except Exception as e:
