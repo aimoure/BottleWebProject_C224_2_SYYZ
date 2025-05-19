@@ -62,6 +62,9 @@
     <Content Include="output\direct_lpp_output.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="output\transport_output.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
     <Content Include="static\content\bootstrap.css" />
     <Content Include="static\content\bootstrap.min.css" />

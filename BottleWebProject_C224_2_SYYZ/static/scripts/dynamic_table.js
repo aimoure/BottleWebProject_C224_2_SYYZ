@@ -192,9 +192,10 @@ window.addEventListener('DOMContentLoaded', () => {
         tblObj.appendChild(rowObj); // Добавление заполненной строки в таблицу
         varsContainer.appendChild(tblObj); // Вставка таблицы на страницу
 
+        // Создание пустого объекта для хранения предыдущих значений полей целевой функции
         let oldConsVarsValues = {};
-        consVarsContainer.querySelectorAll('input').forEach(inp => {
-            oldConsVarsValues[inp.name] = inp.value;
+        consVarsContainer.querySelectorAll('input').forEach(inp => { // Поиск всех input внутри контейнера varsContainer и сбор их текущих значений
+            oldConsVarsValues[inp.name] = inp.value; // Запись значения inp.value в объект под ключом, равным имени поля
         });
         // Ограничения: коэфициенты
         consVarsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
@@ -227,9 +228,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consVarsContainer.appendChild(tblL); // Вставка таблицы на страницу
 
+        // Создание пустого объекта для хранения предыдущих значений полей целевой функции
         let oldConsSignsValues = {};
-        consSignsContainer.querySelectorAll('select').forEach(sel => {
-            oldConsSignsValues[sel.name] = sel.value;
+        consSignsContainer.querySelectorAll('select').forEach(sel => { // Поиск всех input внутри контейнера varsContainer и сбор их текущих значений
+            oldConsSignsValues[sel.name] = sel.value; // Запись значения inp.value в объект под ключом, равным имени поля
         });
         // Ограничения: знак
         consSignsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
@@ -265,9 +267,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consSignsContainer.appendChild(tblS); // Вставка таблицы на страницу
 
+        // Создание пустого объекта для хранения предыдущих значений полей целевой функции
         let oldConsRhsValues = {};
-        consRhsContainer.querySelectorAll('input').forEach(inp => {
-            oldConsRhsValues[inp.name] = inp.value;
+        consRhsContainer.querySelectorAll('input').forEach(inp => { // Поиск всех input внутри контейнера varsContainer и сбор их текущих значений
+            oldConsRhsValues[inp.name] = inp.value; // Запись значения inp.value в объект под ключом, равным имени поля
         });
         // Ограничения: свободный член
         consRhsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
