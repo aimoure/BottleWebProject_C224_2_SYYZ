@@ -289,6 +289,7 @@ def transport_practice():
     """
     Обрабатывается запрос к странице транспортной задачи.
     Поддерживаются GET и POST запросы для отображения формы и обработки данных.
+    После успешного решения записываются данные в transport_results.json.
     """
     # Инициализируются переменные по умолчанию
     rows = 3
@@ -411,6 +412,44 @@ def transport_practice():
                     np.array(supply),
                     np.array(demand)
                 )
+                # После успешного решения записываются данные в файл
+                if result is not None and total_cost is not None:
+                    # Формируется запись
+                    record = {
+                        "timestamp": datetime.now().isoformat(),
+                        "input_data": {
+                            "rows": rows,
+                            "cols": cols,
+                            "cost_matrix": cost_matrix,
+                            "supply": supply,
+                            "demand": demand
+                        },
+                        "result": result,
+                        "total_cost": total_cost
+                    }
+                    
+                    # Путь к файлу transport_results.json
+                    results_file = os.path.join('input', 'transport_results.json')
+                    
+                    # Чтение текущих данных или создание пустого списка
+                    try:
+                        if os.path.exists(results_file):
+                            with open(results_file, 'r', encoding='utf-8') as f:
+                                results = json.load(f)
+                        else:
+                            results = []
+                    except (json.JSONDecodeError, IOError):
+                        results = []
+                    
+                    # Добавление новой записи
+                    results.append(record)
+                    
+                    # Запись обновленного списка в файл
+                    try:
+                        with open(results_file, 'w', encoding='utf-8') as f:
+                            json.dump(results, f, ensure_ascii=False, indent=4)
+                    except IOError as e:
+                        error = f"Ошибка записи результатов в файл: {str(e)}"
 
         except ValueError as e:
             error = f"Ошибка: {str(e)}"

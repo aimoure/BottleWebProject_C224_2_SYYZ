@@ -59,6 +59,9 @@
     <Content Include="input\purpose_input.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="input\transport_results.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="output\direct_lpp_output.json">
       <SubType>Code</SubType>
     </Content>
