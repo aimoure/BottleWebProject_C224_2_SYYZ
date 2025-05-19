@@ -34,6 +34,9 @@
     <Compile Include="dual_lpp_practice.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="direct_lpp.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes.py" />
   </ItemGroup>
   <ItemGroup>
