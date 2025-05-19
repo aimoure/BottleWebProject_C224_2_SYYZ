@@ -1,4 +1,8 @@
 % rebase('layout.tpl', title=title, year=year)
+% error = error if 'error' in locals() else None
+% x_values = x_values if 'x_values' in locals() else None
+% objective_value = objective_value if 'objective_value' in locals() else None
+% status = status if 'status' in locals() else None
 
 <div class="hungarian-page">
     <div class="jumbotron">
@@ -12,7 +16,7 @@
             <label>Количество переменных:&emsp;</label>
             <input class="always-visible" type="number" id="number_of_variables" min="2" max="10" value="2" required>
             <br>
-            <label>Коэфициенты:&emsp;</label>
+            <label>Коэфициенты целевой функции:&emsp;</label>
             <div id="variables_container"></div>
             <br>
             <label>Количество ограничений:&emsp;</label>
@@ -33,8 +37,21 @@
                     <div id="constraints_rhs"></div>
                 </div>
             </div>
+            <!-- Добавление условия неотрицательности -->
+            <div id="nonnegativity_condition" style="margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
             <br>
             <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+            <button type="submit" class="btn btn-secondary btn-lg" style="margin-left: 15px;" id="reset_button">Очистить</button>
+            <br>
+            <div id="results" style="margin-top:20px;">
+              % if error:
+                <div class="alert alert-danger">{{error}}</div>
+              % elif x_values:
+                <h2>Результат решения</h2>
+                <p>Оптимальные x: {{', '.join(map(str,x_values))}}</p>
+                <p style="margin-bottom: -10px">Значение цели: {{objective_value}}</p>
+              % end
+            </div>
         </form>
 
         <!-- Возможность загрузить готовый пример -->
@@ -55,6 +72,5 @@
         </div>
     </div>
 </div>
-
 
 <script src="/static/scripts/dynamic_table.js"></script>

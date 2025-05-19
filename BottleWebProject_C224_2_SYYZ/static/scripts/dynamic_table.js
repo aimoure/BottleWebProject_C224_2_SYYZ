@@ -51,7 +51,9 @@ window.addEventListener('DOMContentLoaded', () => {
         sel.style.whiteSpace = 'nowrap';
     }
 
+    // Сохранение текущего состояния формы в localStorage
     function saveToStorage() {
+        // Создание объекта-данных
         const data = {
             numVars: numVarsInput.value,
             numCons: numConsInput.value,
@@ -61,50 +63,62 @@ window.addEventListener('DOMContentLoaded', () => {
             consRhs: {}
         };
 
+        // Сбор всех коэффициентов целевой функции
         varsContainer.querySelectorAll('input').forEach(input => {
             data.vars[input.name] = input.value;
         });
+        // Сбор всех коэффициентов ограничений
         consVarsContainer.querySelectorAll('input').forEach(input => {
             data.consVars[input.name] = input.value;
         });
+        // Сбор всех знаков ограничений
         consSignsContainer.querySelectorAll('select').forEach(select => {
             data.consSigns[select.name] = select.value;
         });
+        // Сбор всех свободных членов
         consRhsContainer.querySelectorAll('input').forEach(input => {
             data.consRhs[input.name] = input.value;
         });
 
-        localStorage.setItem('directLppData', JSON.stringify(data));
+        localStorage.setItem('directLppData', JSON.stringify(data)); // Сохранение JSON-строки в localStorage
     }
 
+    // Загрузка сохранённых данных и восстановление состояния
     function loadFromStorage() {
+        // Чтение из localStorage
         const saved = localStorage.getItem('directLppData');
+        // Вызов даже если нет сохранённых данных
         if (!saved) {
-            redraw(); // Вызов даже если нет сохранённых данных
+            redraw();
             return;
         }
 
+        // Разбор JSON-строки
         const data = JSON.parse(saved);
         numVarsInput.value = data.numVars;
         numConsInput.value = data.numCons;
 
         redraw();
 
-        for (let [name, value] of Object.entries(data.vars)) {
-            const input = document.querySelector(`input[name="${name}"]`);
-            if (input) input.value = value;
+        // Подстановка сохранённых коэффициентов цели
+        for (let [name, value] of Object.entries(data.vars)) { // Проход по парам из объекта data.vars
+            const input = document.querySelector(`input[name="${name}"]`); // Поиск на странице input по атрибуту name, равному текущему имени
+            if (input) input.value = value; // Если элемент найден, установить его value в сохранённое значение
         }
-        for (let [name, value] of Object.entries(data.consVars)) {
-            const input = document.querySelector(`input[name="${name}"]`);
-            if (input) input.value = value;
+        // Подстановка сохранённых коэффициентов ограничений
+        for (let [name, value] of Object.entries(data.consVars)) { // Проход по парам из объекта data.consVars
+            const input = document.querySelector(`input[name="${name}"]`); // Поиск на странице input по атрибуту name, равному текущему имени
+            if (input) input.value = value; // Если элемент найден, установить его value в сохранённое значение
         }
-        for (let [name, value] of Object.entries(data.consSigns)) {
-            const select = document.querySelector(`select[name="${name}"]`);
-            if (select) select.value = value;
+        // Подстановка сохранённых знаков ограничений
+        for (let [name, value] of Object.entries(data.consSigns)) { // Проход по парам из объекта data.consSigns
+            const select = document.querySelector(`select[name="${name}"]`); // Поиск на странице input по атрибуту name, равному текущему имени
+            if (select) select.value = value; // Если элемент найден, установить его value в сохранённое значение
         }
-        for (let [name, value] of Object.entries(data.consRhs)) {
-            const input = document.querySelector(`input[name="${name}"]`);
-            if (input) input.value = value;
+        // Подстановка сохранённых свободных членов
+        for (let [name, value] of Object.entries(data.consRhs)) { // Проход по парам из объекта data.consRhs
+            const input = document.querySelector(`input[name="${name}"]`); // Поиск на странице input по атрибуту name, равному текущему имени
+            if (input) input.value = value; // Если элемент найден, установить его value в сохранённое значение
         }
     }
 
@@ -114,9 +128,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const nVars = parseInt(numVarsInput.value, 10) || 2;
         const nCons = parseInt(numConsInput.value, 10) || 1;
 
+        // Создание пустого объекта для хранения предыдущих значений полей целевой функции
         let oldVarsValues = {};
-        varsContainer.querySelectorAll('input').forEach(inp => {
-            oldVarsValues[inp.name] = inp.value;
+        varsContainer.querySelectorAll('input').forEach(inp => { // Поиск всех input внутри контейнера varsContainer и сбор их текущих значений
+            oldVarsValues[inp.name] = inp.value; // Запись значения inp.value в объект под ключом, равным имени поля
         });
         // Отрисовка таблицы коэффициентов целевой функции
         varsContainer.innerHTML = ''; // Очистка контейнера перед отрисовкой
@@ -139,7 +154,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const inp = document.createElement('input'); // Создание поля ввода
             styleInput(inp); // Стилизация input
             inp.name = `x_${j}`; // Уникальное имя поля
-            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name]; // Если сохранённое значение существует, присвоить его новому input
             inp.addEventListener('input', saveToStorage); // Сохранение данных
             td.appendChild(inp); // Помещение <input> внутрь ячейки
             rowObj.appendChild(td); // Добавление заполненной ячейки в строку
@@ -173,7 +188,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const inp = document.createElement('input'); // Создание поля ввода
                 styleInput(inp); // Стилизация input
                 inp.name = `cons_${i}_${j}`; // Уникальное имя поля
-                if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+                if (oldConsVarsValues[inp.name] !== undefined) inp.value = oldConsVarsValues[inp.name]; // Если сохранённое значение существует, присвоить его новому input
                 inp.addEventListener('input', saveToStorage); // Сохранение данных
                 td.appendChild(inp); // Помещение <input> внутрь ячейки
                 tr.appendChild(td); // Добавление заполненной ячейки в строку
@@ -212,8 +227,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = sym; // Текстовое содержимое <option>, отображаемое в выпадающем списке, тоже устанавливается в sym
                 sel.appendChild(opt); // Вставка готового <option> внутрь элемента <select> (селектора)
             });
-            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
-            inp.addEventListener('input', saveToStorage); // Сохранение данных
+            if (oldConsSignsValues[sel.name] !== undefined) sel.value = oldConsSignsValues[sel.name]; // Если сохранённое значение существует, присвоить его новому input
+            sel.addEventListener('change', saveToStorage); // Сохранение данных
             td.appendChild(sel); // Помещение выпадающего списка внутрь ячейки
             tr.appendChild(td); // Добавление заполненной ячейки в строку
             tblS.appendChild(tr); // Добавление заполненной строки в таблицу
@@ -243,7 +258,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const inp = document.createElement('input'); // Создание поля ввода
             styleInput(inp); // Стилизация input
             inp.name = `cons_rhs_${i}`; // Уникальное имя поля
-            if (oldVarsValues[inp.name] !== undefined) inp.value = oldVarsValues[inp.name];
+            if (oldConsRhsValues[inp.name] !== undefined) inp.value = oldConsRhsValues[inp.name]; // Если сохранённое значение существует, присвоить его новому input
             inp.addEventListener('input', saveToStorage); // Сохранение данных
             td.appendChild(inp); // Помещение <input> внутрь ячейки
             tr.appendChild(td); // Добавление заполненной ячейки в строку
@@ -251,54 +266,46 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consRhsContainer.appendChild(tblR); // Вставка таблицы на страницу
 
+        // Поиск элемента, куда выводится условие неотрицательности
         const nonnegDiv = document.getElementById('nonnegativity_condition');
         let varsList = [];
+        // Формирование списка имён переменных со сниженными индексами
         for (let i = 0; i < nVars; i++) {
-            varsList.push(`x<sub>${i + 1}</sub>`);
+            varsList.push(`x<sub>${i + 1}</sub>`); // Добавление строки вида x<sub>i+1</sub> в массив
         }
-        nonnegDiv.innerHTML = varsList.join(', ') + ' ≥ 0';
+        nonnegDiv.innerHTML = varsList.join(', ') + ' ≥ 0'; // Объединение элементов массива через запятую и пробел и добавление знака ≥ 0
 
+        // Сохранение текущего состояния всех полей в localStorage
         saveToStorage(); // Сохранение сразу после отрисовки
     }
 
-    // Навешивание обработчиков на изменение числа переменных и ограничений
-    numVarsInput.addEventListener('input', redraw);
-    numConsInput.addEventListener('input', redraw);
+    // Навешивание события на изменение числа переменных: перерисовка таблиц
+    numVarsInput.addEventListener('input', () => { redraw(); });
+    numConsInput.addEventListener('input', () => { redraw(); });
 
-    // Инициализация
-    redraw();
-
-    numVarsInput.addEventListener('input', () => {
-        redraw();
-    });
-
-    numConsInput.addEventListener('input', () => {
-        redraw();
-    });
-
+    // Загрузка ранее сохранённых данных из localStorage и отрисовка таблиц
     loadFromStorage();
 
+    // Поиск кнопки «Очистка» на странице
     const resetBtn = document.getElementById('reset_button');
+    // Навешивание обработчика клика на кнопку «Сброс»
     resetBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // Не отправлять форму
+        e.preventDefault(); // Отмена стандартного поведения (отправка формы)
 
-        // Устанавливаем начальные значения переменных
-        numVarsInput.value = 2;
-        numConsInput.value = 1;
-
-        // Удаляем сохранённые данные
-        localStorage.removeItem('dualLppData');
-
-        // Перерисовываем поля
-        redraw();
-
-        // Явно очищаем все input'ы и select'ы после перерисовки
+        // Явная очистка всех input и select после перерисовки
         varsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consVarsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consSignsContainer.querySelectorAll('select').forEach(select => select.value = '≤');
         consRhsContainer.querySelectorAll('input').forEach(input => input.value = '');
+        saveToStorage();
 
-        // Удалить блок с результатами
+        // Устанавка начальных значения переменных
+        numVarsInput.value = 2;
+        numConsInput.value = 1;
+
+        redraw(); // Перерисовка полей
+
+        // Удаление блока с результатами
         const resultBlock = document.getElementById('results');
         if (resultBlock) {
             resultBlock.innerHTML = '';
