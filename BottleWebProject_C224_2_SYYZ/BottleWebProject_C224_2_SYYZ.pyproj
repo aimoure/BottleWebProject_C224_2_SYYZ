@@ -34,11 +34,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
-
     <Compile Include="hungarian_solver.py" />
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="test_hungarian_solver.py" />
     <Compile Include="tests\test_direct_lpp.py">
       <SubType>Code</SubType>
     </Compile>
@@ -79,7 +79,6 @@
     <Content Include="results\transport_results.json" />
     <Content Include="examples\direct_lpp_examples.json" />
     <Content Include="examples\transport_output.json" />
-
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
     <Content Include="static\scripts\bootstrap.js" />
