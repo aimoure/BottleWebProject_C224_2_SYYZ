@@ -27,7 +27,7 @@
         </p>
 
         <div class="task-container">
-            <img src="/static/images/Condition.png" alt="Условие" class="task-image">
+            <img src="/static/images/purpose_img/Condition.png" alt="Условие" class="task-image">
             <h2>Пример задачи</h2>
             <p>У нас есть 5 организаторов и 5 задач:</p>
             <ul>
@@ -51,18 +51,18 @@
 
         <h2>Шаг 1: Редукция по строкам</h2>
         <p>Из каждого элемента строки вычитаем минимальный элемент строки:</p>
-        <img src="/static/images/Step1.png" alt="Редукция по строкам" class="img-fluid">
+        <img src="/static/images/purpose_img/Step1.png" alt="Редукция по строкам" class="img-fluid">
 
         <h2>Шаг 2: Редукция по столбцам</h2>
         <p>Аналогично — из каждого столбца вычитаем его минимум:</p>
-        <img src="/static/images/Step2.png" alt="Редукция по столбцам" class="img-fluid">
+        <img src="/static/images/purpose_img/purpose_img/Step2.png" alt="Редукция по столбцам" class="img-fluid">
 
         <h2>Шаг 3: Покрытие нулей</h2>
         <p>
             Смотрим чтобы в каждом столбце и в каждой строке был только один выбранный ноль.
             Как видно ниже, в данном случае это сделать невозможно. Два варианта как можно это сделать:
         </p>
-        <img src="/static/images/Step3_1.png" alt="Нули" class="img-fluid">
+        <img src="/static/images/purpose_img/purpose_img/Step3_1.png" alt="Нули" class="img-fluid">
 
         <p>
             Продолжаем решение дальше. Вычеркиваем строки и столбцы, которые содержат нулевые элементы (ВАЖНО! 
@@ -70,18 +70,18 @@
             вычитаем его из оставшихся элементов (которые не зачеркнуты) и прибавляем к элементам, которые расположены на 
             пересечении вычеркнутых строк и столбцов.
         </p>
-        <img src="/static/images/Step3_2.png" alt="Нули" class="img-fluid">
+        <img src="/static/images/purpose_img/Step3_2.png" alt="Нули" class="img-fluid">
 
         <h2>Шаг 4: Построение новой матрицы</h2>
         <p>Как теперь видно, в каждом столбце и строке есть только один выбранный ноль. Решение задачи завершаем!</p>
-        <img src="/static/images/Step4.png" alt="Нули" class="img-fluid">
+        <img src="/static/images/purpose_img/Step4.png" alt="Нули" class="img-fluid">
 
         <h2>Шаг 5: Оптимальное назначение</h2>
         <p>
             Подставляем в начальную таблицу месторасположения выбранных нулей. Таким образом мы получаем оптимум,
             или оптимальный план, при котором организаторы распределены по работам и сумма оценок получилась максимальной.
         </p>
-        <img src="/static/images/Step5.png" alt="Нули" class="img-fluid">
+        <img src="/static/images/purpose_img/Step5.png" alt="Нули" class="img-fluid">
 
         <p>
             Если же вы решаете задачу и у вас до сих пор невозможно выбрать нули так, чтобы в каждом столбце и строке был только один,
