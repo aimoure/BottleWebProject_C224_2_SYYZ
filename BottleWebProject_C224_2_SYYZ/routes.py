@@ -203,4 +203,3 @@ def purpose_practice():
                     x_values=result['x'],
                     objective_value=result['objective_value'],
                     status=result['status'])
-
