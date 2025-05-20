@@ -2,7 +2,7 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
-    color: #ff6633;
+    color: #d35400;
     background: #fafafa;
 }
 
@@ -207,7 +207,6 @@ table.custom-table {
         padding: 8px 12px;
     }
 
-
 /* Основной блок всей страницы */
 .hungarian-page {
     font-size: 18px; /* Увеличенный читаемый текст */
@@ -236,7 +235,6 @@ table.custom-table {
         border-left: 6px solid #e67e22; /* Яркая полоса слева */
         padding-left: 12px; /* Отступ между полосой и текстом */
     }
-
 
     /* Параграфы и списки: общий отступ снизу */
     .hungarian-page h3 {
@@ -364,7 +362,6 @@ table.custom-table {
             color: #fff;
             box-shadow: 0 0 20px rgba(255,102,51,0.8); /* Более выраженная тень */
         }
-
 
 /* Контейнер для каждой задачи с тенью и ховер-эффектом */
 .task-card {
