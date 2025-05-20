@@ -177,7 +177,30 @@ def hungarian_calc():
             return ctx
     else:
         # Сбор данных из формы
-        n_vars = int(request.forms.get('number_of_variables', 2)) # Получается количество переменных из формы
+        n_vars = int(request.forms.get('number_of_variables', 2)) # Получение количества переменных из формы
+        n_cons = int(request.forms.get('number_of_constraints', 1)) # Получение количества ограничений из формы
+
+        # Сбор списка пустых полей
+        missing = []
+        # Целевая функция
+        for j in range(n_vars):
+            if request.forms.get(f'x_{j}', '').strip() == '':
+                missing.append(f'x_{j}')
+        # Коэффициенты ограничений и правые части
+        for i in range(n_cons):
+            # Коэффициенты
+            for j in range(n_vars):
+                if request.forms.get(f'cons_{i}_{j}', '').strip() == '':
+                    missing.append(f'cons_{i}_{j}')
+            # Правая часть
+            if request.forms.get(f'cons_rhs_{i}', '').strip() == '':
+                missing.append(f'cons_rhs_{i}')
+        if missing:
+            # Формировка единый текст ошибки
+            ctx['error'] = "Заполните все поля формы."
+            return ctx
+
+        # Коэффициенты целевой функции
         objective: List[float] = []
         # Перебираются пустой список для коэффициентов целевой функции
         for j in range(n_vars):
@@ -187,7 +210,7 @@ def hungarian_calc():
             except ValueError:
                 objective.append(0.0) # В случае ошибки преобразования добавление 0.0
 
-        n_cons = int(request.forms.get('number_of_constraints', 1)) # Получается количество ограничений из формы
+        # Коэффициенты ограничений
         constraints: List[List[float]] = []
         # Перебираются пустой список для коэффициентов ограничений
         for i in range(n_cons):

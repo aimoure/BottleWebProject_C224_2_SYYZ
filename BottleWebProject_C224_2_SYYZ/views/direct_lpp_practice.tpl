@@ -77,7 +77,8 @@
 <!-- Скрипт для инамической отрисовки таблиц -->
 <script src="/static/scripts/dynamic_table.js"></script>
 
-% if initial_data_json: <!-- Если на сервере переданы данные initial_data_json, то их вставка на страницу -->
+<!-- Если на сервере переданы данные initial_data_json, то их вставка на страницу -->
+% if initial_data_json:
     <script>
     // Ожидание пока загрузится страница
     document.addEventListener('DOMContentLoaded', () => {
