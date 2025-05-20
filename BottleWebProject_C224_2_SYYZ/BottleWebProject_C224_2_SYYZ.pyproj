@@ -41,19 +41,13 @@
     <Compile Include="tests\__init__.py" />
     <Compile Include="tests\test_direct_lpp.py" />
     <Compile Include="test_hungarian_solver.py" />
-    <Compile Include="test_direct_lpp.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="input\" />
-    <Folder Include="NewFolder1\" />
-    <Folder Include="output\" />
-    <Folder Include="routes\" />
+    <Folder Include="static\images\purpose_img\" />
     <Folder Include="tests\" />
     <Folder Include="results\" />
     <Folder Include="examples\" />
@@ -66,13 +60,9 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="input\direct_lpp_input.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="results\purpose_input.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="output\direct_lpp_output.json">
+    <Content Include="examples\transport_examples.json" />
+    <Content Include="results\direct_lpp_results.json" />
+    <Content Include="results\purpose_results.json">
       <SubType>Code</SubType>
     </Content>
     <!-- Пример: -->
@@ -81,10 +71,15 @@
     <Content Include="results\purpose_input.json" />
     <Content Include="results\transport_results.json" />
     <Content Include="examples\direct_lpp_examples.json" />
-    <Content Include="output\dual_lpp_examples.json" />
-    <Content Include="examples\transport_output.json" />
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
+    <Content Include="static\images\purpose_img\Condition.png" />
+    <Content Include="static\images\purpose_img\Step1.png" />
+    <Content Include="static\images\purpose_img\Step2.png" />
+    <Content Include="static\images\purpose_img\Step3_1.png" />
+    <Content Include="static\images\purpose_img\Step3_2.png" />
+    <Content Include="static\images\purpose_img\Step4.png" />
+    <Content Include="static\images\purpose_img\Step5.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\dynamic_table.js" />
