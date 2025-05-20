@@ -10,6 +10,7 @@ import sys
 import routes
 import direct_lpp_routes
 import dual_lpp_practice
+import transport_routes
 
 if '--debug' in sys.argv[1:] or 'SERVER_DEBUG' in os.environ:
     # Debug mode will enable more verbose output in the console window.

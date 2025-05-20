@@ -37,14 +37,21 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_purpose_silenium.py" />
+    <Compile Include="tests\test_hungarian_solver.py" />
     <Compile Include="tests\test_dual_lpp.py" />
     <Compile Include="tests\__init__.py" />
     <Compile Include="tests\test_direct_lpp.py" />
-    <Compile Include="test_hungarian_solver.py" />
+    <Compile Include="tests\test_direct_lpp.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
+    <Compile Include="tests\test_transport_solver.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\images\purpose_img\" />
@@ -68,7 +75,6 @@
     <!-- Пример: -->
     <Content Include="examples\dual_lpp_examples.json" />
     <Content Include="results\dual_lpp_results.json" />
-    <Content Include="results\purpose_input.json" />
     <Content Include="results\transport_results.json" />
     <Content Include="examples\direct_lpp_examples.json" />
     <Content Include="requirements.txt" />
