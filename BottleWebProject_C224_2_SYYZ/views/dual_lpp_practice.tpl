@@ -8,10 +8,53 @@
 % primal_obj = primal_obj if 'primal_obj' in locals() else None
 % dual_obj = dual_obj if 'dual_obj' in locals() else None
 % no_solution = no_solution if 'no_solution' in locals() else None
+% form_data = form_data if 'form_data' in locals() else None
 % answer_vars = answer_vars if 'answer_vars' in locals() and answer_vars is not None else {}
 
 <!--  Подключение JavaScript для динамического управления таблицей -->
 <script src="/static/scripts/dynamic_table_dual.js"></script>
+
+<script>
+// Если сервер передал нам form_data — зальём его в localStorage ДО того, 
+// как dynamic_table_dual.js сделает loadFromStorage()
+% if form_data and form_data['x']:
+(function(){
+    const data = {
+        numVars: {{num_vars}},
+        numCons: {{num_cons}},
+        vars:      {},   // для x_i
+        consVars:  {},   // для cons_i_j
+        consSigns: {},   // для cons_sign_i
+        consRhs:   {}    // для cons_rhs_i
+    };
+
+    // 1) Целевая функция
+    % for i, val in enumerate(form_data['x']):
+    data.vars[`x_{{i}}`] = "{{val}}";
+    % end
+
+    // 2) Левые коэффициенты ограничений
+    % for i, row in enumerate(form_data['cons']):
+        % for j, val in enumerate(row):
+    data.consVars[`cons_{{i}}_{{j}}`] = "{{val}}";
+        % end
+    % end
+
+    // 3) Знаки
+    % for i, val in enumerate(form_data['signs']):
+    data.consSigns[`cons_sign_{{i}}`] = "{{val}}";
+    % end
+
+    // 4) Правые части
+    % for i, val in enumerate(form_data['rhs']):
+    data.consRhs[`cons_rhs_{{i}}`] = "{{val}}";
+    % end
+
+    localStorage.setItem('dualLppData', JSON.stringify(data));
+})();
+% end
+</script>
+
 
 <div class="hungarian-page">
     <div class="jumbotron">
@@ -62,7 +105,7 @@
                     <div id="constraints_signs">
                     % if num_cons:
                         % for i in range(num_cons):
-                            <select name="sign_{{i}}">
+                            <select name="cons_sign_{{i}}">
                                 <option value="≤" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '≤' else ''}}>≤</option>
                                 <option value="≥" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '≥' else ''}}>≥</option>
                                 <option value="=" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '=' else ''}}>=</option>
@@ -75,7 +118,7 @@
                     <div id="constraints_rhs">
                     % if num_cons:
                         % for i in range(num_cons):
-                            <input type="number" step="any" name="rhs_{{i}}" size="5"
+                            <input type="number" step="any" name="cons_rhs_{{i}}" size="5"
                                    value="{{form_data['rhs'][i] if i < len(form_data['rhs']) else ''}}">
                         % end
                     % end
@@ -177,8 +220,10 @@
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
-            <form method="post" action="/dual_lpp_example" enctype="multipart/form-data" class="example-form">
-                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+            <form method="post" action="/dual_lpp_example" class="example-form">
+              <button type="submit" class="btn btn-warning example-button">
+                Загрузить пример
+              </button>
             </form>
         </div>
     </div>
