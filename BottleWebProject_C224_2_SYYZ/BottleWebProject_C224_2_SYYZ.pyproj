@@ -41,10 +41,16 @@
     <Compile Include="tests\test_direct_lpp.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="transport_routes.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
+    <Compile Include="transport_solver_test.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="input\" />
