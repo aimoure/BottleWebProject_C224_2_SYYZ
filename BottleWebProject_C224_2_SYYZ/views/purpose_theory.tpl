@@ -55,14 +55,14 @@
 
         <h2>Шаг 2: Редукция по столбцам</h2>
         <p>Аналогично — из каждого столбца вычитаем его минимум:</p>
-        <img src="/static/images/purpose_img/purpose_img/Step2.png" alt="Редукция по столбцам" class="img-fluid">
+        <img src="/static/images/purpose_img/Step2.png" alt="Редукция по столбцам" class="img-fluid">
 
         <h2>Шаг 3: Покрытие нулей</h2>
         <p>
             Смотрим чтобы в каждом столбце и в каждой строке был только один выбранный ноль.
             Как видно ниже, в данном случае это сделать невозможно. Два варианта как можно это сделать:
         </p>
-        <img src="/static/images/purpose_img/purpose_img/Step3_1.png" alt="Нули" class="img-fluid">
+        <img src="/static/images/purpose_img/Step3_1.png" alt="Нули" class="img-fluid">
 
         <p>
             Продолжаем решение дальше. Вычеркиваем строки и столбцы, которые содержат нулевые элементы (ВАЖНО! 
