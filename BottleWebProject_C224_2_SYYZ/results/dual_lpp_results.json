@@ -72,5 +72,257 @@
       },
       "dual_objective_value": 15.0
     }
+  },
+  {
+    "timestamp": "2025-05-21T01:42:16.700991",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          2.0,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        4.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.33,
+        "y2": 0.33
+      },
+      "dual_objective_value": 6.67
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:42:17.213591",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          2.0,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        4.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.33,
+        "y2": 0.33
+      },
+      "dual_objective_value": 6.67
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:42:20.245011",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          2.0,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        4.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.33,
+        "y2": 0.33
+      },
+      "dual_objective_value": 6.67
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:52:19.843481",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          2.0,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        4.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.33,
+        "y2": 0.33
+      },
+      "dual_objective_value": 6.67
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:52:21.428934",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          2.0,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        4.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 1.33,
+        "y2": 0.33
+      },
+      "dual_objective_value": 6.67
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:56:55.724701",
+    "input": {
+      "objective_coeffs": [
+        5.0,
+        6.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          2.0
+        ],
+        [
+          3.0,
+          1.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        12.0,
+        18.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 5.0,
+        "y2": 3.0,
+        "y3": 0
+      },
+      "dual_objective_value": 56.0
+    }
+  },
+  {
+    "timestamp": "2025-05-21T01:56:56.987601",
+    "input": {
+      "objective_coeffs": [
+        5.0,
+        6.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          2.0
+        ],
+        [
+          3.0,
+          1.0
+        ]
+      ],
+      "rhs_values": [
+        4.0,
+        12.0,
+        18.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 5.0,
+        "y2": 3.0,
+        "y3": 0
+      },
+      "dual_objective_value": 56.0
+    }
   }
 ]
