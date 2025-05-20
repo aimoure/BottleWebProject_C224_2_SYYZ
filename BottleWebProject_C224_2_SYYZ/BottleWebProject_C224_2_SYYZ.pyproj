@@ -17,12 +17,11 @@
     <Name>BottleWebProject_C224_2_SYYZ</Name>
     <RootNamespace>BottleWebProject_C224_2_SYYZ</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
     <TestFramework>unittest</TestFramework>
     <UnitTestPattern>test*.py</UnitTestPattern>
-    <UnitTestRootDirectory>tests</UnitTestRootDirectory>
+    <UnitTestRootDirectory>.\tests</UnitTestRootDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,7 +37,6 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test_purpose_silenium.py" />
     <Compile Include="test_hungarian_solver.py" />
     <Compile Include="tests\test_direct_lpp.py">
       <SubType>Code</SubType>
@@ -47,11 +45,12 @@
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
+    <Compile Include="tests\test_transport_solver.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="input\" />
-    <Folder Include="output\" />
-    <Folder Include="routes\" />
+    <Folder Include="static\images\purpose_img\" />
     <Folder Include="tests\" />
     <Folder Include="results\" />
     <Folder Include="examples\" />
@@ -64,24 +63,25 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="input\direct_lpp_input.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="results\purpose_input.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="output\direct_lpp_output.json">
+    <Content Include="examples\transport_examples.json" />
+    <Content Include="results\direct_lpp_results.json" />
+    <Content Include="results\purpose_results.json">
       <SubType>Code</SubType>
     </Content>
     <!-- Пример: -->
     <Content Include="examples\dual_lpp_examples.json" />
     <Content Include="results\dual_lpp_results.json" />
-    <Content Include="results\purpose_input.json" />
     <Content Include="results\transport_results.json" />
     <Content Include="examples\direct_lpp_examples.json" />
-    <Content Include="examples\transport_output.json" />
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
+    <Content Include="static\images\purpose_img\Condition.png" />
+    <Content Include="static\images\purpose_img\Step1.png" />
+    <Content Include="static\images\purpose_img\Step2.png" />
+    <Content Include="static\images\purpose_img\Step3_1.png" />
+    <Content Include="static\images\purpose_img\Step3_2.png" />
+    <Content Include="static\images\purpose_img\Step4.png" />
+    <Content Include="static\images\purpose_img\Step5.png" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\dynamic_table.js" />
@@ -117,8 +117,8 @@
   <ItemGroup>
     <Interpreter Include="env\">
       <Id>env</Id>
-      <Version>3.11</Version>
-      <Description>env (Python 3.11 (64-bit))</Description>
+      <Version>0.0</Version>
+      <Description>env (Python 3.12 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
