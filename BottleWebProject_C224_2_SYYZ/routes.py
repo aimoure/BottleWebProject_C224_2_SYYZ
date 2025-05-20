@@ -349,7 +349,7 @@ def transport_practice():
                     }
                     
                     # Путь к файлу transport_results.json
-                    results_file = os.path.join('input', 'transport_results.json')
+                    results_file = os.path.join('results', 'transport_results.json')
                     
                     # Чтение текущих данных или создание пустого списка
                     try:
@@ -409,7 +409,7 @@ def transport_practice_example():
     Выбирается случайный пример и перенаправляется на страницу транспортной задачи с данными.
     """
     # Путь к файлу с примерами (в папке output)
-    examples_file = os.path.join('output', 'transport_example.json')
+    examples_file = os.path.join('examples', 'transport_example.json')
     
     try:
         # Чтение файла JSON
