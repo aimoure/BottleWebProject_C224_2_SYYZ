@@ -41,10 +41,16 @@
     <Compile Include="tests\__init__.py" />
     <Compile Include="tests\test_direct_lpp.py" />
     <Compile Include="test_hungarian_solver.py" />
+    <Compile Include="tests\test_direct_lpp.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
+    <Compile Include="tests\test_transport_solver.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\images\purpose_img\" />
