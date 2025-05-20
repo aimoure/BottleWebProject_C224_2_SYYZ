@@ -46,7 +46,7 @@
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
-    <Compile Include="transport_solver_test.py">
+    <Compile Include="tests\transport_solver_test.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

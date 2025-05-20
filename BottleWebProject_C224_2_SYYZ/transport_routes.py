@@ -214,7 +214,7 @@ def transport_practice_example():
     Выбирается случайный пример и перенаправляется на страницу транспортной задачи с данными.
     """
     # Путь к файлу с примерами (в папке output)
-    examples_file = os.path.join('examples', 'transport_example.json')
+    examples_file = os.path.join('examples', 'transport_examples.json')
     
     try:
         # Чтение файла JSON
