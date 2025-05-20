@@ -12,6 +12,7 @@ import random
 import os
 import numpy as np
 
+
 @route('/')
 @route('/home')
 @view('index')

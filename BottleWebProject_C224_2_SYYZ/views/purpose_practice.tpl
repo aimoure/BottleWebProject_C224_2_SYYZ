@@ -1,5 +1,6 @@
 % rebase('layout.tpl', title="Калькулятор задачи о назначениях", year=year)
 
+
 <div class="hungarian-page">
     <!-- Заголовок страницы -->
     <div class="jumbotron bg-warning text-dark">
@@ -23,7 +24,7 @@
 
             <br>
 
-            <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+            <button type="submit" id="result" class="btn btn-primary btn-lg">Решить задачу</button>
         </form>
 
         <div class="example-panel task-container p-3 mb-4 border rounded bg-light">
