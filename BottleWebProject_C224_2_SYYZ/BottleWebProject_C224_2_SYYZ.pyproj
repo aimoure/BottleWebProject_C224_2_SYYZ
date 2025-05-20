@@ -42,8 +42,8 @@
     <Compile Include="routes.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="input\" />
-    <Folder Include="output\" />
+    <Folder Include="results\" />
+    <Folder Include="examples\" />
     <Folder Include="static\" />
     <Folder Include="static\content\" />
     <Folder Include="static\fonts\" />
@@ -53,19 +53,16 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="input\direct_lpp_input.json">
+    <Content Include="results\purpose_input.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="input\purpose_input.json">
+    <Content Include="results\transport_results.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="input\transport_results.json">
+    <Content Include="examples\direct_lpp_examples.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="output\direct_lpp_output.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="output\transport_output.json">
+    <Content Include="examples\transport_output.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="requirements.txt" />

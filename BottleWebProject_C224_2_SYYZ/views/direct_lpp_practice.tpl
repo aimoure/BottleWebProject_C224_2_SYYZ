@@ -3,6 +3,7 @@
 % x_values = x_values if 'x_values' in locals() else None
 % objective_value = objective_value if 'objective_value' in locals() else None
 % status = status if 'status' in locals() else None
+% initial_data_json = initial_data_json if 'initial_data_json' in locals() else None
 
 <div class="hungarian-page">
     <div class="jumbotron">
@@ -40,14 +41,14 @@
             <!-- Добавление условия неотрицательности -->
             <div id="nonnegativity_condition" style="margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
             <br>
-            <button type="submit" class="btn btn-primary btn-lg">Решить задачу</button>
+            <button type="submit" class="btn btn-primary btn-lg" name="action" value="solve">Решить задачу</button>
             <button type="submit" class="btn btn-secondary btn-lg" style="margin-left: 15px;" id="reset_button">Очистить</button>
             <br>
             <div id="results" style="margin-top:20px;">
               % if error:
                 <div class="alert alert-danger">{{error}}</div>
               % elif x_values:
-                <h2>Результат решения</h2>
+                <h3>Результат решения</h3>
                 <p>Оптимальные x: {{', '.join(map(str,x_values))}}</p>
                 <p style="margin-bottom: -10px">Значение цели: {{objective_value}}</p>
               % end
@@ -59,7 +60,7 @@
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
             <form method="post" action="/hungarian-calc" enctype="multipart/form-data" class="example-form">
-                <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
+                <button style="height: 48px" type="submit" class="btn btn-warning example-button" name="action" value="load_example">Загрузить пример</button>
             </form>
         </div>
         <!-- Переход к калькулятору двойственной задачи -->
@@ -74,3 +75,14 @@
 </div>
 
 <script src="/static/scripts/dynamic_table.js"></script>
+
+% if initial_data_json:
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const data = JSON.parse('{{!initial_data_json}}');
+        localStorage.setItem('directLppData', JSON.stringify(data));
+        window.loadFromStorage();
+    });
+    </script>
+% end
