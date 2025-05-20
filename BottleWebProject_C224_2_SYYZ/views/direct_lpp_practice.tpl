@@ -74,15 +74,16 @@
     </div>
 </div>
 
+<!-- Скрипт для инамической отрисовки таблиц -->
 <script src="/static/scripts/dynamic_table.js"></script>
 
-% if initial_data_json:
-    
+% if initial_data_json: <!-- Если на сервере переданы данные initial_data_json, то их вставка на страницу -->
     <script>
+    // Ожидание пока загрузится страница
     document.addEventListener('DOMContentLoaded', () => {
-        const data = JSON.parse('{{!initial_data_json}}');
-        localStorage.setItem('directLppData', JSON.stringify(data));
-        window.loadFromStorage();
+        const data = JSON.parse('{{!initial_data_json}}'); // Сформированная строка с данными
+        localStorage.setItem('directLppData', JSON.stringify(data)); // Сохранение распарсенного объекта в localStorage под ключом directLppData
+        window.loadFromStorage(); // Чтение данных из локального хранилища и вывод их на страницу
     });
     </script>
 % end
