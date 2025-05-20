@@ -37,8 +37,9 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="tests\test_dual_lpp.py" />
+    <Compile Include="tests\test_purpose_silenium.py" />
     <Compile Include="tests\test_hungarian_solver.py" />
+    <Compile Include="tests\test_dual_lpp.py" />
     <Compile Include="tests\__init__.py" />
     <Compile Include="tests\test_direct_lpp.py" />
     <Compile Include="tests\test_direct_lpp.py">
