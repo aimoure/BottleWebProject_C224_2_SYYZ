@@ -38,6 +38,7 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="test_hungarian_solver.py" />
     <Compile Include="tests\test_direct_lpp.py">
       <SubType>Code</SubType>
     </Compile>
