@@ -37,6 +37,7 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_direct_lpp.py" />
     <Compile Include="test_hungarian_solver.py" />
     <Compile Include="test_direct_lpp.py">
       <SubType>Code</SubType>
@@ -48,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="input\" />
+    <Folder Include="NewFolder1\" />
     <Folder Include="output\" />
     <Folder Include="routes\" />
     <Folder Include="tests\" />
