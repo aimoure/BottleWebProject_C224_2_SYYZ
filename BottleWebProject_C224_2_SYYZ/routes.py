@@ -7,7 +7,11 @@ from datetime import datetime
 from direct_lpp import LinearProgrammingProblem
 from typing import List, Optional
 from hungarian_solver import solve_assignment  
+from transport_solver import optimize_transportation
 import json
+import random
+import os
+import numpy as np
 
 # Общая вспомогательная функция: базовые данные для шаблона
 def base_context():
@@ -114,70 +118,157 @@ def about():
 @route('/hungarian-calc', method=['GET','POST'])
 @view('direct_lpp_practice') # Единый шаблон и для GET, и для POST
 def hungarian_calc():
+    # Инициализация базового контекста для шаблона
     ctx = base_context()
+    ctx['initial_data_json'] = None
+    # При GET-запросе возвращается только базовый контекст, страница отрисовывается пустой формой
     if request.method == 'GET':
         return ctx
 
-    # Сбор данных из формы
-    n_vars = int(request.forms.get('number_of_variables', 2))
-    objective: List[float] = []
-    for j in range(n_vars):
-        raw = request.forms.get(f'x_{j}', '').strip()
-        try:
-            objective.append(float(raw))
-        except ValueError:
-            objective.append(0.0)
+    action = request.forms.get('action', 'solve') # Получение типа действия (какая кнопка нажата)
 
-    n_cons = int(request.forms.get('number_of_constraints', 1))
-    constraints: List[List[float]] = []
-    for i in range(n_cons):
-        row: List[float] = []
+    if action == 'load_example':
+        try:
+            # Путь к файлу с примерами
+            examples_file = 'examples/direct_lpp_examples.json'
+            with open(examples_file, 'r', encoding='utf-8-sig') as f:
+                examples = json.load(f)
+            example = random.choice(examples)
+
+            # Распаковка полей
+            objective = example['objective']
+            constraints = example['constraints']
+            signs = example['signs']
+            rhs = example['rhs']
+
+            # Создание задачи
+            lp = LinearProgrammingProblem(objective, constraints, signs, rhs)
+            # Решение задачи
+            result = lp.solve()
+            # Сохранение в файл
+            lp.save_to_json('results/direct_lpp_results.json')
+
+            # Собираем initial_data для JS
+            init_data = {
+                "numVars": len(objective),
+                "numCons": len(constraints),
+                "vars": { f"x_{j}": objective[j] for j in range(len(objective)) },
+                "consVars": {
+                    f"cons_{i}_{j}": constraints[i][j]
+                    for i in range(len(constraints))
+                    for j in range(len(objective))
+                },
+                "consSigns": { f"cons_sign_{i}": signs[i] for i in range(len(signs)) },
+                "consRhs": { f"cons_rhs_{i}": rhs[i] for i in range(len(rhs)) }
+            }
+            # Преобразуем в JSON и кладём в контекст
+            ctx['initial_data_json'] = json.dumps(init_data, ensure_ascii=False)
+
+            if result is None: # Если решения нет — в контекст заносится соответствующее сообщение
+                ctx['error'] = "Пример загружен, но решения нет."
+            else:
+                ctx['x_values'] = result['x']
+                ctx['objective_value'] = result['objective_value']
+                ctx['json_saved'] = True
+            return ctx
+
+        except Exception as e:
+            ctx['error'] = f"Не удалось загрузить пример: {e}"
+            return ctx
+    else:
+        # Сбор данных из формы
+        n_vars = int(request.forms.get('number_of_variables', 2)) # Получение количества переменных из формы
+        n_cons = int(request.forms.get('number_of_constraints', 1)) # Получение количества ограничений из формы
+
+        # Сбор списка пустых полей
+        missing = []
+        # Целевая функция
         for j in range(n_vars):
-            raw = request.forms.get(f'cons_{i}_{j}', '').strip()
+            if request.forms.get(f'x_{j}', '').strip() == '':
+                missing.append(f'x_{j}')
+        # Коэффициенты ограничений и правые части
+        for i in range(n_cons):
+            # Коэффициенты
+            for j in range(n_vars):
+                if request.forms.get(f'cons_{i}_{j}', '').strip() == '':
+                    missing.append(f'cons_{i}_{j}')
+            # Правая часть
+            if request.forms.get(f'cons_rhs_{i}', '').strip() == '':
+                missing.append(f'cons_rhs_{i}')
+        if missing:
+            # Формировка единый текст ошибки
+            ctx['error'] = "Заполните все поля формы."
+            return ctx
+
+        # Коэффициенты целевой функции
+        objective: List[float] = []
+        # Перебираются пустой список для коэффициентов целевой функции
+        for j in range(n_vars):
+            raw = request.forms.get(f'x_{j}', '').strip() # Получение значения переменной из формы
             try:
-                row.append(float(raw))
+                objective.append(float(raw)) # Значение добавляется в список objective
             except ValueError:
-                row.append(0.0)
-        constraints.append(row)
+                objective.append(0.0) # В случае ошибки преобразования добавление 0.0
 
-    signs: List[str] = []
-    for i in range(n_cons):
-        signs.append(request.forms.get(f'cons_sign_{i}', '≤'))
+        # Проверка на нулевые коэффициенты в целевой функции
+        if any(coef == 0 for coef in objective):
+            ctx['error'] = "Целевая функция содержит нулевые коэффициенты."
+            return ctx
 
-    rhs: List[float] = []
-    for i in range(n_cons):
-        raw = request.forms.get(f'cons_rhs_{i}', '').strip()
+        # Коэффициенты ограничений
+        constraints: List[List[float]] = []
+        # Перебираются пустой список для коэффициентов ограничений
+        for i in range(n_cons):
+            row: List[float] = []
+            for j in range(n_vars):
+                raw = request.forms.get(f'cons_{i}_{j}', '').strip() # Получается значение из формы для соответствующей переменной и ограничения
+                try:
+                    row.append(float(raw)) # Добавление в текущую строку
+                except ValueError:
+                    row.append(0.0) # В случае ошибки — добавление 0.0
+            # Проверка: если все коэффициенты в строке ограничения нулевые
+            if all(coef == 0 for coef in row):
+                ctx['error'] = f"Все коэффициенты ограничения №{i+1} равны нулю."
+                return ctx
+            constraints.append(row) # Строка ограничений добавляется в общий список
+    
+        # Получение знака ограничения, по умолчанию — '≤', добавление в список
+        signs: List[str] = []
+        for i in range(n_cons):
+            signs.append(request.forms.get(f'cons_sign_{i}', '≤')) 
+
+        # Получение значения правой части из формы
+        rhs: List[float] = []
+        for i in range(n_cons):
+            raw = request.forms.get(f'cons_rhs_{i}', '').strip()
+            try:
+                rhs.append(float(raw)) # Добавление в текущую строку
+            except ValueError:
+                rhs.append(0.0) # В случае ошибки — добавление 0.0
+
+        # Создание и решение задачи
         try:
-            rhs.append(float(raw))
-        except ValueError:
-            rhs.append(0.0)
+            # Создаётся экземпляр задачи линейного программирования с собранными данными
+            lp = LinearProgrammingProblem(objective, constraints, signs, rhs)
+            result = lp.solve() # Поиск решения с помощью функции solve()
+        except Exception as e:  # В случае любой ошибки результат ошибки помещается в контекст под ключом 'error'
+            ctx['error'] = str(e)
+            return ctx
 
-    # Создание и решение задачи
-    try:
-        lp = LinearProgrammingProblem(
-            objective=objective,
-            constraints=constraints,
-            signs=signs,
-            rhs=rhs
-        )
-        result = lp.solve()
-    except Exception as e:
-        ctx['error'] = str(e)
+        # Сохраняем в конец JSON-файла
+        try:
+            lp.save_to_json('results/direct_lpp_results.json')
+            ctx['json_saved'] = True
+        except Exception as e:
+            # Отметка проблемы
+            ctx['warning'] = f"Не удалось сохранить JSON: {e}"
+
+        if result is None: # Если решения нет — в контекст заносится соответствующее сообщение
+            ctx['error'] = "Нет допустимого решения."
+        else:
+            ctx['x_values'] = result['x']
+            ctx['objective_value'] = result['objective_value']
         return ctx
-
-    if result is None:
-        # Нет допустимого решения
-        ctx['error'] = "Нет допустимого решения."
-        return ctx
-
-
-
-import os
-import json
-from datetime import datetime
-from bottle import route, request, view
-from hungarian_solver import solve_assignment
-import numpy as np
 
 def convert_numpy(obj):
     if isinstance(obj, dict):
@@ -197,7 +288,6 @@ def convert_numpy(obj):
         'objective_value': result['objective_value'],
     })
     return ctx
-
 
 @route('/purpose_practice', method=['GET', 'POST'])
 @view('purpose_practice')
@@ -274,5 +364,251 @@ def purpose_practice():
         worker_labels=worker_labels
     )
 
- 
 
+    # Возврат результата
+    return template('direct_lpp_result',
+                    x_values=result['x'],
+                    objective_value=result['objective_value'],
+                    status=result['status'])
+
+@route('/transport_practice', method=['GET', 'POST'])
+@view('transport_practice')
+def transport_practice():
+    """
+    Обрабатывается запрос к странице транспортной задачи.
+    Поддерживаются GET и POST запросы для отображения формы и обработки данных.
+    После успешного решения записываются данные в transport_results.json.
+    """
+    # Инициализируются переменные по умолчанию
+    rows = 3
+    cols = 4
+    result = None
+    total_cost = None
+    error = ''
+    cost_matrix = None
+    supply = None
+    demand = None
+
+    # Обработка GET-запроса с параметрами от примера
+    if request.method == 'GET':
+        try:
+            rows = int(request.query.get('rows', 3))
+            cols = int(request.query.get('cols', 4))
+            cost_matrix_json = request.query.get('cost_matrix_json', 'null')
+            supply_json = request.query.get('supply_json', 'null')
+            demand_json = request.query.get('demand_json', 'null')
+            
+            if cost_matrix_json != 'null':
+                cost_matrix = json.loads(cost_matrix_json)
+            if supply_json != 'null':
+                supply = json.loads(supply_json)
+            if demand_json != 'null':
+                demand = json.loads(demand_json)
+            error = request.query.get('error', '')
+        except (ValueError, json.JSONDecodeError) as e:
+            error = f"Ошибка загрузки примера: {str(e)}"
+            rows = 3
+            cols = 4
+
+    if request.method == 'POST':
+        action = request.forms.get('action')
+        if action == 'clear':
+            # При очистке формы возвращаются значения по умолчанию
+            return dict(
+                title='The transport programming problem',
+                year=datetime.now().year,
+                rows=rows,
+                cols=cols,
+                result=None,
+                total_cost=None,
+                error='',
+                cost_matrix_json='null',
+                supply_json='null',
+                demand_json='null'
+            )
+
+        try:
+            # Получаются размеры матрицы из формы
+            rows = request.forms.get('rows')
+            cols = request.forms.get('cols')
+            if not rows or not cols:
+                raise ValueError("Укажите количество поставщиков и потребителей.")
+            rows = int(rows)
+            cols = int(cols)
+            # Проверяются допустимые размеры
+            if rows < 1 or cols < 1 or rows > 10 or cols > 10:
+                raise ValueError("Размеры матрицы должны быть от 1 до 10.")
+
+            # Инициализируются массивы для данных формы
+            cost_matrix = []
+            supply = []
+            demand = []
+
+            # Проверяется заполнение матрицы тарифов
+            for i in range(rows):
+                row = []
+                for j in range(cols):
+                    value = request.forms.get(f'matrix-{i}-{j}')
+                    if value is None or value.strip() == '':
+                        raise ValueError("Все поля матрицы тарифов должны быть заполнены числами.")
+                    try:
+                        val = float(value)
+                        if val < 0:
+                            raise ValueError("Значения матрицы тарифов должны быть неотрицательными.")
+                        row.append(val)
+                    except (ValueError, TypeError):
+                        raise ValueError(f"Некорректное значение в матрице тарифов на позиции ({i+1}, {j+1}).")
+                cost_matrix.append(row)
+
+            # Проверяется заполнение запасов
+            for i in range(rows):
+                value = request.forms.get(f'supply-{i}')
+                if value is None or value.strip() == '':
+                    raise ValueError("Все поля запасов должны быть заполнены числами.")
+                try:
+                    val = float(value)
+                    if val < 0:
+                        raise ValueError("Значения запасов должны быть неотрицательными.")
+                    supply.append(val)
+                except (ValueError, TypeError):
+                    raise ValueError(f"Некорректное значение в запасах на позиции {i+1}.")
+
+            # Проверяется заполнение потребностей
+            for j in range(cols):
+                value = request.forms.get(f'demand-{j}')
+                if value is None or value.strip() == '':
+                    raise ValueError("Все поля потребностей должны быть заполнены числами.")
+                try:
+                    val = float(value)
+                    if val < 0:
+                        raise ValueError("Значения потребностей должны быть неотрицательными.")
+                    demand.append(val)
+                except (ValueError, TypeError):
+                    raise ValueError(f"Некорректное значение в потребностях на позиции {j+1}.")
+
+            # Проверяется, что не все запасы или потребности равны нулю
+            if all(s == 0 for s in supply) or all(d == 0 for d in demand):
+                raise ValueError("Запасы и потребности не могут быть одновременно равны нулю.")
+
+            # Проверяется равенство суммы запасов и потребностей
+            if abs(sum(supply) - sum(demand)) > 1e-10:
+                error = "Сумма запасов не равна сумме потребностей."
+            else:
+                # Выполняется оптимизация транспортной задачи
+                result, total_cost = optimize_transportation(
+                    np.array(cost_matrix),
+                    np.array(supply),
+                    np.array(demand)
+                )
+                # После успешного решения записываются данные в файл
+                if result is not None and total_cost is not None:
+                    # Формируется запись
+                    record = {
+                        "timestamp": datetime.now().isoformat(),
+                        "input_data": {
+                            "rows": rows,
+                            "cols": cols,
+                            "cost_matrix": cost_matrix,
+                            "supply": supply,
+                            "demand": demand
+                        },
+                        "result": result,
+                        "total_cost": total_cost
+                    }
+                    
+                    # Путь к файлу transport_results.json
+                    results_file = os.path.join('input', 'transport_results.json')
+                    
+                    # Чтение текущих данных или создание пустого списка
+                    try:
+                        if os.path.exists(results_file):
+                            with open(results_file, 'r', encoding='utf-8') as f:
+                                results = json.load(f)
+                        else:
+                            results = []
+                    except (json.JSONDecodeError, IOError):
+                        results = []
+                    
+                    # Добавление новой записи
+                    results.append(record)
+                    
+                    # Запись обновленного списка в файл
+                    try:
+                        with open(results_file, 'w', encoding='utf-8') as f:
+                            json.dump(results, f, ensure_ascii=False, indent=4)
+                    except IOError as e:
+                        error = f"Ошибка записи результатов в файл: {str(e)}"
+
+        except ValueError as e:
+            error = f"Ошибка: {str(e)}"
+            result = None
+            total_cost = None
+            # Данные сохраняются даже при ошибке
+            if cost_matrix is None:
+                cost_matrix = [[0] * cols for _ in range(rows)]
+            if supply is None:
+                supply = [0] * rows
+            if demand is None:
+                demand = [0] * cols
+
+    # Преобразуются данные в JSON для передачи в шаблон
+    cost_matrix_json = json.dumps(cost_matrix) if cost_matrix else 'null'
+    supply_json = json.dumps(supply) if supply else 'null'
+    demand_json = json.dumps(demand) if demand else 'null'
+
+    # Возвращается словарь с данными для шаблона
+    return dict(
+        title='The transport programming problem',
+        year=datetime.now().year,
+        rows=rows,
+        cols=cols,
+        result=result,
+        total_cost=total_cost,
+        error=error,
+        cost_matrix_json=cost_matrix_json,
+        supply_json=supply_json,
+        demand_json=demand_json
+    )
+
+@route('/transport_practice_example', method='POST')
+def transport_practice_example():
+    """
+    Обрабатывается запрос на загрузку случайного примера из transport_output.json.
+    Выбирается случайный пример и перенаправляется на страницу транспортной задачи с данными.
+    """
+    # Путь к файлу с примерами (в папке output)
+    examples_file = os.path.join('output', 'transport_example.json')
+    
+    try:
+        # Чтение файла JSON
+        with open(examples_file, 'r', encoding='utf-8') as f:
+            examples = json.load(f)
+        
+        # Проверка, что файл не пустой
+        if not examples:
+            return redirect('/transport_practice?error=Файл с примерами пуст.')
+        
+        # Выбор случайного примера
+        example = random.choice(examples)
+        
+        # Подготовка данных для перенаправления
+        rows = example['rows']
+        cols = example['cols']
+        cost_matrix = example['cost_matrix']
+        supply = example['supply']
+        demand = example['demand']
+        
+        # Преобразование в JSON для передачи через параметры запроса
+        cost_matrix_json = json.dumps(cost_matrix)
+        supply_json = json.dumps(supply)
+        demand_json = json.dumps(demand)
+        
+        # Перенаправление на страницу с данными примера
+        return redirect(f'/transport_practice?rows={rows}&cols={cols}&cost_matrix_json={cost_matrix_json}&supply_json={supply_json}&demand_json={demand_json}')
+    
+    except FileNotFoundError:
+        return redirect('/transport_practice?error=Файл transport_output.json не найден в папке output.')
+    except json.JSONDecodeError:
+        return redirect('/transport_practice?error=Ошибка декодирования JSON в файле transport_output.json.')
+    except KeyError as e:
+        return redirect(f'/transport_practice?error=Неверная структура файла transport_output.json (отсутствует ключ {e}).')

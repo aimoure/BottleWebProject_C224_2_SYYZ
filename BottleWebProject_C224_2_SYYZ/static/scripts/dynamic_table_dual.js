@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
+    // Получение основных DOM-элементов
     const numVarsInput = document.getElementById('number_of_variables');
     const numConsInput = document.getElementById('number_of_constraints');
     const varsContainer = document.getElementById('variables_container');
@@ -6,12 +7,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const consSignsContainer = document.getElementById('constraints_signs');
     const consRhsContainer = document.getElementById('constraints_rhs');
 
+    // Применение стилей к таблице
     function styleTable(tbl) {
         tbl.style.borderCollapse = 'collapse';
         tbl.style.marginTop = '10px';
         tbl.style.marginBottom = '10px';
     }
 
+    // Применение стилей к ячейке таблицы
     function styleCell(td) {
         td.style.border = '1px solid #333';
         td.style.padding = '0';
@@ -20,12 +23,10 @@ window.addEventListener('DOMContentLoaded', () => {
         td.style.fontSize = '18px';
     }
 
-    function styleInput(inp) {
+    // Применение стилей и ограничений к числовому полю ввода
+    function styleInput(inp, minVal = -99, maxVal = 99) {
         inp.type = 'number';
-        inp.min = '-1000';
-        inp.max = '1000';
-        inp.step = '0.01'; // Шаг — 2 знака после запятой
-        inp.style.width = '60px';
+        inp.style.width = '72px';
         inp.style.height = '30px';
         inp.style.margin = '0';
         inp.style.padding = '0';
@@ -34,9 +35,41 @@ window.addEventListener('DOMContentLoaded', () => {
         inp.style.borderRadius = '4px';
         inp.style.textAlign = 'center';
         inp.style.fontSize = '18px';
+        inp.step = '0.01';
+        inp.setAttribute('min', String(minVal));
+        inp.setAttribute('max', String(maxVal));
+        inp._lastValid = '';
+
+        // Проверка значения при вводе
+        inp.addEventListener('input', function () {
+            const val = this.value;
+
+            // Разрешается пустая строка, одиночный минус и точка
+            if (val === '' || val === '-' || val === '.') {
+                this._lastValid = val;
+                return;
+            }
+
+            // Проверка на формат: до 2 цифр до и после точки
+            const re = /^-?\d{1,2}(?:\.\d{0,2})?$/;
+            if (!re.test(val)) {
+                this.value = this._lastValid;
+                return;
+            }
+
+            // Проверка на диапазон значений
+            const num = parseFloat(val);
+            if (isNaN(num) || num < minVal || num > maxVal) {
+                this.value = this._lastValid;
+                return;
+            }
+
+            // Сохранение допустимого значения
+            this._lastValid = val;
+        });
     }
 
-
+    // Применение стилей к выпадающему списку
     function styleSelect(sel) {
         sel.style.width = '60px';
         sel.style.height = '30px';
@@ -50,6 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
         sel.style.whiteSpace = 'nowrap';
     }
 
+    // Сохранение текущих данных в localStorage
     function saveToStorage() {
         const data = {
             numVars: numVarsInput.value,
@@ -60,6 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
             consRhs: {}
         };
 
+        // Сбор значений переменных и ограничений
         varsContainer.querySelectorAll('input').forEach(input => {
             data.vars[input.name] = input.value;
         });
@@ -76,10 +111,11 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('dualLppData', JSON.stringify(data));
     }
 
+    // Загрузка данных из localStorage (если они существуют)
     function loadFromStorage() {
         const saved = localStorage.getItem('dualLppData');
         if (!saved) {
-            redraw(); // Вызовем даже если нет сохранённых данных
+            redraw(); // Выполнение перерисовки, даже если данные отсутствуют
             return;
         }
 
@@ -89,6 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         redraw();
 
+        // Восстановление значений в полях
         for (let [name, value] of Object.entries(data.vars)) {
             const input = document.querySelector(`input[name="${name}"]`);
             if (input) input.value = value;
@@ -107,10 +144,12 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Перерисовка таблиц и полей в зависимости от количества переменных и ограничений
     function redraw() {
         const nVars = parseInt(numVarsInput.value, 10) || 2;
         const nCons = parseInt(numConsInput.value, 10) || 1;
 
+        // Сохранение старых значений перед очисткой
         let oldVarsValues = {};
         varsContainer.querySelectorAll('input').forEach(inp => {
             oldVarsValues[inp.name] = inp.value;
@@ -131,11 +170,13 @@ window.addEventListener('DOMContentLoaded', () => {
             oldConsRhsValues[inp.name] = inp.value;
         });
 
+        // Очистка контейнеров перед генерацией новых элементов
         varsContainer.innerHTML = '';
         consVarsContainer.innerHTML = '';
         consSignsContainer.innerHTML = '';
         consRhsContainer.innerHTML = '';
 
+        // Создание строки ввода коэффициентов целевой функции
         const tblObj = document.createElement('table');
         styleTable(tblObj);
         const headerObj = document.createElement('tr');
@@ -161,6 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
         tblObj.appendChild(rowObj);
         varsContainer.appendChild(tblObj);
 
+        // Создание таблицы коэффициентов ограничений
         const tblL = document.createElement('table');
         styleTable(tblL);
         const headerL = document.createElement('tr');
@@ -188,6 +230,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consVarsContainer.appendChild(tblL);
 
+        // Создание таблицы выбора знаков ограничений
         const tblS = document.createElement('table');
         styleTable(tblS);
         const headerS = document.createElement('tr');
@@ -217,6 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consSignsContainer.appendChild(tblS);
 
+        // Создание таблицы правых частей ограничений
         const tblR = document.createElement('table');
         styleTable(tblR);
         const headerR = document.createElement('tr');
@@ -240,6 +284,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         consRhsContainer.appendChild(tblR);
 
+        // Обновление условия неотрицательности
         const nonnegDiv = document.getElementById('nonnegativity_condition');
         let varsList = [];
         for (let i = 0; i < nVars; i++) {
@@ -247,37 +292,38 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         nonnegDiv.innerHTML = varsList.join(', ') + ' ≥ 0';
 
-        saveToStorage(); // Сохраняем сразу после отрисовки
+        saveToStorage(); // Сохранение после обновления интерфейса
     }
 
+    // Обработка изменения количества переменных и ограничений
     numVarsInput.addEventListener('input', () => {
         redraw();
     });
-
     numConsInput.addEventListener('input', () => {
         redraw();
     });
 
+    // Инициализация интерфейса из сохранённых данных
     loadFromStorage();
 
+    // Обработка сброса формы
     const resetBtn = document.getElementById('reset_button');
     resetBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // Отмена стандартного поведения (отправка формы)
+        e.preventDefault(); // Предотвращение отправки формы
 
-        // Явная очистка всех input и select после перерисовки
+        // Очистка всех полей ввода и восстановление значений по умолчанию
         varsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consVarsContainer.querySelectorAll('input').forEach(input => input.value = '');
         consSignsContainer.querySelectorAll('select').forEach(select => select.value = '≤');
         consRhsContainer.querySelectorAll('input').forEach(input => input.value = '');
         saveToStorage();
 
-        // Устанавка начальных значения переменных
         numVarsInput.value = 2;
         numConsInput.value = 1;
 
-        redraw(); // Перерисовка полей
+        redraw(); // Обновление интерфейса
 
-        // Удаление блока с результатами
+        // Очистка блока с результатами, если он существует
         const resultBlock = document.getElementById('results');
         if (resultBlock) {
             resultBlock.innerHTML = '';

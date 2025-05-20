@@ -1,184 +1,149 @@
-// Функция для генерации таблицы транспортной задачи
-// Принимаются параметры: rows (количество строк, т.е. поставщиков) и cols (количество столбцов, т.е. потребителей)
-function generateMatrix(rows, cols) {
-    // Находится контейнер с id="matrix-container", куда помещается таблица
+// Создается таблица матрицы с заданным количеством строк и столбцов, поддерживается ввод данных для затрат, запасов и потребностей
+function generateMatrix(rows, cols, matrixData = null, supplyData = null, demandData = null) {
     const container = document.getElementById('matrix-container');
-    // Очищается содержимое контейнера для удаления предыдущей таблицы, если она была
-    container.innerHTML = '';
+    container.innerHTML = ''; // Очищается содержимое контейнера перед созданием новой таблицы
 
-    // Создается элемент таблицы <table>
     const table = document.createElement('table');
-    // Устанавливаются атрибуты таблицы: граница, внутренние отступы, расстояние между ячейками
     table.border = "1";
     table.cellPadding = "5";
     table.cellSpacing = "0";
+    table.style.borderCollapse = "collapse"; // Устанавливаются стили для таблицы
 
-    // Создается строка заголовка таблицы
+    // Создается заголовочная строка с метками для столбцов и ячейкой для заголовка запасов
     const headerRow = document.createElement('tr');
-
-    // Создается пустая ячейка в левом верхнем углу таблицы
     const emptyCell = document.createElement('th');
-    // Добавляется пустая ячейка в строку заголовка
     headerRow.appendChild(emptyCell);
 
-    // Генерируются заголовки столбцов (B1, B2, ..., Bn) для потребителей
     for (let j = 0; j < cols; j++) {
-        // Создается ячейка заголовка столбца
         const th = document.createElement('th');
-        // Устанавливается текст ячейки с нижним индексом (например, B₁, B₂)
-        th.innerHTML = `B<sub>${j + 1}</sub>`;
-        // Добавляется ячейка в строку заголовка
+        th.innerHTML = `B<sub>${j + 1}</sub>`; // Метки для столбцов B1, B2, ...
         headerRow.appendChild(th);
     }
 
-    // Создается заголовок для столбца "Запасы"
     const supplyHeader = document.createElement('th');
-    // Устанавливается текст "Запасы, a_i" с нижним индексом
-    supplyHeader.innerHTML = 'Запасы, a<sub>i</sub>';
-    // Добавляется заголовок столбца в строку
+    supplyHeader.innerHTML = 'Запасы, a<sub>i</sub>'; // Заголовок для столбца запасов
     headerRow.appendChild(supplyHeader);
-
-    // Добавляется строка заголовка в таблицу
     table.appendChild(headerRow);
 
-    // Генерируются строки таблицы для каждого поставщика (A1, A2, ..., Am)
+    // Создаются строки таблицы с ячейками для ввода затрат и запасов
     for (let i = 0; i < rows; i++) {
-        // Создается новая строка таблицы
         const tr = document.createElement('tr');
-
-        // Создается заголовок строки (например, A₁, A₂, ...)
         const rowHeader = document.createElement('th');
-        // Устанавливается текст заголовка строки с нижним индексом
-        rowHeader.innerHTML = `A<sub>${i + 1}</sub>`;
-        // Добавляется заголовок в строку
+        rowHeader.innerHTML = `A<sub>${i + 1}</sub>`; // Метки для строк A1, A2, ...
         tr.appendChild(rowHeader);
 
-        // Генерируются ячейки матрицы затрат (Cij) для текущей строки
         for (let j = 0; j < cols; j++) {
-            // Создается ячейка для ввода значения затрат
             const td = document.createElement('td');
-            // Создается поле ввода
             const input = document.createElement('input');
-            // Устанавливается тип поля ввода как число
             input.type = 'number';
-            // Задается имя поля ввода в формате matrix-i-j для обработки формы
-            input.name = `matrix-${i}-${j}`;
-            // Устанавливается начальное значение поля (0)
-            input.value = 0;
-            // Поле делается обязательным для заполнения
+            input.name = `matrix-${i}-${j}`; // Уникальное имя для ячейки матрицы
+            input.value = matrixData && matrixData[i] && matrixData[i][j] !== undefined ? matrixData[i][j] : 0; // Устанавливается значение из matrixData или 0
+            input.min = 0;
             input.required = true;
-            // Устанавливается ширина поля ввода (60px)
             input.style.width = '60px';
-            // Убираются отступы и границы поля ввода
             input.style.margin = '0';
             input.style.padding = '0';
             input.style.border = 'none';
-            input.style.outline = 'none';
-            // Добавляется поле ввода в ячейку
+            input.style.outline = 'none'; // Стили для поля ввода
             td.appendChild(input);
-            // Добавляется ячейка в строку
             tr.appendChild(td);
         }
 
-        // Создается ячейка для ввода запасов (a_i)
         const supplyCell = document.createElement('td');
-        // Создается поле ввода для запасов
         const supplyInput = document.createElement('input');
-        // Устанавливается тип поля ввода как число
         supplyInput.type = 'number';
-        // Задается имя поля ввода для обработки формы
-        supplyInput.name = `supply-${i}`;
-        // Устанавливается начальное значение поля (0)
-        supplyInput.value = 0;
-        // Поле делается обязательным для заполнения
+        supplyInput.name = `supply-${i}`; // Уникальное имя для ячейки запаса
+        supplyInput.value = supplyData && supplyData[i] !== undefined ? supplyData[i] : 0; // Устанавливается значение из supplyData или 0
+        supplyInput.min = 0;
         supplyInput.required = true;
-        // Устанавливается ширина поля ввода (60px)
         supplyInput.style.width = '60px';
-        // Убираются отступы и границы поля ввода
         supplyInput.style.margin = '0';
         supplyInput.style.padding = '0';
         supplyInput.style.border = 'none';
-        supplyInput.style.outline = 'none';
-        // Добавляется поле ввода в ячейку
+        supplyInput.style.outline = 'none'; // Стили для поля ввода
         supplyCell.appendChild(supplyInput);
-        // Добавляется ячейка в строку
         tr.appendChild(supplyCell);
-
-        // Добавляется строка в таблицу
         table.appendChild(tr);
     }
 
-    // Создается последняя строка для потребностей (b_j)
+    // Создается строка для ввода потребностей
     const demandRow = document.createElement('tr');
-
-    // Создается заголовок строки "Потребности"
     const demandHeader = document.createElement('th');
-    // Устанавливается текст "Потребности, b_j" с нижним индексом
-    demandHeader.innerHTML = 'Потребности, b<sub>j</sub>';
-    // Добавляется заголовок в строку
+    demandHeader.innerHTML = 'Потребности, b<sub>j</sub>'; // Заголовок для строки потребностей
     demandRow.appendChild(demandHeader);
 
-    // Генерируются поля для потребностей (b_j)
     for (let j = 0; j < cols; j++) {
-        // Создается ячейка для ввода потребности
         const demandCell = document.createElement('td');
-        // Создается поле ввода для потребности
         const demandInput = document.createElement('input');
-        // Устанавливается тип поля ввода как число
         demandInput.type = 'number';
-        // Задается имя поля ввода для обработки формы
-        demandInput.name = `demand-${j}`;
-        // Устанавливается начальное значение поля (0)
-        demandInput.value = 0;
-        // Поле делается обязательным для заполнения
+        demandInput.name = `demand-${j}`; // Уникальное имя для ячейки потребности
+        demandInput.value = demandData && demandData[j] !== undefined ? demandData[j] : 0; // Устанавливается значение из demandData или 0
+        demandInput.min = 0;
         demandInput.required = true;
-        // Устанавливается ширина поля ввода (60px)
         demandInput.style.width = '60px';
-        // Убираются отступы и границы поля ввода
         demandInput.style.margin = '0';
         demandInput.style.padding = '0';
         demandInput.style.border = 'none';
-        demandInput.style.outline = 'none';
-        // Добавляется поле ввода в ячейку
+        demandInput.style.outline = 'none'; // Стили для поля ввода
         demandCell.appendChild(demandInput);
-        // Добавляется ячейка в строку
         demandRow.appendChild(demandCell);
     }
 
-    // Создается пустая ячейка в последней строке под столбцом запасов
     const emptyDemandCell = document.createElement('td');
-    // Добавляется пустая ячейка в строку
     demandRow.appendChild(emptyDemandCell);
-
-    // Добавляется строка потребностей в таблицу
     table.appendChild(demandRow);
-
-    // Добавляется таблица в контейнер
-    container.appendChild(table);
+    container.appendChild(table); // Добавляется таблица в контейнер
 }
 
-// Функция для обновления таблицы при изменении размеров
+// Обновляется матрица при изменении количества строк или столбцов
 function updateMatrix() {
-    // Получаются значения количества строк и столбцов из полей ввода
     const rows = parseInt(document.getElementById('rows').value);
     const cols = parseInt(document.getElementById('cols').value);
-    // Проверяется, что значения находятся в допустимом диапазоне (от 1 до 10)
-    if (rows >= 1 && rows <= 10 && cols >= 1 && cols <= 10) {
-        // Генерируется новая таблица с обновленными размерами
-        generateMatrix(rows, cols);
+    if (rows >= 1 && rows <= 10 && cols >= 1 && cols <= 10) { // Проверяется допустимость размеров матрицы
+        // Сохраняются текущие данные формы
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+        const matrixData = [];
+        const supplyData = [];
+        const demandData = [];
+
+        for (let i = 0; i < rows; i++) {
+            matrixData[i] = [];
+            for (let j = 0; j < cols; j++) {
+                matrixData[i][j] = parseFloat(formData.get(`matrix-${i}-${j}`)) || 0; // Собираются данные матрицы
+            }
+            supplyData[i] = parseFloat(formData.get(`supply-${i}`)) || 0; // Собираются данные запасов
+        }
+        for (let j = 0; j < cols; j++) {
+            demandData[j] = parseFloat(formData.get(`demand-${j}`)) || 0; // Собираются данные потребностей
+        }
+
+        generateMatrix(rows, cols, matrixData, supplyData, demandData); // Перегенерируется матрица с сохраненными данными
     }
 }
 
-// Добавляется обработчик события на изменение значения поля количества строк
+// Добавляются обработчики событий для полей ввода количества строк и столбцов
 document.getElementById('rows').addEventListener('input', updateMatrix);
-// Добавляется обработчик события на изменение значения поля количества столбцов
 document.getElementById('cols').addEventListener('input', updateMatrix);
 
-// Выполняется генерация таблицы при загрузке страницы
+// Инициализируется матрица при загрузке страницы
 window.onload = function () {
-    // Получаются элементы полей ввода
     const rowsInput = document.getElementById('rows');
     const colsInput = document.getElementById('cols');
-    // Генерируется таблица с начальными значениями размеров
-    generateMatrix(parseInt(rowsInput.value), parseInt(colsInput.value));
+    // Получаются данные из шаблона
+    const costMatrixJson = document.getElementById('cost-matrix-data').value;
+    const supplyJson = document.getElementById('supply-data').value;
+    const demandJson = document.getElementById('demand-data').value;
+
+    const matrixData = costMatrixJson !== 'null' ? JSON.parse(costMatrixJson) : null; // Парсятся данные матрицы затрат
+    const supplyData = supplyJson !== 'null' ? JSON.parse(supplyJson) : null; // Парсятся данные запасов
+    const demandData = demandJson !== 'null' ? JSON.parse(demandJson) : null; // Парсятся данные потребностей
+
+    generateMatrix(
+        parseInt(rowsInput.value),
+        parseInt(colsInput.value),
+        matrixData,
+        supplyData,
+        demandData
+    ); // Генерируется начальная матрица
 };
