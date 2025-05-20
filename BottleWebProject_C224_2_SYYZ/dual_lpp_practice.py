@@ -1,8 +1,9 @@
-from bottle import route, request, template, static_file
+from bottle import redirect, route, request, template, static_file
 import numpy as np
 import os
 import json
 import datetime
+import random
 
 # Исключение при отсутствии допустимого решения
 class NoSolutionError(Exception):
@@ -31,12 +32,37 @@ corrupted_sign_map = {
     '>=': '≥'
 }
 
-# Обработка статических скриптов
+# Статика
 @route('/static/scripts/<filename>')
 def serve_static(filename):
     return static_file(filename, root='static/scripts')
 
-# Основной маршрут обработки формы
+# Маршрут для загрузки случайного примера
+@route('/dual_lpp_example', method='POST')
+def dual_lpp_example():
+    example_file = 'output/dual_lpp_examples.json'
+
+    if not os.path.exists(example_file):
+        return "Файл с примерами не найден."
+
+    with open(example_file, 'r', encoding='utf-8-sig') as f:
+        examples = json.load(f)
+
+    if not examples:
+        return "Нет доступных примеров."
+
+    # Выбираем случайный пример из списка и берем поле 'input'
+    random_example = random.choice(examples)['input']
+
+    # Сохраняем этот пример в отдельный файл для загрузки в форму
+    input_filename = 'input/dual_lpp_last_input.json'
+    os.makedirs(os.path.dirname(input_filename), exist_ok=True)
+    with open(input_filename, 'w', encoding='utf-8-sig') as f:
+        json.dump(random_example, f, ensure_ascii=False, indent=2)
+
+    return redirect('/dual_lpp_practice')
+
+# Основной маршрут
 @route('/dual_lpp_practice', method=['GET', 'POST'])
 def dual_lpp_practice():
     result_table = []
@@ -50,128 +76,151 @@ def dual_lpp_practice():
     duality_check = ''
     no_solution = False
     error_message = ''
+    form_data = {}
 
-    num_vars = request.forms.get('num_vars', '2')
-    num_cons = request.forms.get('num_cons', '1')
+    if request.method == 'GET':
+        # Попытка загрузить последний пример из файла
+        input_filename = 'input/dual_lpp_last_input.json'
+        if os.path.exists(input_filename):
+            try:
+                with open(input_filename, 'r', encoding='utf-8-sig') as f:
+                    last_input = json.load(f)
 
-    if request.method == 'POST':
-        try:
-            num_vars = int(num_vars)
-            num_cons = int(num_cons)
+                c = last_input.get('objective_coeffs', [])
+                A = last_input.get('constraint_coeffs', [])
+                b = last_input.get('rhs_values', [])
+                signs = last_input.get('constraint_signs', [])
 
-            # Получаем коэффициенты целевой функции
-            raw_c = [request.forms.get(f'x_{j}', '') for j in range(num_vars)]
-            if not any(cell.strip() for cell in raw_c):
-                raise Exception("Целевая функция не может быть пустой.")
-            c = [float(val.strip() or '0') for val in raw_c]
-            if all(coef == 0 for coef in c):
-                raise Exception("Коэффициенты целевой функции не могут быть все нулями.")
+                num_vars = len(c)
+                num_cons = len(A)
 
-            # Чтение ограничений
-            A = []
-            b = []
-            signs = []
+                # Решаем задачу сразу
+                steps, result_values, W = solve_dual_simplex(c, A, b)
+                answer_vars = {k: round(v, 2) for k, v in result_values.items() if k.startswith('y')}
+                F = round(-W, 2)
+                duality_check = "Все условия двойственности выполняются."
 
-            for i in range(num_cons):
-                row_raw = [request.forms.get(f'cons_{i}_{j}', '') for j in range(num_vars)]
-                if not any(cell.strip() for cell in row_raw):
-                    raise Exception(f"Ограничение {i+1} не может быть пустым.")
-                row = [float(val.strip() or '0') for val in row_raw]
-                if all(val == 0 for val in row):
-                    raise Exception(f"Ограничение {i+1} не может состоять только из нулей.")
-                A.append(row)
+                # Формирование таблицы
+                result_table.append(['Базис'] + [f'y{i+1}' for i in range(num_cons)] + ['Св.член'])
+                last = steps[-1]['table']
+                for row in last[:-1]:
+                    result_table.append([row[0]] + [round(x, 2) for x in row[1:]])
+                result_table.append(['W'] + [round(x, 2) for x in last[-1][1:]])
 
-                # Чистим знак от битой кодировки
-                raw_sign = request.forms.get(f'cons_sign_{i}', '≤')
-                sign = corrupted_sign_map.get(raw_sign, raw_sign)
-                signs.append(sign)
+                # Формулировки
+                x_vars = [f'x{i+1}' for i in range(num_vars)]
+                y_vars = [f'y{i+1}' for i in range(num_cons)]
+                primal_obj = f"Z = {format_expression(c, x_vars)}"
+                primal_constraints = [format_expression(A[i], x_vars, b[i], '≤') for i in range(num_cons)]
+                A_dual = np.array(A).T.tolist()
+                dual_obj = f"W = {format_expression(b, y_vars)}"
+                dual_constraints = [format_expression(A_dual[i], y_vars, c[i], '≥') for i in range(num_vars)]
 
-                # Чтение правой части
-                b_val = request.forms.get(f'cons_rhs_{i}', '').strip()
-                if b_val == '':
-                    raise Exception(f"Свободный член ограничения №{i+1} не может быть пустым.")
-                b.append(float(b_val or '0'))
+                form_data = {'x': c, 'cons': A, 'signs': signs, 'rhs': b}
 
-            # Решение методом двойственного симплекс-метода
-            steps, result_values, W = solve_dual_simplex(c, A, b)
+            except Exception as e:
+                no_solution = True
+                error_message = f"Ошибка загрузки примера: {str(e)}"
+                num_vars = 2
+                num_cons = 1
+        else:
+            # Если файла нет — пустая форма
+            num_vars = 2
+            num_cons = 1
 
-            answer_vars = {k: round(v, 2) for k, v in result_values.items() if k.startswith('y')}
-            F = round(-W, 2)
-            duality_check = "Все условия двойственности выполняются."
+        return template('dual_lpp_practice.tpl',
+                        title='Двойственная ЗЛП',
+                        year=2025,
+                        num_vars=num_vars,
+                        num_cons=num_cons,
+                        result_table=result_table if result_table else None,
+                        dual_steps=steps if steps else None,
+                        answer_vars=answer_vars,
+                        F=F,
+                        duality_check=duality_check,
+                        primal_obj=primal_obj,
+                        primal_constraints=primal_constraints,
+                        dual_obj=dual_obj,
+                        dual_constraints=dual_constraints,
+                        no_solution=no_solution,
+                        error_message=error_message,
+                        form_data=form_data)
 
-            record = {
-                "timestamp": datetime.datetime.now().isoformat(),
-                "input": {
-                    "objective_coeffs": [round(val, 2) for val in c],
-                    "constraint_coeffs": [[round(aij, 2) for aij in row] for row in A],
-                    "rhs_values": [round(val, 2) for val in b],
-                    "constraint_signs": signs
-                },
-                "output": {
-                    "dual_variables": answer_vars,
-                    "dual_objective_value": F
-                }
+    # Если POST — берём из формы
+    num_vars = int(request.forms.get('num_vars', '2'))
+    num_cons = int(request.forms.get('num_cons', '1'))
+
+    try:
+        # Целевая функция
+        raw_c = [request.forms.get(f'x_{j}', '') for j in range(num_vars)]
+        if not any(cell.strip() for cell in raw_c):
+            raise Exception("Целевая функция не может быть пустой.")
+        c = [float(val or '0') for val in raw_c]
+        if all(coef == 0 for coef in c):
+            raise Exception("Коэффициенты целевой функции не могут быть все нулями.")
+
+        # Ограничения
+        A, b, signs = [], [], []
+        for i in range(num_cons):
+            row_raw = [request.forms.get(f'cons_{i}_{j}', '') for j in range(num_vars)]
+            if not any(cell.strip() for cell in row_raw):
+                raise Exception(f"Ограничение {i+1} не может быть пустым.")
+            row = [float(val or '0') for val in row_raw]
+            if all(val == 0 for val in row):
+                raise Exception(f"Ограничение {i+1} не может состоять только из нулей.")
+            A.append(row)
+
+            raw_sign = request.forms.get(f'cons_sign_{i}', '≤')
+            signs.append(corrupted_sign_map.get(raw_sign, raw_sign))
+
+            b_val = request.forms.get(f'cons_rhs_{i}', '').strip()
+            if b_val == '':
+                raise Exception(f"Свободный член ограничения №{i+1} не может быть пустым.")
+            b.append(float(b_val))
+
+        # Решаем
+        steps, result_values, W = solve_dual_simplex(c, A, b)
+        answer_vars = {k: round(v, 2) for k, v in result_values.items() if k.startswith('y')}
+        F = round(-W, 2)
+        duality_check = "Все условия двойственности выполняются."
+
+        # Сохраняем
+        record = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "input": {
+                "objective_coeffs": c,
+                "constraint_coeffs": A,
+                "rhs_values": b,
+                "constraint_signs": signs
+            },
+            "output": {
+                "dual_variables": answer_vars,
+                "dual_objective_value": F
             }
-            save_result_to_json(record)
+        }
+        save_result_to_json(record)
 
-            result_table.append(['Базис'] + [f'y{i+1}' for i in range(num_cons)] + ['Св.член'])
-            last_table = steps[-1]['table']
-            for row in last_table[:-1]:
-                result_table.append([row[0]] + [round(x, 2) for x in row[1:]])
-            result_table.append(['W'] + [round(x, 2) for x in last_table[-1][1:]])
+        # Таблица
+        result_table.append(['Базис'] + [f'y{i+1}' for i in range(num_cons)] + ['Св.член'])
+        last = steps[-1]['table']
+        for row in last[:-1]:
+            result_table.append([row[0]] + [round(x, 2) for x in row[1:]])
+        result_table.append(['W'] + [round(x, 2) for x in last[-1][1:]])
 
-            x_vars = [f'x{i+1}' for i in range(num_vars)]
-            y_vars = [f'y{i+1}' for i in range(num_cons)]
-            primal_obj = f"Z = {format_expression(c, x_vars)}"
-            primal_constraints = [format_expression(A[i], x_vars, b[i], '≤') for i in range(num_cons)]
-            A_dual = np.array(A).T.tolist()
-            dual_obj = f"W = {format_expression(b, y_vars)}"
-            dual_constraints = [format_expression(A_dual[i], y_vars, c[i], '≥') for i in range(num_vars)]
+        # Формулировки
+        x_vars = [f'x{i+1}' for i in range(num_vars)]
+        y_vars = [f'y{i+1}' for i in range(num_cons)]
+        primal_obj = f"Z = {format_expression(c, x_vars)}"
+        primal_constraints = [format_expression(A[i], x_vars, b[i], '≤') for i in range(num_cons)]
+        A_dual = np.array(A).T.tolist()
+        dual_obj = f"W = {format_expression(b, y_vars)}"
+        dual_constraints = [format_expression(A_dual[i], y_vars, c[i], '≥') for i in range(num_vars)]
 
-        except NoSolutionError as ne:
-            no_solution = True
-            error_message = str(ne)
-            record = {
-                "timestamp": datetime.datetime.now().isoformat(),
-                "input": {
-                    "objective_coeffs": [float(val.strip() or '0') for val in raw_c],
-                    "constraint_coeffs": [[float(request.forms.get(f'cons_{i}_{j}', '0')) for j in range(num_vars)] for i in range(num_cons)],
-                    "rhs_values": [float(request.forms.get(f'cons_rhs_{i}', '0')) for i in range(num_cons)],
-                    "constraint_signs": [corrupted_sign_map.get(request.forms.get(f'cons_sign_{i}', ''), request.forms.get(f'cons_sign_{i}', '')) for i in range(num_cons)]
-                },
-                "error": error_message
-            }
-            save_result_to_json(record)
+        form_data = {'x': c, 'cons': A, 'signs': signs, 'rhs': b}
 
-        except ValueError as ve:
-            no_solution = True
-            error_message = f"Ошибка ввода: {ve}"
-            record = {
-                "timestamp": datetime.datetime.now().isoformat(),
-                "input": {
-                    "objective_coeffs": raw_c,
-                    "constraint_coeffs": [[request.forms.get(f'cons_{i}_{j}', '') for j in range(num_vars)] for i in range(num_cons)],
-                    "rhs_values": [request.forms.get(f'cons_rhs_{i}', '') for i in range(num_cons)],
-                    "constraint_signs": [corrupted_sign_map.get(request.forms.get(f'cons_sign_{i}', ''), request.forms.get(f'cons_sign_{i}', '')) for i in range(num_cons)]
-                },
-                "error": error_message
-            }
-            save_result_to_json(record)
-
-        except Exception as e:
-            no_solution = True
-            error_message = f"Ошибка: {e}"
-            record = {
-                "timestamp": datetime.datetime.now().isoformat(),
-                "input": {
-                    "objective_coeffs": raw_c,
-                    "constraint_coeffs": [[request.forms.get(f'cons_{i}_{j}', '') for j in range(num_vars)] for i in range(num_cons)],
-                    "rhs_values": [request.forms.get(f'cons_rhs_{i}', '') for i in range(num_cons)],
-                    "constraint_signs": [corrupted_sign_map.get(request.forms.get(f'cons_sign_{i}', ''), request.forms.get(f'cons_sign_{i}', '')) for i in range(num_cons)]
-                },
-                "error": error_message
-            }
-            save_result_to_json(record)
+    except Exception as e:
+        no_solution = True
+        error_message = str(e)
 
     return template('dual_lpp_practice.tpl',
                     title='Двойственная ЗЛП',
@@ -188,103 +237,77 @@ def dual_lpp_practice():
                     dual_obj=dual_obj,
                     dual_constraints=dual_constraints,
                     no_solution=no_solution,
-                    error_message=error_message)
+                    error_message=error_message,
+                    form_data=form_data)
 
 # Двойственный симплекс-метод
 def solve_dual_simplex(c, A, b):
-    A = np.array(A, dtype=float)
-    c = np.array(c, dtype=float)
-    b = np.array(b, dtype=float)
+    A = np.array(A, float)
+    c = np.array(c, float)
+    b = np.array(b, float)
+    A_dual, b_dual, c_dual = A.T, c, b
+    nV, nC = A_dual.shape[1], A_dual.shape[0]
+    var_n = [f"y{i+1}" for i in range(nV)]
+    slack = [f"t{i+1}" for i in range(nC)]
+    allv = var_n + slack
 
-    A_dual = A.T
-    b_dual = c
-    c_dual = b
+    Tkl = []
+    base = []
+    for i in range(nC):
+        row = list(-A_dual[i]) + [1 if j == i else 0 for j in range(nC)] + [-b_dual[i]]
+        Tkl.append(row)
+        base.append(slack[i])
+    Tkl.append(list(c_dual) + [0] * nC + [0])
 
-    num_vars = A_dual.shape[1]
-    num_cons = A_dual.shape[0]
-
-    var_names = [f"y{i+1}" for i in range(num_vars)]
-    slack_names = [f"t{i+1}" for i in range(num_cons)]
-    all_vars = var_names + slack_names
-
-    tableau = []
-    basis = []
-    for i in range(num_cons):
-        row = list(-A_dual[i])
-        slack = [1 if j == i else 0 for j in range(num_cons)]
-        row += slack
-        row.append(-b_dual[i])
-        tableau.append(row)
-        basis.append(slack_names[i])
-
-    z_row = list(c_dual) + [0]*num_cons + [0]
-    tableau.append(z_row)
-
-    steps = [{
-        "title": "Начальная таблица",
-        "table": [[basis[i]] + tableau[i] for i in range(num_cons)] + [["W"] + tableau[-1]],
-        "explanation": "Начальная симплекс-таблица"
-    }]
+    steps = [{"title": "Начальная таблица", "table": [[base[i]] + Tkl[i] for i in range(nC)] + [["W"] + Tkl[-1]], "explanation": "Начальная симплекс-таблица"}]
 
     while True:
-        rhs = [row[-1] for row in tableau[:-1]]
-        if all(r >= 0 for r in rhs):
+        last = Tkl
+        base_row_vals = [last[i][-1] for i in range(nC)]
+        if all(x >= 0 for x in base_row_vals):
             break
 
-        leaving = int(np.argmin(rhs))
-        row = tableau[leaving]
+        pivot_row = base_row_vals.index(min(base_row_vals))
+        pivot_candidates = [(j, last[-1][j] / last[pivot_row][j]) for j in range(nV + nC) if last[pivot_row][j] < 0]
+        if not pivot_candidates:
+            raise NoSolutionError("Решение не найдено")
 
-        ratios = []
-        for j in range(len(row)-1):
-            coeff = row[j]
-            zjcj = tableau[-1][j]
-            if coeff < 0:
-                ratios.append((zjcj / abs(coeff), j))
-        if not ratios:
-            raise NoSolutionError("Задача не имеет допустимого решения.")
+        pivot_col = min(pivot_candidates, key=lambda x: x[1])[0]
 
-        _, entering = min(ratios)
-        pivot = tableau[leaving][entering]
-        tableau[leaving] = [v / pivot for v in tableau[leaving]]
-        basis[leaving] = all_vars[entering]
+        pivot = last[pivot_row][pivot_col]
+        last[pivot_row] = [x / pivot for x in last[pivot_row]]
+        for i in range(nC + 1):
+            if i != pivot_row:
+                ratio = last[i][pivot_col]
+                last[i] = [last[i][j] - ratio * last[pivot_row][j] for j in range(len(last[i]))]
 
-        for i in range(len(tableau)):
-            if i != leaving:
-                factor = tableau[i][entering]
-                tableau[i] = [
-                    tableau[i][j] - factor * tableau[leaving][j]
-                    for j in range(len(tableau[i]))
-                ]
+        base[pivot_row] = allv[pivot_col]
 
-        steps.append({
-            "title": "Итерация",
-            "table": [[basis[i]] + tableau[i] for i in range(num_cons)] + [["W"] + tableau[-1]],
-            "explanation": f"Ведущий столбец: {all_vars[entering]}, ведущая строка: {basis[leaving]}"
-        })
+        steps.append({"title": f"Шаг {len(steps)}", "table": [[base[i]] + last[i] for i in range(nC)] + [["W"] + last[-1]], "explanation": f"Пивот: строка {pivot_row+1}, столбец {pivot_col+1}"})
 
-    result_values = {name: 0 for name in all_vars}
-    for i, var in enumerate(basis):
-        result_values[var] = tableau[i][-1]
-    W = tableau[-1][-1]
+    results = {}
+    for i, var in enumerate(var_n):
+        if var in base:
+            idx = base.index(var)
+            results[var] = last[idx][-1]
+        else:
+            results[var] = 0.0
 
-    return steps, result_values, W
+    W = last[-1][-1]
+    return steps, results, W
 
-# Форматирование выражений
-def format_term(coef, var):
-    if coef == 0:
-        return ''
-    coef_int = int(coef)
-    if coef == 1:
-        return var
-    if coef == -1:
-        return f"-{var}"
-    return f"{coef_int if coef == coef_int else coef}{var}"
+# Форматирование выражения для отображения
+def format_expression(coefs, vars, rhs=None, sign=None):
+    terms = []
+    for a, v in zip(coefs, vars):
+        if a == 0:
+            continue
+        a_str = f"{a:+g}" if terms else f"{a:g}"
+        if abs(a) == 1:
+            a_str = a_str.replace("1", "")
+        terms.append(f"{a_str}{v}")
+    expr = " ".join(terms).replace("+ -", "- ")
+    if rhs is not None and sign is not None:
+        expr += f" {sign} {rhs:g}"
+    return expr if expr else "0"
 
-def format_expression(coeffs, vars_list, rhs=None, sign=None):
-    terms = [format_term(c, v) for c, v in zip(coeffs, vars_list)]
-    expr = ' + '.join(filter(None, terms)).replace('+ -', '- ')
-    if sign and rhs is not None:
-        rhs_int = int(rhs)
-        rhs_str = str(rhs_int if rhs == rhs_int else rhs)
-        return f"{expr} {sign} {rhs_str}"
-    return expr

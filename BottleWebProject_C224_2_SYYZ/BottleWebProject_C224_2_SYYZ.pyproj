@@ -63,6 +63,7 @@
     <Content Include="output\direct_lpp_output.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="output\dual_lpp_examples.json" />
     <Content Include="output\transport_output.json">
       <SubType>Code</SubType>
     </Content>

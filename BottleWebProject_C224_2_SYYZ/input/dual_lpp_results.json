@@ -69,5 +69,128 @@
       ]
     },
     "error": "Задача не имеет допустимого решения."
+  },
+  {
+    "timestamp": "2025-05-20T02:24:46.259950",
+    "input": {
+      "objective_coeffs": [
+        "",
+        ""
+      ],
+      "constraint_coeffs": [
+        [
+          "",
+          ""
+        ]
+      ],
+      "rhs_values": [
+        ""
+      ],
+      "constraint_signs": [
+        ""
+      ]
+    },
+    "error": "Целевая функция не может быть пустой."
+  },
+  {
+    "timestamp": "2025-05-20T02:24:49.598100",
+    "input": {
+      "objective_coeffs": [
+        "",
+        ""
+      ],
+      "constraint_coeffs": [
+        [
+          "",
+          ""
+        ]
+      ],
+      "rhs_values": [
+        ""
+      ],
+      "constraint_signs": [
+        "≤"
+      ]
+    },
+    "error": "Целевая функция не может быть пустой."
+  },
+  {
+    "timestamp": "2025-05-20T02:24:51.667794",
+    "input": {
+      "objective_coeffs": [
+        "",
+        ""
+      ],
+      "constraint_coeffs": [
+        [
+          "",
+          ""
+        ]
+      ],
+      "rhs_values": [
+        ""
+      ],
+      "constraint_signs": [
+        ""
+      ]
+    },
+    "error": "Целевая функция не может быть пустой."
+  },
+  {
+    "timestamp": "2025-05-20T02:50:33.863936",
+    "input": {
+      "input": {
+        "objective_coeffs": [
+          3.0,
+          2.0
+        ],
+        "constraint_coeffs": [
+          [
+            2.0,
+            1.0
+          ],
+          [
+            1.0,
+            2.0
+          ]
+        ],
+        "rhs_values": [
+          4.0,
+          4.0
+        ],
+        "constraint_signs": [
+          "≤",
+          "≤"
+        ]
+      }
+    },
+    "output": {}
+  },
+  {
+    "timestamp": "2025-05-20T03:16:06.555934",
+    "input": {
+      "objective_coeffs": [
+        3.0,
+        2.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "rhs_values": [
+        3.0
+      ],
+      "constraint_signs": [
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 3.0
+      },
+      "dual_objective_value": 9.0
+    }
   }
 ]

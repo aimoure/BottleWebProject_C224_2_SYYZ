@@ -23,11 +23,18 @@
         <!-- Форма для ввода данных задачи -->
         <form method="post" action="/dual_lpp_practice">
             <label>Количество переменных:</label>
-            <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" step="1" value="{{num_cons or 2}}" required onkeydown="return false;">
+            <input type="number" id="number_of_variables" name="num_vars" min="2" max="10" step="1" value="{{num_vars or 2}}" required onkeydown="return false;">
             <br>
 
             <label>Коэффициенты целевой функции:</label>
-            <div id="variables_container"></div>
+            <div id="variables_container">
+                % if num_vars:
+                    % for i in range(num_vars):
+                        <input type="number" step="any" name="x_{{i}}" size="5"
+                               value="{{form_data['x'][i] if i < len(form_data['x']) else ''}}">
+                    % end
+                % end
+            </div>
             <br>
 
             <label>Количество ограничений:</label>
@@ -38,13 +45,41 @@
             <!-- Контейнеры для ограничений: коэффициенты, знаки, свободные члены -->
             <div id="constraints_wrapper" style="display:flex; gap:20px; align-items:flex-start;">
                 <div>
-                    <div id="constraints_vars"></div>
+                    <div id="constraints_vars">
+                    % if num_vars:
+                        % for i in range(num_cons):
+                            <div>
+                                % for j in range(num_vars):
+                                    <input type="number" step="any" name="cons_{{i}}_{{j}}" size="5"
+                                           value="{{form_data['cons'][i][j] if i < len(form_data['cons']) and j < len(form_data['cons'][i]) else ''}}">
+                                % end
+                            </div>
+                        % end
+                    % end
+                    </div>
                 </div>
                 <div>
-                    <div id="constraints_signs"></div>
+                    <div id="constraints_signs">
+                    % if num_cons:
+                        % for i in range(num_cons):
+                            <select name="sign_{{i}}">
+                                <option value="≤" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '≤' else ''}}>≤</option>
+                                <option value="≥" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '≥' else ''}}>≥</option>
+                                <option value="=" {{'selected' if (form_data['signs'][i] if i < len(form_data['signs']) else '') == '=' else ''}}>=</option>
+                            </select>
+                        % end
+                    % end
+                    </div>
                 </div>
                 <div>
-                    <div id="constraints_rhs"></div>
+                    <div id="constraints_rhs">
+                    % if num_cons:
+                        % for i in range(num_cons):
+                            <input type="number" step="any" name="rhs_{{i}}" size="5"
+                                   value="{{form_data['rhs'][i] if i < len(form_data['rhs']) else ''}}">
+                        % end
+                    % end
+                    </div>
                 </div>
             </div>
 
@@ -142,7 +177,7 @@
         <div class="example-panel task-container">
             <h3>Пример решения</h3>
             <p>Не хочешь заморачиваться? Загрузить готовый пример и проверить алгоритм!</p>
-            <form method="post" action="/hungarian-calc" enctype="multipart/form-data" class="example-form">
+            <form method="post" action="/dual_lpp_example" enctype="multipart/form-data" class="example-form">
                 <button style="height: 48px" type="submit" class="btn btn-warning example-button">Загрузить пример</button>
             </form>
         </div>
