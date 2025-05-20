@@ -20,6 +20,9 @@
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
+    <TestFramework>unittest</TestFramework>
+    <UnitTestPattern>test*.py</UnitTestPattern>
+    <UnitTestRootDirectory>tests</UnitTestRootDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +34,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+
     <Compile Include="hungarian_solver.py" />
+    <Compile Include="direct_lpp_routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\test_direct_lpp.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
@@ -40,6 +50,8 @@
   <ItemGroup>
     <Folder Include="input\" />
     <Folder Include="output\" />
+    <Folder Include="routes\" />
+    <Folder Include="tests\" />
     <Folder Include="results\" />
     <Folder Include="examples\" />
     <Folder Include="static\" />
@@ -60,6 +72,14 @@
     <Content Include="output\direct_lpp_output.json">
       <SubType>Code</SubType>
     </Content>
+    <!-- Пример: -->
+    <Content Include="examples\dual_lpp_examples.json" />
+    <Content Include="results\dual_lpp_results.json" />
+    <Content Include="results\purpose_input.json" />
+    <Content Include="results\transport_results.json" />
+    <Content Include="examples\direct_lpp_examples.json" />
+    <Content Include="examples\transport_output.json" />
+
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
     <Content Include="static\scripts\bootstrap.js" />
