@@ -13,11 +13,6 @@ class LinearProgrammingProblem:
     signs: List[str] = field(default_factory=list)  # Знаки ограничений: каждый элемент — одна из строк '?', '=', '?'
     rhs: List[float] = field(default_factory=list) # Свободные члены ограничений (массив чисел)
 
-    corrupted_sign_map = {
-        'â\u0089¤': '≤',
-        'â\u0089¥': '≥'
-        }
-
     # Инициализация
     def __post_init__(self):
         # Простая валидация на согласованность размеров
