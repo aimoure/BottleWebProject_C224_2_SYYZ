@@ -13,10 +13,10 @@ import socket
 import logging
 import random
 
-# Импортируем сервер из твоего app.py
+# РРјРїРѕСЂС‚РёСЂСѓРµРј СЃРµСЂРІРµСЂ РёР· С‚РІРѕРµРіРѕ app.py
 import app
 
-# Настройка логирования
+# РќР°СЃС‚СЂРѕР№РєР° Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class TestBottleApp(unittest.TestCase):
         cls.server_thread = threading.Thread(target=run_server, args=(cls.port,))
         cls.server_thread.daemon = True
         cls.server_thread.start()
-        time.sleep(2)  # Ждём запуска сервера
+        time.sleep(2)  # Р–РґС‘Рј Р·Р°РїСѓСЃРєР° СЃРµСЂРІРµСЂР°
 
     def setUp(self):
         chrome_options = Options()
@@ -52,42 +52,42 @@ class TestBottleApp(unittest.TestCase):
         self.driver.implicitly_wait(10)
 
     def test_navigation_to_purpose_theory(self):
-        # Открываем главную страницу
+        # РћС‚РєСЂС‹РІР°РµРј РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
         self.driver.get(f'http://localhost:{self.port}/')
 
-        # Убедимся, что заголовок страницы правильный
+        # РЈР±РµРґРёРјСЃСЏ, С‡С‚Рѕ Р·Р°РіРѕР»РѕРІРѕРє СЃС‚СЂР°РЅРёС†С‹ РїСЂР°РІРёР»СЊРЅС‹Р№
         h1_text = self.driver.find_element(By.TAG_NAME, 'h1').text
         self.assertEqual(h1_text, 'DualSolve')
 
-        # Находим и нажимаем на ссылку "Задача о назначениях"
+        # РќР°С…РѕРґРёРј Рё РЅР°Р¶РёРјР°РµРј РЅР° СЃСЃС‹Р»РєСѓ "Р—Р°РґР°С‡Р° Рѕ РЅР°Р·РЅР°С‡РµРЅРёСЏС…"
         purpose_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//a[@href='/purpose_theory']"))
         )
         purpose_link.click()
 
-        # Ждём загрузки страницы и появления заголовка
+        # Р–РґС‘Рј Р·Р°РіСЂСѓР·РєРё СЃС‚СЂР°РЅРёС†С‹ Рё РїРѕСЏРІР»РµРЅРёСЏ Р·Р°РіРѕР»РѕРІРєР°
         header = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, 'h1'))
         )
 
 
-        # Задержка 3 секунды
+        # Р—Р°РґРµСЂР¶РєР° 3 СЃРµРєСѓРЅРґС‹
         time.sleep(3)
 
-        # Прокрутка вниз
+        # РџСЂРѕРєСЂСѓС‚РєР° РІРЅРёР·
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(1)
 
-        # Клик по кнопке "Перейти к решению"
+        # РљР»РёРє РїРѕ РєРЅРѕРїРєРµ "РџРµСЂРµР№С‚Рё Рє СЂРµС€РµРЅРёСЋ"
         practice_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//a[@href='/purpose_practice']"))
         )
         practice_button.click()
 
-        # Задержка 3 секунды после перехода на страницу калькулятора
+        # Р—Р°РґРµСЂР¶РєР° 3 СЃРµРєСѓРЅРґС‹ РїРѕСЃР»Рµ РїРµСЂРµС…РѕРґР° РЅР° СЃС‚СЂР°РЅРёС†Сѓ РєР°Р»СЊРєСѓР»СЏС‚РѕСЂР°
         time.sleep(3)
 
-            # Устанавливаем размер матрицы = 3
+            # РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЂР°Р·РјРµСЂ РјР°С‚СЂРёС†С‹ = 3
         matrix_size_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'size'))
         )
@@ -97,52 +97,53 @@ class TestBottleApp(unittest.TestCase):
 
         
 
-        # Заполняем матрицу случайными числами от 0 до 10
+        # Р—Р°РїРѕР»РЅСЏРµРј РјР°С‚СЂРёС†Сѓ СЃР»СѓС‡Р°Р№РЅС‹РјРё С‡РёСЃР»Р°РјРё РѕС‚ 0 РґРѕ 10
         for i in range(3):
             for j in range(3):
                 cell = self.driver.find_element(By.NAME, f'matrix-{i}-{j}')
                 cell.clear()
                 cell.send_keys(str(random.randint(0, 10)))
 
-        # Нажимаем кнопку "Решить задачу"
+        # РќР°Р¶РёРјР°РµРј РєРЅРѕРїРєСѓ "Р РµС€РёС‚СЊ Р·Р°РґР°С‡Сѓ"
         solve_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'result'))
         )
         solve_button.click()
 
-        # Прокрутка вниз
+        # РџСЂРѕРєСЂСѓС‚РєР° РІРЅРёР·
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(3)
 
-        # Обновление страницы
+        # РћР±РЅРѕРІР»РµРЅРёРµ СЃС‚СЂР°РЅРёС†С‹
         self.driver.refresh()
-        time.sleep(1)  # Дай странице загрузиться
+        time.sleep(1)  # Р”Р°Р№ СЃС‚СЂР°РЅРёС†Рµ Р·Р°РіСЂСѓР·РёС‚СЊСЃСЏ
 
         self.driver.execute_script("window.scrollTo(0, 0);")
         time.sleep(1) 
-        # Установить чекбокс "решить задачу на максимум"
+        # РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С‡РµРєР±РѕРєСЃ "СЂРµС€РёС‚СЊ Р·Р°РґР°С‡Сѓ РЅР° РјР°РєСЃРёРјСѓРј"
         maximize_checkbox = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'maximize'))
         )
         if not maximize_checkbox.is_selected():
             maximize_checkbox.click()
 
-        # Нажать кнопку "Сгенерировать рандомно"
+        # РќР°Р¶Р°С‚СЊ РєРЅРѕРїРєСѓ "РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ СЂР°РЅРґРѕРјРЅРѕ"
         generate_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'uploadRandomBtn'))
         )
         generate_button.click()
 
-        # Прокрутка вниз снова
+        # РџСЂРѕРєСЂСѓС‚РєР° РІРЅРёР· СЃРЅРѕРІР°
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(10)
+        time.sleep(3)
 
-        # Нажимаем кнопку "Решить задачу"
+        # РќР°Р¶РёРјР°РµРј РєРЅРѕРїРєСѓ "Р РµС€РёС‚СЊ Р·Р°РґР°С‡Сѓ"
         solve_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'result'))
         )
         solve_button.click()
-        time.sleep(3)
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(10)
 
 
 
