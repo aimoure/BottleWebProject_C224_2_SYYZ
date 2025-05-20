@@ -1073,5 +1073,54 @@
       },
       "dual_objective_value": 27.0
     }
+  },
+  {
+    "timestamp": "2025-05-20T13:12:13.701852",
+    "input": {
+      "objective_coeffs": [
+        2.0,
+        3.0,
+        1.0,
+        5.0
+      ],
+      "constraint_coeffs": [
+        [
+          1.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          2.0,
+          3.0,
+          1.0
+        ],
+        [
+          4.0,
+          0.0,
+          2.0,
+          3.0
+        ]
+      ],
+      "rhs_values": [
+        5.0,
+        8.0,
+        15.0
+      ],
+      "constraint_signs": [
+        "≤",
+        "≤",
+        "≤"
+      ]
+    },
+    "output": {
+      "dual_variables": {
+        "y1": 0,
+        "y2": 1.5,
+        "y3": 1.17
+      },
+      "dual_objective_value": 29.5
+    }
   }
 ]
