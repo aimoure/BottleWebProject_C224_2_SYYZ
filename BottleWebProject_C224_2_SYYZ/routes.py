@@ -137,6 +137,8 @@ def purpose_practice():
             task_labels = [request.forms.get(f'label-x{j}', f'Task {j+1}') for j in range(size)]
             worker_labels = [request.forms.get(f'label-y{i}', f'Worker {i+1}') for i in range(size)]
 
+            
+
             matrix = []
             for i in range(size):
                 row = []
@@ -147,12 +149,15 @@ def purpose_practice():
                     row.append(int(val))
                 matrix.append(row)
 
-            result = solve_assignment(matrix)
+            maximize = request.forms.get('maximize') == 'on'
+            result = solve_assignment(matrix, maximize=maximize)
+
 
             # сохраняем данные
             save_data = {
                 "timestamp": datetime.now().isoformat(),
                 "size": size,
+                "maximize": maximize,
                 "tasks": task_labels,
                 "workers": worker_labels,
                 "matrix": matrix,
