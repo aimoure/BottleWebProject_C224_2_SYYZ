@@ -5,11 +5,12 @@ This script runs the application using a development server.
 import bottle
 import os
 import sys
-import dual_lpp_practice
 
 # routes contains the HTTP handlers for our server and must be imported.
 import routes
 import direct_lpp_routes
+import dual_lpp_practice
+import transport_routes
 
 if '--debug' in sys.argv[1:] or 'SERVER_DEBUG' in os.environ:
     # Debug mode will enable more verbose output in the console window.
