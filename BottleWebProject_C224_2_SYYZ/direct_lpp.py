@@ -2,6 +2,9 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 import numpy as np
 from scipy.optimize import linprog
+import json
+from datetime import datetime
+from json import JSONDecodeError
 
 @dataclass
 class LinearProgrammingProblem:
@@ -9,6 +12,11 @@ class LinearProgrammingProblem:
     constraints: List[List[float]] = field(default_factory=list) # Коэффициенты ограничений (двумерный массив)
     signs: List[str] = field(default_factory=list)  # Знаки ограничений: каждый элемент — одна из строк '?', '=', '?'
     rhs: List[float] = field(default_factory=list) # Свободные члены ограничений (массив чисел)
+
+    corrupted_sign_map = {
+        'â\u0089¤': '≤',
+        'â\u0089¥': '≥'
+        }
 
     # Инициализация
     def __post_init__(self):
@@ -90,3 +98,63 @@ class LinearProgrammingProblem:
             'x': x, # Список значений переменных
             'objective_value': value, # Значение функции
         }
+    
+    def save_to_json(self, filepath: str) -> None:
+        # Костыль для восстановления корректных символов знаков
+        corrupted_sign_map = {
+            'â\u0089¤': '≤',
+            'â\u0089¥': '≥'
+        }
+        clean_signs = [corrupted_sign_map.get(s, s) for s in self.signs]
+
+        new_entry = {
+            "input": {
+                "x": self.objective,
+                "coefficients_of_constraints": self.constraints,
+                "signs": clean_signs,
+                "b": self.rhs
+            },
+            "output": self._make_output_block()
+        }
+
+        # Чтение существующих данных
+        try:
+            with open(filepath, 'r', encoding='utf-8-sig') as f:
+                data = json.load(f)
+                # Если файл содержит не список — обёрнем его в список
+                if not isinstance(data, list):
+                    data = [data]
+        except (FileNotFoundError, JSONDecodeError):
+            data = []
+
+        # Добавление новой записи
+        data.append(new_entry)
+
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
+    # Вспомогательный метод, собирающий блок output
+    def _make_output_block(self) -> dict:
+        try:
+            result = self.solve()
+            if result is None:
+                return {
+                    "time": datetime.now().isoformat(),
+                    "x": [],
+                    "Z": None,
+                    "error": "Нет допустимого решения"
+                }
+            else:
+                return {
+                    "time": datetime.now().isoformat(),
+                    "x": result["x"],
+                    "Z": result["objective_value"],
+                    "error": None
+                }
+        except Exception as e:
+            return {
+                "time": datetime.now().isoformat(),
+                "x": [],
+                "Z": None,
+                "error": str(e)
+            }
