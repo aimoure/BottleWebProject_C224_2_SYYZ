@@ -16,7 +16,7 @@
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>BottleWebProject_C224_2_SYYZ</Name>
     <RootNamespace>BottleWebProject_C224_2_SYYZ</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|PythonCore|3.13</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
     <TestFramework>unittest</TestFramework>
@@ -39,18 +39,12 @@
     </Compile>
     <Compile Include="tests\test_direct_lpp.py" />
     <Compile Include="test_hungarian_solver.py" />
-    <Compile Include="test_direct_lpp.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="transport_solver.py" />
     <Compile Include="dual_lpp_practice.py" />
     <Compile Include="direct_lpp.py" />
     <Compile Include="routes.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="input\" />
-    <Folder Include="NewFolder1\" />
-    <Folder Include="output\" />
     <Folder Include="routes\" />
     <Folder Include="tests\" />
     <Folder Include="results\" />
@@ -64,13 +58,7 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="input\direct_lpp_input.json">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="results\purpose_input.json">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="output\direct_lpp_output.json">
       <SubType>Code</SubType>
     </Content>
     <!-- Пример: -->
@@ -79,7 +67,6 @@
     <Content Include="results\purpose_input.json" />
     <Content Include="results\transport_results.json" />
     <Content Include="examples\direct_lpp_examples.json" />
-    <Content Include="output\dual_lpp_examples.json" />
     <Content Include="examples\transport_output.json" />
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
@@ -116,15 +103,7 @@
     <!-- и т.д. (оставьте остальные строки как есть, главное — уберите дубли и закройте теги) -->
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env\">
-      <Id>env</Id>
-      <Version>0.0</Version>
-      <Description>env (Python 3.12 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
+    <InterpreterReference Include="Global|PythonCore|3.13" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <Target Name="BeforeBuild" />
