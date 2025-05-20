@@ -54,7 +54,7 @@
     <Content Include="input\direct_lpp_input.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="input\purpose_input.json">
+    <Content Include="results\purpose_input.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="output\direct_lpp_output.json">

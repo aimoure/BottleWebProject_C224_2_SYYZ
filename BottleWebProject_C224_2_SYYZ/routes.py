@@ -332,7 +332,7 @@ def purpose_practice():
                 "result": result
             }
 
-            output_dir = 'input'
+            output_dir = 'results'
             os.makedirs(output_dir, exist_ok=True)
             file_path = os.path.join(output_dir, 'purpose_input.json')
 
