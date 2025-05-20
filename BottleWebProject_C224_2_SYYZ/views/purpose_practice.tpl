@@ -12,8 +12,12 @@
         <form method="post" action="/purpose_practice">
             <label for="size">Размер матрицы (n × n):&emsp;</label>
             <input class="always-visible" type="number" id="size" name="size" min="2" max="10" value="4" required>
+            
             <br><br>
-
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="maximize" name="maximize">
+                <label class="form-check-label" for="maximize">Решать задачу на максимум</label>
+            </div>
             <!-- Контейнер с таблицей матрицы -->
             <div id="matrix-container"></div>
 
