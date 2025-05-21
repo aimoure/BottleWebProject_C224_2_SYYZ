@@ -24,6 +24,16 @@ class LinearProgrammingProblem:
             self.constraints = [[float(x) for x in row] for row in self.constraints]
         except (ValueError, TypeError) as e:
             raise ValueError("Все коэффициенты и свободные члены должны быть числовыми") from e
+        # Нормализация знаков ограничений
+        sign_map = {
+            '<=': '≤',
+            '>=': '≥',
+            'â\u0089¤': '≤',
+            'â\u0089¥': '≥',
+            '⩽': '≤',
+            '⩾': '≥',
+        }
+        self.signs = [sign_map.get(s, s) for s in self.signs]
         if len(self.constraints) != n_cons:
             raise ValueError(f"Ожидалось {n_cons} строк в constraints, получено {len(self.constraints)}")
         if len(self.signs) != n_cons:

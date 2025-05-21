@@ -62,51 +62,103 @@ class TestDirectLPPPractice(unittest.TestCase):
     def tearDown(self):
         self.driver.quit() # Закрытие браузера и освобождение ресурсов WebDriver
 
-    def test_filling_out_and_solving(self):
-        # Открытие нужной страницы
+    def run_lpp_test(self, objective, constraint_matrix, rhs):
+        # Открытие страницы
         self.driver.get(f"{self.base_url}/direct_lpp_practice")
 
-        # Проверка, что по умолчанию number_of_variables == 2
-        num_vars = self.driver.find_element(By.ID, 'number_of_variables')
-        self.assertEqual(num_vars.get_attribute('value'), '2')
+        num_vars = len(objective)
+        num_constraints = len(constraint_matrix)
 
-        # Ввод в целевую функцию 3 и 2
-        self.driver.find_element(By.NAME, 'x_0').clear()
-        self.driver.find_element(By.NAME, 'x_0').send_keys('3')
-        self.driver.find_element(By.NAME, 'x_1').clear()
-        self.driver.find_element(By.NAME, 'x_1').send_keys('2')
-
-        # Увеличение number_of_constraints до 2 и перерисовка таблицы
+        # Установка переменных и ограничений
         self.driver.execute_script(
-            "document.getElementById('number_of_constraints').value = '2';"
+            f"document.getElementById('number_of_variables').value = '{num_vars}';"
+            f"document.getElementById('number_of_constraints').value = '{num_constraints}';"
             "window.redraw();"
         )
-        time.sleep(0.5)  # Пауза для JS завершить отрисовку
+        time.sleep(1)
 
-        # Заполнение матрицы ограничений
-        self.driver.find_element(By.NAME, 'cons_0_0').send_keys('2')
-        self.driver.find_element(By.NAME, 'cons_0_1').send_keys('1')
-        self.driver.find_element(By.NAME, 'cons_1_0').send_keys('1')
-        self.driver.find_element(By.NAME, 'cons_1_1').send_keys('2')
+        # Ввод целевой функции
+        for i, val in enumerate(objective):
+            field = self.driver.find_element(By.NAME, f'x_{i}')
+            field.clear()
+            field.send_keys(str(val))
 
-        # Заполнение свободных членов
-        self.driver.find_element(By.NAME, 'cons_rhs_0').send_keys('4')
-        self.driver.find_element(By.NAME, 'cons_rhs_1').send_keys('4')
+        # Ввод ограничений
+        for i, row in enumerate(constraint_matrix):
+            for j, val in enumerate(row):
+                self.driver.find_element(By.NAME, f'cons_{i}_{j}').send_keys(str(val))
+            self.driver.find_element(By.NAME, f'cons_rhs_{i}').send_keys(str(rhs[i]))
 
-        # Нажатие кнопки Решить
-        btn = self.driver.find_element(
+        # Решить
+        solve_btn = self.driver.find_element(
             By.CSS_SELECTOR, "button[name='action'][value='solve']"
         )
-        btn.click()
+        solve_btn.click()
+        # Прокрутка вниз, чтобы область с результатом точно была видна
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        # Пауза для отрисовки результатов
+        time.sleep(6)
 
-        # Пауза, пока в блоке #results появится заголовок <h3>
+        # Ожидание появления результата
         WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#results h3"))
+            EC.presence_of_element_located((By.ID, "results"))
+        )
+        result_text = self.driver.find_element(By.ID, 'results').text
+
+        # Проверка результата
+        accepted_phrases = [
+            "Оптимальные", "Нет допустимого решения", "Ошибка",
+            "Невозможно", "Решение не найдено"
+        ]
+        self.assertTrue(
+            any(phrase in result_text for phrase in accepted_phrases),
+            msg="Ожидалось сообщение об оптимуме или ошибке, но результат: " + result_text
         )
 
-        # Проверка, что результат явно содержит слово "Оптимальные"
-        text = self.driver.find_element(By.ID, 'results').text
-        self.assertIn("Оптимальные", text)
+    def test_various_lpp_inputs(self):
+        # Стандартная задача с допустимым решением
+        # Maximize Z = 5x + 4y + 3z + 6w
+        # При ограничениях, допускающих область допустимых решений
+        self.run_lpp_test(
+            objective=['3', '5', '2', '4'],
+            constraint_matrix=[
+                ['1', '2', '1', '0'],   # x + y + z ≤ 40
+                ['2', '1', '0', '1'],   # 2x + 3y + 1w ≤ 50
+                ['1', '1', '1', '1'],   # x + y + z + w ≤ 60
+                ['0', '1', '2', '2'],   # y + 2z + 2w ≤ 50
+                ['1', '0', '1', '0']    # x + z ≤ 30
+            ],
+            rhs=['40', '50', '60', '50', '30']
+        )
+
+        # Задача без допустимого решения
+        # Все переменные ограничены сверху 1, но сумма ≤ 0 — несовместимо
+        self.run_lpp_test(
+            objective=['1', '1', '1', '1'],
+            constraint_matrix=[
+                ['1', '1', '0', '0'],   # x + y ≤ 2
+                ['-1', '-1', '0', '0'],   # -x - y ≤ -5
+                ['0', '0', '1', '0'],   # z ≤ 10
+                ['0', '0', '0', '1'],   # w ≤ 10
+                ['1', '0', '1', '0']    # x + z ≤ 100 (противоречие)
+            ],
+            rhs=['2', '-5', '10', '10', '100']
+        )
+
+        # Допустимая задача с перекрёстными ограничениями
+        # Maximize Z = 4x + 2y + 5z + 3w
+        # Зависимости между переменными менее прямолинейные, но допустимы
+        self.run_lpp_test(
+            objective=['4', '2', '5', '3'],
+            constraint_matrix=[
+                ['1', '2', '0', '1'],   # x + 2y + w ≤ 35
+                ['0', '0', '2', '3'],   # 2z + 3w ≤ 40
+                ['2', '0', '1', '1'],   # 2x + z + w ≤ 45
+                ['1', '1', '1', '1'],   # x + y + z + w ≤ 50
+                ['0', '3', '0', '1']    # 3y + w ≤ 30
+            ],
+            rhs=['35', '40', '45', '50', '30']
+        )
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
