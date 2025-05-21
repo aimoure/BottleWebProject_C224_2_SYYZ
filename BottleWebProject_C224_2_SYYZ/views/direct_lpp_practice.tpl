@@ -5,6 +5,7 @@
 % status = status if 'status' in locals() else None
 % initial_data_json = initial_data_json if 'initial_data_json' in locals() else None
 
+<html lang="ru">
 <div class="hungarian-page">
     <div class="jumbotron">
         <h1>Калькулятор прямой задачи линейного программирования</h1>
