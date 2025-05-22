@@ -10,7 +10,7 @@ class TestTransportationProblem(unittest.TestCase):
                 'cost_matrix': [[4, 8], [6, 5]],
                 'supply': [30, 30],
                 'demand': [20, 40],
-                'expected_cost': 370,
+                'expected_cost': 310,
                 'description': 'Базовый случай 2x2 с балансом'
             },
             # 2. Стоимости с нулями
@@ -18,15 +18,15 @@ class TestTransportationProblem(unittest.TestCase):
                 'cost_matrix': [[0, 2], [3, 0]],
                 'supply': [25, 25],
                 'demand': [30, 20],
-                'expected_cost': 50,
+                'expected_cost': 15,
                 'description': 'Нули в матрице стоимости'
             },
-            # ?3. Избыточное предложение — авто-добавление фиктивного спроса
+            # 3. Избыточное предложение — авто-добавление фиктивного спроса
             {
                 'cost_matrix': [[2, 3], [5, 4]],
                 'supply': [40, 30],
                 'demand': [30, 30],
-                'expected_cost': 290,
+                'expected_cost': 170,
                 'description': 'Избыточное предложение'
             },
             # 4. Избыточный спрос — авто-добавление фиктивного поставщика
@@ -34,7 +34,7 @@ class TestTransportationProblem(unittest.TestCase):
                 'cost_matrix': [[3, 1], [4, 2]],
                 'supply': [20, 30],
                 'demand': [10, 50],
-                'expected_cost': 110,
+                'expected_cost': 80,
                 'description': 'Избыточный спрос'
             },
             # 5. Сложная 2x3 задача
@@ -42,7 +42,7 @@ class TestTransportationProblem(unittest.TestCase):
                 'cost_matrix': [[2, 3, 1], [5, 4, 8]],
                 'supply': [60, 10],
                 'demand': [30, 20, 20],
-                'expected_cost': 210,
+                'expected_cost': 150,
                 'description': '2x3 задача с балансом'
             },
             # 6. Сложная 3x3 задача с нулями
@@ -50,7 +50,7 @@ class TestTransportationProblem(unittest.TestCase):
                 'cost_matrix': [[0, 3, 1], [4, 0, 2], [3, 1, 0]],
                 'supply': [30, 25, 15],
                 'demand': [20, 20, 30],
-                'expected_cost': 80,
+                'expected_cost': 20,
                 'description': '3x3 с нулевыми стоимостями'
             },
         ]
@@ -104,7 +104,7 @@ class TestTransportationProblem(unittest.TestCase):
                 'demand': [30, -5],
                 'description': 'Отрицательный спрос'
             },
-            # 6. Несовпадение размерности матрицы (3 строки, 2 demand)
+            # 6. Несовпадение размерности матрицы (3 supply, 2 demand)
             {
                 'cost_matrix': [[1, 2], [3, 4], [5, 6]],
                 'supply': [10, 10, 10],
