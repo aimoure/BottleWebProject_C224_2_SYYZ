@@ -1,12 +1,14 @@
-import unittest  # РњРѕРґСѓР»СЊ РґР»СЏ РЅР°РїРёСЃР°РЅРёСЏ СЋРЅРёС‚-С‚РµСЃС‚РѕРІ
-from hungarian_solver import solve_assignment  # РРјРїРѕСЂС‚РёСЂСѓРµРј С‚РІРѕСЋ С„СѓРЅРєС†РёСЋ РґР»СЏ СЂРµС€РµРЅРёСЏ Р·Р°РґР°С‡Рё Рѕ РЅР°Р·РЅР°С‡РµРЅРёСЏС…
+import unittest  # Модуль для написания юнит-тестов
+from hungarian_solver import solve_assignment  # Импортируем твою функцию для решения задачи о назначениях
 
 class TestHungarianSolver(unittest.TestCase):  # РљР»Р°СЃСЃ, СЃРѕРґРµСЂР¶Р°С‰РёР№ РІСЃРµ С‚РµСЃС‚С‹ (РЅР°СЃР»РµРґСѓРµС‚СЃСЏ РѕС‚ unittest.TestCase)
 
+class TestHungarianSolver(unittest.TestCase):
+
     def test_minimization_cases(self):
-        # РўРµСЃС‚С‹ РґР»СЏ Р·Р°РґР°С‡Рё РЅР° РјРёРЅРёРјСѓРј (РјРёРЅРёРјРёР·Р°С†РёСЏ РѕР±С‰РёС… Р·Р°С‚СЂР°С‚)
+        # Тесты для задачи на минимум (минимизация общих затрат)
         test_cases = [
-            # РљР°Р¶РґС‹Р№ СЌР»РµРјРµРЅС‚: (РјР°С‚СЂРёС†Р° Р·Р°С‚СЂР°С‚, РѕР¶РёРґР°РµРјР°СЏ РёС‚РѕРіРѕРІР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ)
+            # Каждый элемент: (матрица затрат, ожидаемая итоговая стоимость)
             ([[4, 2, 8], [2, 3, 7], [3, 1, 6]], 9),
             ([[1, 2, 3], [3, 2, 1], [2, 1, 3]], 3),
             ([[5, 9, 7], [8, 1, 4], [6, 3, 2]], 8),
@@ -14,13 +16,29 @@ class TestHungarianSolver(unittest.TestCase):  # РљР»Р°СЃСЃ, СЃРѕРґРµСЂР¶Р°С‰РёР
             ([[2, 4, 6], [5, 1, 7], [8, 3, 2]], 6),
         ]
         for matrix, expected_cost in test_cases:
-            with self.subTest(matrix=matrix):  # РџРѕР·РІРѕР»СЏРµС‚ Р·Р°РїСѓСЃРєР°С‚СЊ РєР°Р¶РґС‹Р№ РЅР°Р±РѕСЂ РєР°Рє РѕС‚РґРµР»СЊРЅС‹Р№ СЃР°Р±С‚РµСЃС‚
-                result = solve_assignment(matrix)  # Р РµС€Р°РµРј Р·Р°РґР°С‡Сѓ РґР»СЏ С‚РµРєСѓС‰РµР№ РјР°С‚СЂРёС†С‹
-                self.assertEqual(result['total_cost'], expected_cost)  # РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РёС‚РѕРіРѕРІР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃРѕРІРїР°РґР°РµС‚
-                self.assertEqual(len(result['assignment']), len(matrix))  # РЈР±РµРґРёРјСЃСЏ, С‡С‚Рѕ РєР°Р¶РґРѕРµ Р·Р°РґР°РЅРёРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРѕ
+            with self.subTest(matrix=matrix):  # Позволяет запускать каждый набор как отдельный сабтест
+                result = solve_assignment(matrix)  # Решаем задачу для текущей матрицы
+                self.assertEqual(result['total_cost'], expected_cost)  # Проверяем, что итоговая стоимость совпадает
+                self.assertEqual(len(result['assignment']), len(matrix))  # Убедимся, что каждое задание распределено
+
+        matrix2 = [
+            [1, 2, 3],
+            [3, 2, 1],
+            [2, 1, 3]
+        ]
+        result = solve_assignment(matrix2)
+        self.assertEqual(result['total_cost'], 3)
+
+        matrix3 = [
+            [5, 9, 7],
+            [8, 1, 4],
+            [6, 3, 2]
+        ]
+        result = solve_assignment(matrix3)
+        self.assertEqual(result['total_cost'], 8)
 
     def test_maximization_cases(self):
-        # РўРµСЃС‚С‹ РґР»СЏ Р·Р°РґР°С‡Рё РЅР° РјР°РєСЃРёРјСѓРј (РјР°РєСЃРёРјРёР·Р°С†РёСЏ РїСЂРёР±С‹Р»Рё РёР»Рё СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё)
+        # Тесты для задачи на максимум (максимизация прибыли или эффективности)
         test_cases = [
             ([[4, 2, 8], [2, 3, 7], [3, 1, 6]], 14),
             ([[15, 30, 5], [20, 25, 10], [10, 35, 40]], 90),
@@ -29,24 +47,24 @@ class TestHungarianSolver(unittest.TestCase):  # РљР»Р°СЃСЃ, СЃРѕРґРµСЂР¶Р°С‰РёР
             ([[20, 25, 30], [22, 27, 35], [24, 20, 28]], 90),
         ]
         for matrix, expected_cost in test_cases:
-            with self.subTest(matrix=matrix):  # РЎР°Р±С‚РµСЃС‚ вЂ” СѓРґРѕР±РЅРѕ РґРµР±Р°Р¶РёС‚СЊ РєРѕРЅРєСЂРµС‚РЅС‹Р№ РєРµР№СЃ
-                result = solve_assignment(matrix, maximize=True)  # Р’С‹Р·С‹РІР°РµРј СЃ РїР°СЂР°РјРµС‚СЂРѕРј РјР°РєСЃРёРјРёР·Р°С†РёРё
-                self.assertEqual(result['total_cost'], expected_cost)  # РџСЂРѕРІРµСЂРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р°
-                self.assertEqual(len(result['assignment']), len(matrix))  # РЈР±РµРґРёРјСЃСЏ, С‡С‚Рѕ РІСЃРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРѕ
+            with self.subTest(matrix=matrix):  # Сабтест — удобно дебажить конкретный кейс
+                result = solve_assignment(matrix, maximize=True)  # Вызываем с параметром максимизации
+                self.assertEqual(result['total_cost'], expected_cost)  # Проверка результата
+                self.assertEqual(len(result['assignment']), len(matrix))  # Убедимся, что все распределено
 
     def test_invalid_input(self):
-        # РўРµСЃС‚С‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РЅРµРєРѕСЂСЂРµРєС‚РЅС‹С… РґР°РЅРЅС‹С…
+        # Тесты для обработки некорректных данных
         invalid_cases = [
-            [["a", "b"], [3, 4]],  # РЎС‚СЂРѕРєРё РІРјРµСЃС‚Рѕ С‡РёСЃРµР»
-            [[1, 2], [3]],  # РќРµСЂР°РІРЅРѕРјРµСЂРЅР°СЏ РІР»РѕР¶РµРЅРЅРѕСЃС‚СЊ
-            [],  # РџСѓСЃС‚Р°СЏ РјР°С‚СЂРёС†Р°
-            [[1, 2, 3], [4, 5]],  # РќРµ РєРІР°РґСЂР°С‚РЅР°СЏ
-            [[None, 2], [3, 4]],  # None РІ РјР°С‚СЂРёС†Рµ
+            [["a", "b"], [3, 4]],  # Строки вместо чисел
+            [[1, 2], [3]],  # Неравномерная вложенность
+            [],  # Пустая матрица
+            [[1, 2, 3], [4, 5]],  # Не квадратная
+            [[None, 2], [3, 4]],  # None в матрице
         ]
         for case in invalid_cases:
-            with self.subTest(case=case):  # РЎР°Р±С‚РµСЃС‚ РґР»СЏ РєР°Р¶РґРѕРіРѕ РєРµР№СЃР°
-                with self.assertRaises((ValueError, TypeError)):  # РћР¶РёРґР°РµРј, С‡С‚Рѕ Р±СѓРґРµС‚ РѕС€РёР±РєР° (С‚РёРїРѕРІР°СЏ РёР»Рё Р»РѕРіРёС‡РµСЃРєР°СЏ)
-                    solve_assignment(case)  # РџС‹С‚Р°РµРјСЃСЏ СЂРµС€РёС‚СЊ вЂ” РґРѕР»Р¶РЅРѕ СѓРїР°СЃС‚СЊ
+            with self.subTest(case=case):  # Сабтест для каждого кейса
+                with self.assertRaises((ValueError, TypeError)):  # Ожидаем, что будет ошибка (типовая или логическая)
+                    solve_assignment(case)  # Пытаемся решить — должно упасть
 
 # Р•СЃР»Рё СЌС‚РѕС‚ С„Р°Р№Р» Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РЅР°РїСЂСЏРјСѓСЋ вЂ” Р·Р°РїСѓСЃС‚РёС‚СЊ РІСЃРµ С‚РµСЃС‚С‹
 if __name__ == '__main__':
