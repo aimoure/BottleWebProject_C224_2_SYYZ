@@ -37,6 +37,9 @@
     <Compile Include="direct_lpp_routes.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_direct_lpp_selenium.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\test_purpose_silenium.py" />
     <Compile Include="tests\test_hungarian_solver.py" />
     <Compile Include="tests\test_dual_lpp.py" />
@@ -45,6 +48,7 @@
     <Compile Include="tests\test_direct_lpp.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="transport_routes.py" />
     <Compile Include="tests\test_transport_silenium.py">
       <SubType>Code</SubType>
     </Compile>
@@ -82,6 +86,16 @@
     <Content Include="examples\direct_lpp_examples.json" />
     <Content Include="requirements.txt" />
     <None Include="static\scripts\_references.js" />
+    <Content Include="static\content\bootstrap.css" />
+    <Content Include="static\content\bootstrap.min.css" />
+    <Content Include="static\content\site.css" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="static\images\anya.jpg" />
+    <Content Include="static\images\erya.jpg" />
+    <Content Include="static\images\kirill.jpg" />
     <Content Include="static\images\purpose_img\Condition.png" />
     <Content Include="static\images\purpose_img\Step1.png" />
     <Content Include="static\images\purpose_img\Step2.png" />
@@ -89,6 +103,26 @@
     <Content Include="static\images\purpose_img\Step3_2.png" />
     <Content Include="static\images\purpose_img\Step4.png" />
     <Content Include="static\images\purpose_img\Step5.png" />
+    <Content Include="static\images\transport_img\transport1.png" />
+    <Content Include="static\images\transport_img\transport10.png" />
+    <Content Include="static\images\transport_img\transport11.png" />
+    <Content Include="static\images\transport_img\transport12.png" />
+    <Content Include="static\images\transport_img\transport13.png" />
+    <Content Include="static\images\transport_img\transport14.png" />
+    <Content Include="static\images\transport_img\transport15.png" />
+    <Content Include="static\images\transport_img\transport16.png" />
+    <Content Include="static\images\transport_img\transport17.png" />
+    <Content Include="static\images\transport_img\transport18.png" />
+    <Content Include="static\images\transport_img\transport2.png" />
+    <Content Include="static\images\transport_img\transport3.png" />
+    <Content Include="static\images\transport_img\transport4.png" />
+    <Content Include="static\images\transport_img\transport5.png" />
+    <Content Include="static\images\transport_img\transport6.png" />
+    <Content Include="static\images\transport_img\transport7.png" />
+    <Content Include="static\images\transport_img\transport8.png" />
+    <Content Include="static\images\transport_img\transport9.png" />
+    <Content Include="static\images\user_avatar.png" />
+    <Content Include="static\images\vika.jpg" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
     <Content Include="static\scripts\dynamic_table.js" />
